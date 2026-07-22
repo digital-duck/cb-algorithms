@@ -1,5 +1,12 @@
+import sys
+from pathlib import Path
+
 from api.config import settings
-from api.services.catalog_lock import read_catalog, update_catalog
+
+# scripts/ on sys.path so catalog_lock.py (the single locked read/write path,
+# shared with scripts/batch_generate.py) is importable without duplicating it.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "scripts"))
+from catalog_lock import read_catalog, update_catalog  # noqa: E402
 
 _CATALOG = settings.public_domains / "catalog.json"
 

@@ -1,12 +1,19 @@
 """Single write-path for public/domains/catalog.json.
 
 catalog.json is read by the frontend as static data but can be written by
-several producers (generation endpoint, batch scripts, CLI repairs). A naive
-read-modify-write lets concurrent writers silently drop each other's updates.
+several producers (the /api/generate FastAPI endpoint, batch scripts, CLI
+repairs). A naive read-modify-write lets concurrent writers silently drop
+each other's updates -- this happened for real in concept-book: a live API
+server (running with --reload) and a batch script each read-modified-wrote
+catalog.json independently, and one write clobbered a domain's just-
+generated book entry even though the book itself generated successfully on
+disk.
 
 All mutations should go through update_catalog(), which serializes writers
 with an fcntl lock and publishes atomically (temp file + os.replace), so
-readers never see a torn file.
+readers never see a torn file. Both api/services/catalog_svc.py and
+scripts/batch_generate.py import this module rather than duplicating the
+read/write logic.
 """
 from __future__ import annotations
 
