@@ -122,9 +122,9 @@ def _get_application_ids(domain_id: str) -> list[str]:
     return list(apps.keys())
 
 
-def _already_generated(catalog_entry: dict, target: str, model: str) -> bool:
+def _already_generated(catalog_entry: dict, target: str, model: str, language: str) -> bool:
     return any(
-        b["target"] == target and b.get("model") == model
+        b["target"] == target and b.get("model") == model and b.get("language", "en") == language
         for b in catalog_entry.get("books", [])
     )
 
@@ -149,11 +149,20 @@ def _mark_generated(domain_id: str, target: str, level: str, language: str, mode
                 continue
             books: list[dict] = d.setdefault("books", [])
             book_file = f"output/{variant}/{model}/html/book_{target}.html"
-            if not any(b["target"] == target and b.get("model") == model for b in books):
-                books.append({"target": target, "file": book_file, "model": model})
+            if not any(
+                b["target"] == target and b.get("model") == model
+                and b.get("language", "en") == language
+                for b in books
+            ):
+                books.append({"target": target, "file": book_file, "model": model, "language": language})
             d["has_book"] = True
-            # Preserve legacy entries (no model field) and entries from other models
-            other = [c for c in d.get("generated_concepts", []) if c.get("model") != model]
+            # Preserve legacy entries (no model field) and entries from other models/languages
+            other = [
+                c for c in d.get("generated_concepts", [])
+                if c.get("model") != model or c.get("language", "en") != language
+            ]
+            for c in new_concepts:
+                c["language"] = language
             d["generated_concepts"] = sorted(other + new_concepts, key=lambda c: c["label"])
             break
 
@@ -174,11 +183,21 @@ def _run_spl3(
     output_dir = DOMAINS_DIR / domain_id / "output" / f"{level}.{language}" / model / "html"
     output_dir.mkdir(parents=True, exist_ok=True)
 
+    # Pass the domain's own synced graph.yaml as an absolute path rather than
+    # a bare "{domain_id}_graph.yaml" filename. graph_lib.load_domain()
+    # resolves bare filenames relative to SPL.py's own cookbook/74_concept_book
+    # directory, which requires every domain's graph to also be hand-copied
+    # there; an absolute path is honored as-is and works for any domain synced
+    # into public/domains/ regardless of whether a same-named copy exists in
+    # SPL.py's cookbook dir (e.g. domains synced from concept-book-press's
+    # ingestion pipeline, which never puts anything there).
+    domain_yaml_path = DOMAINS_DIR / domain_id / "input" / "graph.yaml"
+
     cmd = [
         "spl3", "run", str(SPL_WORKFLOW / "build_concept_book.spl"),
         "--tools", str(SPL_WORKFLOW / "tools.py"),
         "--llm", llm,
-        "--param", f"domain_yaml={domain_id}_graph.yaml",
+        "--param", f"domain_yaml={domain_yaml_path}",
         "--param", f"target={target}",
         "--param", f"lvl={level}",
         "--param", f"language={language}",
@@ -269,7 +288,7 @@ def main(
             continue
         selected = app_ids[:n_targets] if n_targets else app_ids
         for target in selected:
-            if skip_existing and _already_generated(entry, target, model):
+            if skip_existing and _already_generated(entry, target, model, language):
                 click.echo(f"[skip] {did}/{target} ({model}): already in catalog")
                 continue
             jobs.append((did, target, eff_level))
