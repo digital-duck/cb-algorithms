@@ -1,1 +1,242 @@
-[]
+[
+  {
+    "id": "algorithms_ch02",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch2: Recursion",
+    "capstone": "karatsuba_multiplication",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch03",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch3: Backtracking",
+    "capstone": "optimal_binary_search_tree",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch04",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch4: Dynamic Programming",
+    "capstone": "maximum_independent_set_in_trees",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch05",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch5: Greedy Algorithms",
+    "capstone": "national_resident_matching_program",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch06",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch6: Basic Graph Algorithms",
+    "capstone": "flood_fill",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch07",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch7: Depth-First Search",
+    "capstone": "tarjan_algorithm",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch08",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch8: Minimum Spanning Trees",
+    "capstone": "kruskals_algorithm",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch09",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch9: Shortest Paths",
+    "capstone": "moores_algorithm",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch10",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch10: All-Pairs Shortest Paths",
+    "capstone": "transitive_closure",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch11",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch11: Maximum Flows & Minimum Cuts",
+    "capstone": "unit_capacity_network_algorithms",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch12",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch12: Applications of Flows and Cuts",
+    "capstone": "project_selection",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch13",
+    "name": "Algorithms (Jeff Erickson) \u2014 Ch13: NP-Hardness",
+    "capstone": "draughts_move_hardness",
+    "default_level": "core",
+    "has_navigator": true,
+    "has_book": false,
+    "books": [],
+    "generated_concepts": [],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+    }
+  }
+]
