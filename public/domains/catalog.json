@@ -1,13 +1,69 @@
 [
   {
     "id": "algorithms_ch02",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch2: Recursion",
+    "name": "Algorithms (Jeff Erickson) — Ch2: Recursion",
     "capstone": "karatsuba_multiplication",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
-    "has_book": false,
-    "books": [],
-    "generated_concepts": [],
+    "has_book": true,
+    "books": [
+      {
+        "target": "tower_of_hanoi",
+        "file": "output/college.en/sonnet/html/book_tower_of_hanoi.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "fast_exponentiation",
+        "file": "output/college.en/sonnet/html/book_fast_exponentiation.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "base_case",
+        "label": "Base Case",
+        "file": "output/college.en/sonnet/html/concept_base_case.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fast_exponentiation",
+        "label": "Fast Exponentiation",
+        "file": "output/college.en/sonnet/html/concept_fast_exponentiation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "induction_proof",
+        "label": "Induction Proof",
+        "file": "output/college.en/sonnet/html/concept_induction_proof.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recursion",
+        "label": "Recursion",
+        "file": "output/college.en/sonnet/html/concept_recursion.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reduction",
+        "label": "Reduction",
+        "file": "output/college.en/sonnet/html/concept_reduction.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tower_of_hanoi",
+        "label": "Tower Of Hanoi",
+        "file": "output/college.en/sonnet/html/concept_tower_of_hanoi.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
     "tags": [
       "computer-science"
     ],
@@ -16,14 +72,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch03",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch3: Backtracking",
+    "name": "Algorithms (Jeff Erickson) — Ch3: Backtracking",
     "capstone": "optimal_binary_search_tree",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -36,14 +92,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch04",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch4: Dynamic Programming",
+    "name": "Algorithms (Jeff Erickson) — Ch4: Dynamic Programming",
     "capstone": "maximum_independent_set_in_trees",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -56,14 +112,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch05",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch5: Greedy Algorithms",
+    "name": "Algorithms (Jeff Erickson) — Ch5: Greedy Algorithms",
     "capstone": "national_resident_matching_program",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -76,14 +132,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch06",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch6: Basic Graph Algorithms",
+    "name": "Algorithms (Jeff Erickson) — Ch6: Basic Graph Algorithms",
     "capstone": "flood_fill",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -96,14 +152,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch07",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch7: Depth-First Search",
+    "name": "Algorithms (Jeff Erickson) — Ch7: Depth-First Search",
     "capstone": "tarjan_algorithm",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -116,14 +172,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch08",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch8: Minimum Spanning Trees",
+    "name": "Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees",
     "capstone": "kruskals_algorithm",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -136,14 +192,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch09",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch9: Shortest Paths",
+    "name": "Algorithms (Jeff Erickson) — Ch9: Shortest Paths",
     "capstone": "moores_algorithm",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -156,14 +212,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch10",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch10: All-Pairs Shortest Paths",
+    "name": "Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths",
     "capstone": "transitive_closure",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -176,14 +232,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch11",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch11: Maximum Flows & Minimum Cuts",
+    "name": "Algorithms (Jeff Erickson) — Ch11: Maximum Flows & Minimum Cuts",
     "capstone": "unit_capacity_network_algorithms",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -196,14 +252,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch12",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch12: Applications of Flows and Cuts",
+    "name": "Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts",
     "capstone": "project_selection",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -216,14 +272,14 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   },
   {
     "id": "algorithms_ch13",
-    "name": "Algorithms (Jeff Erickson) \u2014 Ch13: NP-Hardness",
+    "name": "Algorithms (Jeff Erickson) — Ch13: NP-Hardness",
     "capstone": "draughts_move_hardness",
-    "default_level": "core",
+    "default_level": "college",
     "has_navigator": true,
     "has_book": false,
     "books": [],
@@ -236,7 +292,7 @@
       "authors": "Jeff Erickson",
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
-      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. \u00a9 Jeff Erickson."
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
     }
   }
 ]

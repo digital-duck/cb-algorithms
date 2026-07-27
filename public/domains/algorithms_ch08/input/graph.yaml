@@ -65,24 +65,24 @@ concepts:
     - safe_edge
     - useless_edge
     tier: 3
+applications:
   boruvkas_algorithm:
     defines: An MST algorithm that repeatedly identifies and adds all safe edges (one per component of
       F) in each round, running in O(E log V) time.
-    composed_of:
+    needs:
     - generic_mst_algorithm
     tier: 4
   jarniks_algorithm:
     defines: An MST algorithm that grows a single tree T from an arbitrary start vertex by repeatedly
       adding T's safe edge, implemented with a priority queue in O(E log V) time.
-    composed_of:
+    needs:
     - generic_mst_algorithm
     - fibonacci_heap
     tier: 4
   kruskals_algorithm:
     defines: An MST algorithm that scans all edges in increasing order of weight and adds each edge to
       F if it is safe, running in O(E log V) time dominated by sorting.
-    composed_of:
+    needs:
     - generic_mst_algorithm
     - disjoint_set_data_structure
     tier: 4
-applications: {}
