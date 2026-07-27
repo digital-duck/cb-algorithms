@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baseball Elimination | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="baseball-elimination">Baseball Elimination</h2>
+<p><strong>Definition.</strong> Let $n$ teams compete in a season. For each team $i$, let $w_i$ denote its current win total and $r_i$ its remaining games. Let $g_{jk}$ denote the number of remaining games between teams $j$ and $k$. Team $i$ is <strong>trivially eliminated</strong> if there exists a team $j$ with $w_j > w_i + r_i$. More subtly, team $i$ is <strong>non-trivially eliminated</strong> when no assignment of future game outcomes allows it to finish with the most wins, even if it wins all remaining games. Formally, team $i$ is eliminated if and only if it cannot tie for first place in any possible completion of the season.</p>
+<p>The power of the baseball elimination problem lies in its reduction to a <strong>maximum network flow</strong> computation. Construct a directed network $G_i$ as follows. Create a source $s$, a sink $t$, one <em>game node</em> $(j,k)$ for every pair $j < k$ with $j, k \neq i$, and one <em>team node</em> for each team $j \neq i$. Add edges:</p>
+$$s \to (j,k) \text{ with capacity } g_{jk}, \quad (j,k) \to j \text{ and } (j,k) \to k \text{ with capacity } \infty,$$
+$$j \to t \text{ with capacity } (w_i + r_i) - w_j \quad (\text{set to } 0 \text{ if negative}).$$
+<p>The capacity on edge $j \to t$ encodes how many more wins team $j$ can accumulate before it surpasses the ceiling $w_i + r_i$.</p>
+<p><strong>Worked Example.</strong> Suppose four teams remain with standings $w = (83, 80, 78, 77)$, remaining games $r = (0, 3, 6, 6)$, and inter-team game counts $g_{23}=1, g_{24}=3, g_{34}=2$ (all other pairs complete). Is team 1 eliminated? Team 1's ceiling is $83 + 0 = 83$. The total games among teams 2, 3, 4 is $G = 1+3+2=6$. The capacities to $t$ are $83-80=3$, $83-78=5$, $83-77=6$. Running max-flow on $G_1$ yields a value of $6$, equal to $G$, so team 1 is <strong>not</strong> eliminated.</p>
+<p><strong>Theorem (Schwartz 1966; Hoffman–Rivlin 1967).</strong> Team $i$ is eliminated if and only if the maximum $s$-$t$ flow in $G_i$ is strictly less than</p>
+$$G_i^{\text{total}} = \sum_{\substack{j < k \\ j,k \neq i}} g_{jk}.$$
+<p>By the max-flow min-cut theorem, this is equivalent to the existence of a subset $T \subseteq \{1,\dots,n\}\setminus\{i\}$ such that</p>
+$$w_i + r_i < \frac{1}{|T|}\!\left(\sum_{j \in T} w_j + \sum_{\substack{j < k \\ j,k \in T}} g_{jk}\right).$$
+<p>The right-hand side is the average wins that teams in $T$ must collectively achieve among themselves, demonstrating that the group $T$ collectively forces team $i$ out.</p>
+<p><strong>Lab Cell.</strong></p>
+<pre><code>import networkx as nx
+
+def is_eliminated(i, w, r, g):
+    ceiling = w[i] + r[i]
+    teams = [j for j in range(len(w)) if j != i]
+    G = nx.DiGraph()
+    G.add_node('s'); G.add_node('t')
+    total_games = 0
+    for idx, j in enumerate(teams):
+        for k in teams[idx+1:]:
+            cap = g.get((j, k), g.get((k, j), 0))
+            total_games += cap
+            node = f"game_{j}_{k}"
+            G.add_edge('s', node, capacity=cap)
+            G.add_edge(node, j, capacity=float('inf'))
+            G.add_edge(node, k, capacity=float('inf'))
+        G.add_edge(j, 't', capacity=max(0, ceiling - w[j]))
+    flow_value, _ = nx.maximum_flow(G, 's', 't')
+    return flow_value &lt; total_games
+
+w = [83, 80, 78, 77]; r = [0, 3, 6, 6]
+g = {(1,2):1, (1,3):3, (2,3):2}
+print(is_eliminated(0, w, r, g))  # False</code></pre>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>State Summary Minimization | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="state-summary-minimization">State Summary Minimization</h2>
+<h3 id="definition">Definition</h3>
+<p>A <strong>state summary</strong> is a function $\sigma : S \to \Sigma$ that maps each state $s$ in a state space $S$ to a compact descriptor in a summary space $\Sigma$. Given a transition system $(S, \mathcal{A}, \delta)$ — where $\mathcal{A}$ is an alphabet of actions and $\delta : S \times \mathcal{A} \to S$ is the transition function — two states $s, s'$ are said to be <strong>summary-equivalent</strong>, written $s \sim s'$, if and only if they are indistinguishable by all future observations:</p>
+$$s \sim s' \iff \forall w \in \mathcal{A}^{*},\; \delta^{*}(s,w) \in F \Leftrightarrow \delta^{*}(s',w) \in F,$$
+<p>where $F \subseteq S$ is the set of accepting states and $\delta^{<em>}$ denotes the extension of $\delta$ to strings. <strong>State summary minimization</strong> is the problem of finding the coarsest partition $\Pi^{</em>} = \{[s]_{\sim}\}$ of $S$ consistent with $\sim$, thereby yielding the smallest system that preserves all observable behavior.</p>
+<h3 id="worked-example">Worked Example</h3>
+<p>Consider a deterministic finite automaton with states $\{q_0, q_1, q_2, q_3\}$, alphabet $\{0,1\}$, start state $q_0$, and accepting set $F = \{q_1, q_3\}$. Suppose the transition table is:</p>
+<p>| State | 0 | 1 | |-------|---|---| | $q_0$ | $q_1$ | $q_2$ | | $q_1$ | $q_3$ | $q_0$ | | $q_2$ | $q_1$ | $q_2$ | | $q_3$ | $q_3$ | $q_0$ |</p>
+<p><strong>Step 1.</strong> Partition by acceptance: $P_0 = \{\{q_1,q_3\},\{q_0,q_2\}\}$.</p>
+<p><strong>Step 2.</strong> Refine. Under input $0$, both $q_0$ and $q_2$ transition to $q_1 \in F$; under input $1$, both transition to $q_2 \notin F$. Hence $q_0 \sim q_2$. Similarly $q_1 \sim q_3$.</p>
+<p>The minimal automaton has two states: $[\![q_0]\!]$ and $[\![q_1]\!]$.</p>
+<h3 id="key-theorem-myhill-nerode">Key Theorem (Myhill–Nerode)</h3>
+<p><strong>Theorem.</strong> A language $L \subseteq \mathcal{A}^{*}$ is recognized by a finite automaton if and only if the relation $\sim_L$, defined by</p>
+$$x \sim_L y \iff \forall z \in \mathcal{A}^{*},\; xz \in L \Leftrightarrow yz \in L,$$
+<p>has finite index. Moreover, the number of equivalence classes equals the number of states in the unique minimal automaton for $L$.</p>
+<p><em>Proof sketch.</em> Each class $[x]_{\sim_L}$ corresponds to exactly one reachable state; distinguishability of any two classes by some suffix forces them to be separate states. Merging any two classes would cause an accepting and a rejecting state to coincide, contradicting correctness. $\square$</p>
+<h3 id="lab-cell">Lab Cell</h3>
+<pre><code>from sympy import symbols, FiniteSet, Eq
+
+# Represent transition as a dictionary and apply Table-filling algorithm
+def minimize(states, alphabet, delta, accept):
+    distinguishable = set()
+    pairs = [(p,q) for i,p in enumerate(states)
+                   for q in states[i+1:]]
+    # Mark pairs where exactly one is accepting
+    for p, q in pairs:
+        if (p in accept) != (q in accept):
+            distinguishable.add(frozenset({p,q}))
+    changed = True
+    while changed:
+        changed = False
+        for p, q in pairs:
+            pair = frozenset({p,q})
+            if pair not in distinguishable:
+                for a in alphabet:
+                    if frozenset({delta[p][a], delta[q][a]}) in distinguishable:
+                        distinguishable.add(pair); changed = True; break
+    return [pair for pair in pairs if frozenset(pair) not in distinguishable]
+
+states  = ['q0','q1','q2','q3']
+alpha   = [0, 1]
+delta   = {'q0':{0:'q1',1:'q2'}, 'q1':{0:'q3',1:'q0'},
+           'q2':{0:'q1',1:'q2'}, 'q3':{0:'q3',1:'q0'}}
+accept  = {'q1','q3'}
+print("Equivalent pairs:", minimize(states, alpha, delta, accept))
+# Output: Equivalent pairs: [('q0','q2'), ('q1','q3')]</code></pre>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>
