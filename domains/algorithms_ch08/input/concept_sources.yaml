@@ -1,0 +1,73 @@
+domain: Algorithms_JeffE
+sources:
+  weighted_graph:
+    label: Weighted Graph
+    sections: []
+  spanning_tree:
+    label: Spanning Tree
+    sections: []
+  minimum_spanning_tree:
+    label: Minimum Spanning Tree
+    sections:
+    - id: ch08_distinct_edge_weights
+      title: Distinct Edge Weights
+  mst_uniqueness:
+    label: MST Uniqueness Under Distinct Weights
+    sections:
+    - id: ch08_distinct_edge_weights
+      title: Distinct Edge Weights
+  tie_breaking_rule:
+    label: Edge Tie-Breaking (ShorterEdge)
+    sections:
+    - id: ch08_the_only_minimum_spanning_tree_algorithm
+      title: The Only Minimum Spanning Tree Algorithm
+  intermediate_spanning_forest:
+    label: Intermediate Spanning Forest
+    sections:
+    - id: ch08_the_only_minimum_spanning_tree_algorithm
+      title: The Only Minimum Spanning Tree Algorithm
+  useless_edge:
+    label: Useless Edge
+    sections:
+    - id: ch08_the_only_minimum_spanning_tree_algorithm
+      title: The Only Minimum Spanning Tree Algorithm
+  safe_edge:
+    label: Safe Edge
+    sections:
+    - id: ch08_the_only_minimum_spanning_tree_algorithm
+      title: The Only Minimum Spanning Tree Algorithm
+  generic_mst_algorithm:
+    label: Generic Minimum Spanning Tree Algorithm
+    sections:
+    - id: ch08_the_only_minimum_spanning_tree_algorithm
+      title: The Only Minimum Spanning Tree Algorithm
+  boruvkas_algorithm:
+    label: Borůvka's Algorithm
+    sections:
+    - id: ch08_bor_vka_s_algorithm
+      title: Borůvka’s Algorithm
+  jarniks_algorithm:
+    label: Jarník's ("Prim's") Algorithm
+    sections:
+    - id: ch08_jarn_k_s_prim_s_algorithm
+      title: Jarník’s (“Prim’s”) Algorithm
+  fibonacci_heap:
+    label: Fibonacci Heap
+    sections:
+    - id: ch08_jarn_k_s_prim_s_algorithm
+      title: Jarník’s (“Prim’s”) Algorithm
+  kruskals_algorithm:
+    label: Kruskal's Algorithm
+    sections:
+    - id: ch08_kruskal_s_algorithm
+      title: Kruskal’s Algorithm
+  disjoint_set_data_structure:
+    label: Disjoint-Set (Union-Find) Data Structure
+    sections:
+    - id: ch08_kruskal_s_algorithm
+      title: Kruskal’s Algorithm
+  edge_contraction:
+    label: Edge Contraction
+    sections:
+    - id: ch08_exercises
+      title: Exercises

@@ -1,0 +1,118 @@
+domain: Algorithms_JeffE
+sources:
+  recursion:
+    label: Recursion
+    sections: []
+  recursion_tree:
+    label: Recursion Tree
+    sections:
+    - id: ch03_n_queens
+      title: N Queens
+  backtracking:
+    label: Backtracking
+    sections: []
+  brute_force_enumeration:
+    label: Brute-Force Enumeration
+    sections:
+    - id: ch03_the_general_pattern
+      title: The General Pattern
+    - id: ch03_subset_sum
+      title: Subset Sum
+    - id: ch03_text_segmentation_interpunctio_verborum
+      title: Text Segmentation (Interpunctio Verborum)
+  state_summary_minimization:
+    label: Minimal State Summary
+    sections:
+    - id: ch03_the_general_pattern
+      title: The General Pattern
+    - id: ch03_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+  index_formulation:
+    label: Index-Based Reformulation
+    sections:
+    - id: ch03_text_segmentation_interpunctio_verborum
+      title: Text Segmentation (Interpunctio Verborum)
+    - id: ch03_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+  subtraction_recurrence_trick:
+    label: Recurrence Subtraction Technique
+    sections:
+    - id: ch03_text_segmentation_interpunctio_verborum
+      title: Text Segmentation (Interpunctio Verborum)
+    - id: ch03_optimal_binary_search_trees
+      title: Optimal Binary Search Trees
+  exponential_running_time:
+    label: Exponential Worst-Case Running Time
+    sections:
+    - id: ch03_subset_sum
+      title: Subset Sum
+    - id: ch03_text_segmentation_interpunctio_verborum
+      title: Text Segmentation (Interpunctio Verborum)
+    - id: ch03_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+    - id: ch03_optimal_binary_search_trees
+      title: Optimal Binary Search Trees
+  n_queens:
+    label: N Queens Problem
+    sections:
+    - id: ch03_n_queens
+      title: N Queens
+  game_tree:
+    label: Game Tree
+    sections:
+    - id: ch03_game_trees
+      title: Game Trees
+  good_bad_state:
+    label: Good/Bad Game State
+    sections:
+    - id: ch03_game_trees
+      title: Game Trees
+  game_tree_search:
+    label: Perfect Game-Tree Search
+    sections:
+    - id: ch03_game_trees
+      title: Game Trees
+  subset_sum:
+    label: Subset Sum
+    sections:
+    - id: ch03_subset_sum
+      title: Subset Sum
+  include_exclude_recursion:
+    label: Include/Exclude Recursive Pattern
+    sections:
+    - id: ch03_subset_sum
+      title: Subset Sum
+    - id: ch03_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+  text_segmentation:
+    label: Text Segmentation
+    sections:
+    - id: ch03_text_segmentation_interpunctio_verborum
+      title: Text Segmentation (Interpunctio Verborum)
+  subsequence:
+    label: Subsequence
+    sections:
+    - id: ch03_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+  longest_increasing_subsequence:
+    label: Longest Increasing Subsequence
+    sections:
+    - id: ch03_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+    - id: ch03_longest_increasing_subsequence_take_2
+      title: Longest Increasing Subsequence, Take 2
+  binary_search_tree:
+    label: Binary Search Tree
+    sections:
+    - id: ch03_optimal_binary_search_trees
+      title: Optimal Binary Search Trees
+  optimal_binary_search_tree:
+    label: Optimal Binary Search Tree
+    sections:
+    - id: ch03_optimal_binary_search_trees
+      title: Optimal Binary Search Trees
+  divide_and_conquer_root_choice:
+    label: Root-Choice Divide and Conquer
+    sections:
+    - id: ch03_optimal_binary_search_trees
+      title: Optimal Binary Search Trees

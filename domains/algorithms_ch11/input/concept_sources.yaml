@@ -1,0 +1,161 @@
+domain: Algorithms_JeffE
+sources:
+  directed_graph:
+    label: Directed Graph
+    sections: []
+  flow_network:
+    label: Flow Network
+    sections:
+    - id: ch11_flows
+      title: Flows
+    - id: ch11_cuts
+      title: Cuts
+  flow:
+    label: (s,t)-Flow
+    sections:
+    - id: ch11_flows
+      title: Flows
+  flow_value:
+    label: Value of a Flow
+    sections:
+    - id: ch11_flows
+      title: Flows
+  capacity_function:
+    label: Capacity Function
+    sections:
+    - id: ch11_cuts
+      title: Cuts
+  feasible_flow:
+    label: Feasible Flow
+    sections:
+    - id: ch11_cuts
+      title: Cuts
+  maximum_flow_problem:
+    label: Maximum Flow Problem
+    sections:
+    - id: ch11_flows
+      title: Flows
+    - id: ch11_cuts
+      title: Cuts
+  cut:
+    label: (s,t)-Cut
+    sections:
+    - id: ch11_cuts
+      title: Cuts
+  cut_capacity:
+    label: Capacity of a Cut
+    sections:
+    - id: ch11_cuts
+      title: Cuts
+  minimum_cut_problem:
+    label: Minimum Cut Problem
+    sections:
+    - id: ch11_cuts
+      title: Cuts
+  weak_duality_flows_cuts:
+    label: Weak Duality of Flows and Cuts
+    sections:
+    - id: ch11_cuts
+      title: Cuts
+  maxflow_mincut_theorem:
+    label: Maxflow-Mincut Theorem
+    sections:
+    - id: ch11_the_maxflow_mincut_theorem
+      title: The Maxflow-Mincut Theorem
+  residual_capacity:
+    label: Residual Capacity
+    sections:
+    - id: ch11_the_maxflow_mincut_theorem
+      title: The Maxflow-Mincut Theorem
+  residual_graph:
+    label: Residual Graph
+    sections:
+    - id: ch11_the_maxflow_mincut_theorem
+      title: The Maxflow-Mincut Theorem
+  augmenting_path:
+    label: Augmenting Path
+    sections:
+    - id: ch11_the_maxflow_mincut_theorem
+      title: The Maxflow-Mincut Theorem
+    - id: ch11_ford_and_fulkerson_s_augmenting_path_alg
+      title: Ford and Fulkerson's augmenting-path algorithm
+  ford_fulkerson_algorithm:
+    label: Ford-Fulkerson Augmenting-Path Algorithm
+    sections:
+    - id: ch11_ford_and_fulkerson_s_augmenting_path_alg
+      title: Ford and Fulkerson's augmenting-path algorithm
+  integrality_theorem:
+    label: Integrality Theorem
+    sections:
+    - id: ch11_ford_and_fulkerson_s_augmenting_path_alg
+      title: Ford and Fulkerson's augmenting-path algorithm
+  ford_fulkerson_running_time:
+    label: Ford-Fulkerson Running Time Analysis
+    sections:
+    - id: ch11_ford_and_fulkerson_s_augmenting_path_alg
+      title: Ford and Fulkerson's augmenting-path algorithm
+  irrational_capacities_nontermination:
+    label: Non-termination with Irrational Capacities
+    sections:
+    - id: ch11_ford_and_fulkerson_s_augmenting_path_alg
+      title: Ford and Fulkerson's augmenting-path algorithm
+  path_flow:
+    label: Path Flow
+    sections:
+    - id: ch11_combining_and_decomposing_flows
+      title: Combining and Decomposing Flows
+  cycle_flow:
+    label: Cycle Flow
+    sections:
+    - id: ch11_combining_and_decomposing_flows
+      title: Combining and Decomposing Flows
+  circulation:
+    label: Circulation
+    sections:
+    - id: ch11_combining_and_decomposing_flows
+      title: Combining and Decomposing Flows
+  flow_decomposition_theorem:
+    label: Flow Decomposition Theorem
+    sections:
+    - id: ch11_combining_and_decomposing_flows
+      title: Combining and Decomposing Flows
+  acyclic_flow:
+    label: Acyclic Flow
+    sections:
+    - id: ch11_combining_and_decomposing_flows
+      title: Combining and Decomposing Flows
+  flow_decomposition_lower_bound:
+    label: Flow Decomposition Running-Time Lower Bound
+    sections:
+    - id: ch11_combining_and_decomposing_flows
+      title: Combining and Decomposing Flows
+  fattest_augmenting_path:
+    label: Fattest Augmenting Path Rule
+    sections:
+    - id: ch11_edmonds_and_karp_s_algorithms
+      title: Edmonds and Karp's Algorithms
+  shortest_augmenting_path:
+    label: Shortest Augmenting Path Rule
+    sections:
+    - id: ch11_edmonds_and_karp_s_algorithms
+      title: Edmonds and Karp's Algorithms
+  bfs_level_graph:
+    label: BFS Level of a Vertex
+    sections:
+    - id: ch11_edmonds_and_karp_s_algorithms
+      title: Edmonds and Karp's Algorithms
+  edmonds_karp_polynomial_bounds:
+    label: Edmonds-Karp Polynomial Running Times
+    sections:
+    - id: ch11_edmonds_and_karp_s_algorithms
+      title: Edmonds and Karp's Algorithms
+  advanced_maxflow_algorithms:
+    label: Advanced Maximum-Flow Algorithms
+    sections:
+    - id: ch11_further_progress
+      title: Further Progress
+  unit_capacity_network_algorithms:
+    label: Unit-Capacity Network Algorithms
+    sections:
+    - id: ch11_further_progress
+      title: Further Progress

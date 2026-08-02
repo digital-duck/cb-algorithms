@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boruvkas Algorithm | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="borůvka-s-algorithm">Borůvka's Algorithm</h2>
+<p><strong>Definition.</strong> Let $G = (V, E, w)$ be a connected, weighted, undirected graph with $n$ vertices, $m$ edges, and distinct edge weights. A <em>minimum spanning tree</em> (MST) of $G$ is a spanning tree $T \subseteq E$ such that $\sum_{e \in T} w(e)$ is minimized. Borůvka's algorithm constructs an MST by maintaining a forest $F$ that is grown in <em>phases</em>. At the start of each phase, $F$ consists of several connected components. For every component $C$, the algorithm selects the minimum-weight edge crossing from $C$ to any other component and adds it to $F$. Phases repeat until only one component remains.</p>
+<p>Formally, let $\mathcal{C}^{(k)}$ denote the partition of $V$ into components after $k$ phases, with $\mathcal{C}^{(0)} = \{\{v\} : v \in V\}$. In phase $k+1$, for each $C \in \mathcal{C}^{(k)}$ define</p>
+$$e^*(C) = \arg\min\{w(u,v) : u \in C,\; v \notin C,\; (u,v) \in E\}.$$
+<p>All edges $\{e^*(C) : C \in \mathcal{C}^{(k)}\}$ are added to $F$. Because edge weights are distinct, no cycle is introduced.</p>
+<p><strong>Worked Example.</strong> Consider the graph with vertices $\{A, B, C, D\}$ and weighted edges: $AB = 3$, $AC = 1$, $BC = 4$, $BD = 2$, $CD = 5$.</p>
+<p><em>Phase 1.</em> Each vertex is its own component. Minimum outgoing edges: $A \to AC(1)$, $B \to BD(2)$, $C \to AC(1)$, $D \to BD(2)$. Adding $\{AC, BD\}$ yields two components $\{A,C\}$ and $\{B,D\}$.</p>
+<p><em>Phase 2.</em> Component $\{A,C\}$: cheapest crossing edge is $AB = 3$ or $BC = 4$; minimum is $AB = 3$. Adding $AB$ merges all four vertices into one component. The MST is $\{AC, BD, AB\}$ with total weight $1 + 2 + 3 = 6$.</p>
+<p><strong>Theorem (Correctness and Complexity).</strong> Borůvka's algorithm produces a minimum spanning tree of $G$ in $O(m \log n)$ time.</p>
+<p><em>Proof sketch.</em> Each selected edge $e^*(C)$ is the lightest edge in the cut $(C, V \setminus C)$; by the Cut Property of MSTs, every such edge belongs to some MST. Since distinct weights guarantee a unique MST, all selected edges lie in it. Each phase at least halves the number of components, so the algorithm terminates in at most $\lceil \log_2 n \rceil$ phases. Scanning all edges per phase costs $O(m)$, giving $O(m \log n)$ total.</p>
+<p><strong>Lab Cell.</strong></p>
+<pre><code>import sympy as sp
+from sympy.combinatorics import graph_utils  # illustrative
+
+# Represent the example graph as an edge list
+edges = [('A','B',3), ('A','C',1), ('B','C',4), ('B','D',2), ('C','D',5)]
+
+def boruvka(vertices, edges):
+    parent = {v: v for v in vertices}
+    def find(x):
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]
+            x = parent[x]
+        return x
+    mst, total = [], 0
+    num_components = len(vertices)
+    while num_components &gt; 1:
+        cheapest = {}
+        for u, v, w in edges:
+            ru, rv = find(u), find(v)
+            if ru != rv:
+                if ru not in cheapest or cheapest[ru][2] &gt; w:
+                    cheapest[ru] = (u, v, w)
+                if rv not in cheapest or cheapest[rv][2] &gt; w:
+                    cheapest[rv] = (u, v, w)
+        for edge in set(map(tuple, cheapest.values())):
+            ru, rv = find(edge[0]), find(edge[1])
+            if ru != rv:
+                parent[ru] = rv
+                mst.append(edge)
+                total += edge[2]
+                num_components -= 1
+    return mst, total
+
+vertices = ['A', 'B', 'C', 'D']
+mst, cost = boruvka(vertices, edges)
+print("MST edges:", mst)
+print("Total weight:", cost)  # Expected: 6</code></pre>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>

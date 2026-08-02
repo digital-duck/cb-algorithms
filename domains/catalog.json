@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "algorithms_ch02",
+    "name": "Algorithms (Jeff Erickson) — Ch2: Recursion",
+    "capstone": "karatsuba_multiplication",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "tower_of_hanoi",
+        "file": "output/college.en/sonnet/html/book_tower_of_hanoi.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "fast_exponentiation",
+        "file": "output/college.en/sonnet/html/book_fast_exponentiation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "mergesort",
+        "file": "output/college.en/sonnet/html/book_mergesort.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "quicksort",
+        "file": "output/college.en/sonnet/html/book_quicksort.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "median_of_medians",
+        "file": "output/college.en/sonnet/html/book_median_of_medians.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "karatsuba_multiplication",
+        "file": "output/college.en/sonnet/html/book_karatsuba_multiplication.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "base_case",
+        "label": "Base Case",
+        "file": "output/college.en/sonnet/html/concept_base_case.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "divide_and_conquer",
+        "label": "Divide And Conquer",
+        "file": "output/college.en/sonnet/html/concept_divide_and_conquer.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fast_exponentiation",
+        "label": "Fast Exponentiation",
+        "file": "output/college.en/sonnet/html/concept_fast_exponentiation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "induction_proof",
+        "label": "Induction Proof",
+        "file": "output/college.en/sonnet/html/concept_induction_proof.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "karatsuba_multiplication",
+        "label": "Karatsuba Multiplication",
+        "file": "output/college.en/sonnet/html/concept_karatsuba_multiplication.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "median_of_medians",
+        "label": "Median Of Medians",
+        "file": "output/college.en/sonnet/html/concept_median_of_medians.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "merge_subroutine",
+        "label": "Merge Subroutine",
+        "file": "output/college.en/sonnet/html/concept_merge_subroutine.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "mergesort",
+        "label": "Mergesort",
+        "file": "output/college.en/sonnet/html/concept_mergesort.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "partition_subroutine",
+        "label": "Partition Subroutine",
+        "file": "output/college.en/sonnet/html/concept_partition_subroutine.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "quickselect",
+        "label": "Quickselect",
+        "file": "output/college.en/sonnet/html/concept_quickselect.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "quicksort",
+        "label": "Quicksort",
+        "file": "output/college.en/sonnet/html/concept_quicksort.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recurrence_relation",
+        "label": "Recurrence Relation",
+        "file": "output/college.en/sonnet/html/concept_recurrence_relation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recursion",
+        "label": "Recursion",
+        "file": "output/college.en/sonnet/html/concept_recursion.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reduction",
+        "label": "Reduction",
+        "file": "output/college.en/sonnet/html/concept_reduction.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "split_multiply",
+        "label": "Split Multiply",
+        "file": "output/college.en/sonnet/html/concept_split_multiply.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tower_of_hanoi",
+        "label": "Tower Of Hanoi",
+        "file": "output/college.en/sonnet/html/concept_tower_of_hanoi.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch03",
+    "name": "Algorithms (Jeff Erickson) — Ch3: Backtracking",
+    "capstone": "optimal_binary_search_tree",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "n_queens",
+        "file": "output/college.en/sonnet/html/book_n_queens.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "game_tree_search",
+        "file": "output/college.en/sonnet/html/book_game_tree_search.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "subset_sum",
+        "file": "output/college.en/sonnet/html/book_subset_sum.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "text_segmentation",
+        "file": "output/college.en/sonnet/html/book_text_segmentation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "longest_increasing_subsequence",
+        "file": "output/college.en/sonnet/html/book_longest_increasing_subsequence.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "optimal_binary_search_tree",
+        "file": "output/college.en/sonnet/html/book_optimal_binary_search_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "backtracking",
+        "label": "Backtracking",
+        "file": "output/college.en/sonnet/html/concept_backtracking.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "binary_search_tree",
+        "label": "Binary Search Tree",
+        "file": "output/college.en/sonnet/html/concept_binary_search_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "brute_force_enumeration",
+        "label": "Brute Force Enumeration",
+        "file": "output/college.en/sonnet/html/concept_brute_force_enumeration.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "divide_and_conquer_root_choice",
+        "label": "Divide And Conquer Root Choice",
+        "file": "output/college.en/sonnet/html/concept_divide_and_conquer_root_choice.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "exponential_running_time",
+        "label": "Exponential Running Time",
+        "file": "output/college.en/sonnet/html/concept_exponential_running_time.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "game_tree",
+        "label": "Game Tree",
+        "file": "output/college.en/sonnet/html/concept_game_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "game_tree_search",
+        "label": "Game Tree Search",
+        "file": "output/college.en/sonnet/html/concept_game_tree_search.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "good_bad_state",
+        "label": "Good Bad State",
+        "file": "output/college.en/sonnet/html/concept_good_bad_state.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "include_exclude_recursion",
+        "label": "Include Exclude Recursion",
+        "file": "output/college.en/sonnet/html/concept_include_exclude_recursion.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "index_formulation",
+        "label": "Index Formulation",
+        "file": "output/college.en/sonnet/html/concept_index_formulation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "longest_increasing_subsequence",
+        "label": "Longest Increasing Subsequence",
+        "file": "output/college.en/sonnet/html/concept_longest_increasing_subsequence.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "n_queens",
+        "label": "N Queens",
+        "file": "output/college.en/sonnet/html/concept_n_queens.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "optimal_binary_search_tree",
+        "label": "Optimal Binary Search Tree",
+        "file": "output/college.en/sonnet/html/concept_optimal_binary_search_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recursion",
+        "label": "Recursion",
+        "file": "output/college.en/sonnet/html/concept_recursion.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recursion_tree",
+        "label": "Recursion Tree",
+        "file": "output/college.en/sonnet/html/concept_recursion_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "state_summary_minimization",
+        "label": "State Summary Minimization",
+        "file": "output/college.en/sonnet/html/concept_state_summary_minimization.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "subsequence",
+        "label": "Subsequence",
+        "file": "output/college.en/sonnet/html/concept_subsequence.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "subset_sum",
+        "label": "Subset Sum",
+        "file": "output/college.en/sonnet/html/concept_subset_sum.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "subtraction_recurrence_trick",
+        "label": "Subtraction Recurrence Trick",
+        "file": "output/college.en/sonnet/html/concept_subtraction_recurrence_trick.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "text_segmentation",
+        "label": "Text Segmentation",
+        "file": "output/college.en/sonnet/html/concept_text_segmentation.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch04",
+    "name": "Algorithms (Jeff Erickson) — Ch4: Dynamic Programming",
+    "capstone": "maximum_independent_set_in_trees",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "fibonacci_numbers",
+        "file": "output/college.en/sonnet/html/book_fibonacci_numbers.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "text_segmentation",
+        "file": "output/college.en/sonnet/html/book_text_segmentation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "subset_sum",
+        "file": "output/college.en/sonnet/html/book_subset_sum.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "longest_increasing_subsequence",
+        "file": "output/college.en/sonnet/html/book_longest_increasing_subsequence.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "edit_distance",
+        "file": "output/college.en/sonnet/html/book_edit_distance.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "optimal_binary_search_trees",
+        "file": "output/college.en/sonnet/html/book_optimal_binary_search_trees.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "maximum_independent_set_in_trees",
+        "file": "output/college.en/sonnet/html/book_maximum_independent_set_in_trees.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "backtracking",
+        "label": "Backtracking",
+        "file": "output/college.en/sonnet/html/concept_backtracking.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dynamic_programming",
+        "label": "Dynamic Programming",
+        "file": "output/college.en/sonnet/html/concept_dynamic_programming.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "edit_distance",
+        "label": "Edit Distance",
+        "file": "output/college.en/sonnet/html/concept_edit_distance.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fibonacci_numbers",
+        "label": "Fibonacci Numbers",
+        "file": "output/college.en/sonnet/html/concept_fibonacci_numbers.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "longest_increasing_subsequence",
+        "label": "Longest Increasing Subsequence",
+        "file": "output/college.en/sonnet/html/concept_longest_increasing_subsequence.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "matrix_exponentiation_recurrence",
+        "label": "Matrix Exponentiation Recurrence",
+        "file": "output/college.en/sonnet/html/concept_matrix_exponentiation_recurrence.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "maximum_independent_set_in_trees",
+        "label": "Maximum Independent Set In Trees",
+        "file": "output/college.en/sonnet/html/concept_maximum_independent_set_in_trees.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "memoization",
+        "label": "Memoization",
+        "file": "output/college.en/sonnet/html/concept_memoization.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "optimal_binary_search_trees",
+        "label": "Optimal Binary Search Trees",
+        "file": "output/college.en/sonnet/html/concept_optimal_binary_search_trees.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recurrence_relation",
+        "label": "Recurrence Relation",
+        "file": "output/college.en/sonnet/html/concept_recurrence_relation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "recursion",
+        "label": "Recursion",
+        "file": "output/college.en/sonnet/html/concept_recursion.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "subproblem_evaluation_order",
+        "label": "Subproblem Evaluation Order",
+        "file": "output/college.en/sonnet/html/concept_subproblem_evaluation_order.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "subset_sum",
+        "label": "Subset Sum",
+        "file": "output/college.en/sonnet/html/concept_subset_sum.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "text_segmentation",
+        "label": "Text Segmentation",
+        "file": "output/college.en/sonnet/html/concept_text_segmentation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tree_dynamic_programming",
+        "label": "Tree Dynamic Programming",
+        "file": "output/college.en/sonnet/html/concept_tree_dynamic_programming.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch05",
+    "name": "Algorithms (Jeff Erickson) — Ch5: Greedy Algorithms",
+    "capstone": "national_resident_matching_program",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "national_resident_matching_program",
+        "file": "output/college.en/sonnet/html/book_national_resident_matching_program.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "gale_shapley_algorithm",
+        "label": "Gale Shapley Algorithm",
+        "file": "output/college.en/sonnet/html/concept_gale_shapley_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "matching",
+        "label": "Matching",
+        "file": "output/college.en/sonnet/html/concept_matching.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "national_resident_matching_program",
+        "label": "National Resident Matching Program",
+        "file": "output/college.en/sonnet/html/concept_national_resident_matching_program.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "preference_list",
+        "label": "Preference List",
+        "file": "output/college.en/sonnet/html/concept_preference_list.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "stable_matching_problem",
+        "label": "Stable Matching Problem",
+        "file": "output/college.en/sonnet/html/concept_stable_matching_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch06",
+    "name": "Algorithms (Jeff Erickson) — Ch6: Basic Graph Algorithms",
+    "capstone": "flood_fill",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "intersection_graph",
+        "file": "output/college.en/sonnet/html/book_intersection_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "configuration_graph",
+        "file": "output/college.en/sonnet/html/book_configuration_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "finite_state_automaton_graph",
+        "file": "output/college.en/sonnet/html/book_finite_state_automaton_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "dependency_graph",
+        "file": "output/college.en/sonnet/html/book_dependency_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "subset_construction",
+        "file": "output/college.en/sonnet/html/book_subset_construction.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "flood_fill",
+        "file": "output/college.en/sonnet/html/book_flood_fill.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "configuration_graph",
+        "label": "Configuration Graph",
+        "file": "output/college.en/sonnet/html/concept_configuration_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "connectivity",
+        "label": "Connectivity",
+        "file": "output/college.en/sonnet/html/concept_connectivity.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "cycle_acyclic",
+        "label": "Cycle Acyclic",
+        "file": "output/college.en/sonnet/html/concept_cycle_acyclic.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dependency_graph",
+        "label": "Dependency Graph",
+        "file": "output/college.en/sonnet/html/concept_dependency_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "directed_edge",
+        "label": "Directed Edge",
+        "file": "output/college.en/sonnet/html/concept_directed_edge.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "directed_graph_concepts",
+        "label": "Directed Graph Concepts",
+        "file": "output/college.en/sonnet/html/concept_directed_graph_concepts.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "finite_state_automaton_graph",
+        "label": "Finite State Automaton Graph",
+        "file": "output/college.en/sonnet/html/concept_finite_state_automaton_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "flood_fill",
+        "label": "Flood Fill",
+        "file": "output/college.en/sonnet/html/concept_flood_fill.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "graph",
+        "label": "Graph",
+        "file": "output/college.en/sonnet/html/concept_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "intersection_graph",
+        "label": "Intersection Graph",
+        "file": "output/college.en/sonnet/html/concept_intersection_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reachability",
+        "label": "Reachability",
+        "file": "output/college.en/sonnet/html/concept_reachability.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reduction",
+        "label": "Reduction",
+        "file": "output/college.en/sonnet/html/concept_reduction.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "spanning_tree",
+        "label": "Spanning Tree",
+        "file": "output/college.en/sonnet/html/concept_spanning_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "subset_construction",
+        "label": "Subset Construction",
+        "file": "output/college.en/sonnet/html/concept_subset_construction.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tree",
+        "label": "Tree",
+        "file": "output/college.en/sonnet/html/concept_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "walk_path",
+        "label": "Walk Path",
+        "file": "output/college.en/sonnet/html/concept_walk_path.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "whatever_first_search",
+        "label": "Whatever First Search",
+        "file": "output/college.en/sonnet/html/concept_whatever_first_search.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch07",
+    "name": "Algorithms (Jeff Erickson) — Ch7: Depth-First Search",
+    "capstone": "tarjan_algorithm",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "cycle_detection",
+        "file": "output/college.en/sonnet/html/book_cycle_detection.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "topological_sort",
+        "file": "output/college.en/sonnet/html/book_topological_sort.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "memoization",
+        "file": "output/college.en/sonnet/html/book_memoization.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "dynamic_programming",
+        "file": "output/college.en/sonnet/html/book_dynamic_programming.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "longest_path_in_dag",
+        "file": "output/college.en/sonnet/html/book_longest_path_in_dag.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "kosaraju_sharir_algorithm",
+        "file": "output/college.en/sonnet/html/book_kosaraju_sharir_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "tarjan_algorithm",
+        "file": "output/college.en/sonnet/html/book_tarjan_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "active_interval",
+        "label": "Active Interval",
+        "file": "output/college.en/sonnet/html/concept_active_interval.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "cycle_detection",
+        "label": "Cycle Detection",
+        "file": "output/college.en/sonnet/html/concept_cycle_detection.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dag",
+        "label": "Dag",
+        "file": "output/college.en/sonnet/html/concept_dag.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dependency_graph",
+        "label": "Dependency Graph",
+        "file": "output/college.en/sonnet/html/concept_dependency_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "depth_first_search",
+        "label": "Depth First Search",
+        "file": "output/college.en/sonnet/html/concept_depth_first_search.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dfs_wrapper",
+        "label": "Dfs Wrapper",
+        "file": "output/college.en/sonnet/html/concept_dfs_wrapper.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dynamic_programming",
+        "label": "Dynamic Programming",
+        "file": "output/college.en/sonnet/html/concept_dynamic_programming.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "edge_classification",
+        "label": "Edge Classification",
+        "file": "output/college.en/sonnet/html/concept_edge_classification.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "graph_reversal",
+        "label": "Graph Reversal",
+        "file": "output/college.en/sonnet/html/concept_graph_reversal.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "kosaraju_sharir_algorithm",
+        "label": "Kosaraju Sharir Algorithm",
+        "file": "output/college.en/sonnet/html/concept_kosaraju_sharir_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "longest_path_in_dag",
+        "label": "Longest Path In Dag",
+        "file": "output/college.en/sonnet/html/concept_longest_path_in_dag.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "memoization",
+        "label": "Memoization",
+        "file": "output/college.en/sonnet/html/concept_memoization.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "preorder_postorder",
+        "label": "Preorder Postorder",
+        "file": "output/college.en/sonnet/html/concept_preorder_postorder.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reachability",
+        "label": "Reachability",
+        "file": "output/college.en/sonnet/html/concept_reachability.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "sink_source_component",
+        "label": "Sink Source Component",
+        "file": "output/college.en/sonnet/html/concept_sink_source_component.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "strong_component_graph",
+        "label": "Strong Component Graph",
+        "file": "output/college.en/sonnet/html/concept_strong_component_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "strong_connectivity",
+        "label": "Strong Connectivity",
+        "file": "output/college.en/sonnet/html/concept_strong_connectivity.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tarjan_algorithm",
+        "label": "Tarjan Algorithm",
+        "file": "output/college.en/sonnet/html/concept_tarjan_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tarjan_low_function",
+        "label": "Tarjan Low Function",
+        "file": "output/college.en/sonnet/html/concept_tarjan_low_function.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "topological_sort",
+        "label": "Topological Sort",
+        "file": "output/college.en/sonnet/html/concept_topological_sort.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch08",
+    "name": "Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees",
+    "capstone": "kruskals_algorithm",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "boruvkas_algorithm",
+        "file": "output/college.en/sonnet/html/book_boruvkas_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "jarniks_algorithm",
+        "file": "output/college.en/sonnet/html/book_jarniks_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "kruskals_algorithm",
+        "file": "output/college.en/sonnet/html/book_kruskals_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "boruvkas_algorithm",
+        "label": "Boruvkas Algorithm",
+        "file": "output/college.en/sonnet/html/concept_boruvkas_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "disjoint_set_data_structure",
+        "label": "Disjoint Set Data Structure",
+        "file": "output/college.en/sonnet/html/concept_disjoint_set_data_structure.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fibonacci_heap",
+        "label": "Fibonacci Heap",
+        "file": "output/college.en/sonnet/html/concept_fibonacci_heap.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "generic_mst_algorithm",
+        "label": "Generic Mst Algorithm",
+        "file": "output/college.en/sonnet/html/concept_generic_mst_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "intermediate_spanning_forest",
+        "label": "Intermediate Spanning Forest",
+        "file": "output/college.en/sonnet/html/concept_intermediate_spanning_forest.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "jarniks_algorithm",
+        "label": "Jarniks Algorithm",
+        "file": "output/college.en/sonnet/html/concept_jarniks_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "kruskals_algorithm",
+        "label": "Kruskals Algorithm",
+        "file": "output/college.en/sonnet/html/concept_kruskals_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "minimum_spanning_tree",
+        "label": "Minimum Spanning Tree",
+        "file": "output/college.en/sonnet/html/concept_minimum_spanning_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "safe_edge",
+        "label": "Safe Edge",
+        "file": "output/college.en/sonnet/html/concept_safe_edge.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "spanning_tree",
+        "label": "Spanning Tree",
+        "file": "output/college.en/sonnet/html/concept_spanning_tree.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "useless_edge",
+        "label": "Useless Edge",
+        "file": "output/college.en/sonnet/html/concept_useless_edge.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "weighted_graph",
+        "label": "Weighted Graph",
+        "file": "output/college.en/sonnet/html/concept_weighted_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch09",
+    "name": "Algorithms (Jeff Erickson) — Ch9: Shortest Paths",
+    "capstone": "moores_algorithm",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "moores_algorithm",
+        "file": "output/college.en/sonnet/html/book_moores_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "bellman_ford",
+        "label": "Bellman Ford",
+        "file": "output/college.en/sonnet/html/concept_bellman_ford.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "dist_pred_labels",
+        "label": "Dist Pred Labels",
+        "file": "output/college.en/sonnet/html/concept_dist_pred_labels.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "edge_relaxation",
+        "label": "Edge Relaxation",
+        "file": "output/college.en/sonnet/html/concept_edge_relaxation.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "edge_weight",
+        "label": "Edge Weight",
+        "file": "output/college.en/sonnet/html/concept_edge_weight.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fifo_queue",
+        "label": "Fifo Queue",
+        "file": "output/college.en/sonnet/html/concept_fifo_queue.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fords_generic_algorithm",
+        "label": "Fords Generic Algorithm",
+        "file": "output/college.en/sonnet/html/concept_fords_generic_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "moores_algorithm",
+        "label": "Moores Algorithm",
+        "file": "output/college.en/sonnet/html/concept_moores_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "negative_cycle",
+        "label": "Negative Cycle",
+        "file": "output/college.en/sonnet/html/concept_negative_cycle.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "negative_edge_weight",
+        "label": "Negative Edge Weight",
+        "file": "output/college.en/sonnet/html/concept_negative_edge_weight.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "shortest_path",
+        "label": "Shortest Path",
+        "file": "output/college.en/sonnet/html/concept_shortest_path.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "sssp_problem",
+        "label": "Sssp Problem",
+        "file": "output/college.en/sonnet/html/concept_sssp_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tense_edge",
+        "label": "Tense Edge",
+        "file": "output/college.en/sonnet/html/concept_tense_edge.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch10",
+    "name": "Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths",
+    "capstone": "transitive_closure",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "arbitrage_detection",
+        "file": "output/college.en/sonnet/html/book_arbitrage_detection.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "transitive_closure",
+        "file": "output/college.en/sonnet/html/book_transitive_closure.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "arbitrage_detection",
+        "label": "Arbitrage Detection",
+        "file": "output/college.en/sonnet/html/concept_arbitrage_detection.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "bellman_ford_algorithm",
+        "label": "Bellman Ford Algorithm",
+        "file": "output/college.en/sonnet/html/concept_bellman_ford_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fast_matrix_multiplication",
+        "label": "Fast Matrix Multiplication",
+        "file": "output/college.en/sonnet/html/concept_fast_matrix_multiplication.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "min_plus_matrix_multiplication",
+        "label": "Min Plus Matrix Multiplication",
+        "file": "output/college.en/sonnet/html/concept_min_plus_matrix_multiplication.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "negative_cycle",
+        "label": "Negative Cycle",
+        "file": "output/college.en/sonnet/html/concept_negative_cycle.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "shortest_path_distance",
+        "label": "Shortest Path Distance",
+        "file": "output/college.en/sonnet/html/concept_shortest_path_distance.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "transitive_closure",
+        "label": "Transitive Closure",
+        "file": "output/college.en/sonnet/html/concept_transitive_closure.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch11",
+    "name": "Algorithms (Jeff Erickson) — Ch11: Maximum Flows & Minimum Cuts",
+    "capstone": "unit_capacity_network_algorithms",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "maximum_flow_problem",
+        "file": "output/college.en/sonnet/html/book_maximum_flow_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "minimum_cut_problem",
+        "file": "output/college.en/sonnet/html/book_minimum_cut_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "ford_fulkerson_algorithm",
+        "file": "output/college.en/sonnet/html/book_ford_fulkerson_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "irrational_capacities_nontermination",
+        "file": "output/college.en/sonnet/html/book_irrational_capacities_nontermination.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "advanced_maxflow_algorithms",
+        "file": "output/college.en/sonnet/html/book_advanced_maxflow_algorithms.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "unit_capacity_network_algorithms",
+        "file": "output/college.en/sonnet/html/book_unit_capacity_network_algorithms.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "advanced_maxflow_algorithms",
+        "label": "Advanced Maxflow Algorithms",
+        "file": "output/college.en/sonnet/html/concept_advanced_maxflow_algorithms.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "augmenting_path",
+        "label": "Augmenting Path",
+        "file": "output/college.en/sonnet/html/concept_augmenting_path.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "bfs_level_graph",
+        "label": "Bfs Level Graph",
+        "file": "output/college.en/sonnet/html/concept_bfs_level_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "capacity_function",
+        "label": "Capacity Function",
+        "file": "output/college.en/sonnet/html/concept_capacity_function.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "cut",
+        "label": "Cut",
+        "file": "output/college.en/sonnet/html/concept_cut.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "cut_capacity",
+        "label": "Cut Capacity",
+        "file": "output/college.en/sonnet/html/concept_cut_capacity.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "edmonds_karp_polynomial_bounds",
+        "label": "Edmonds Karp Polynomial Bounds",
+        "file": "output/college.en/sonnet/html/concept_edmonds_karp_polynomial_bounds.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "fattest_augmenting_path",
+        "label": "Fattest Augmenting Path",
+        "file": "output/college.en/sonnet/html/concept_fattest_augmenting_path.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "feasible_flow",
+        "label": "Feasible Flow",
+        "file": "output/college.en/sonnet/html/concept_feasible_flow.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "flow",
+        "label": "Flow",
+        "file": "output/college.en/sonnet/html/concept_flow.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "flow_network",
+        "label": "Flow Network",
+        "file": "output/college.en/sonnet/html/concept_flow_network.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "flow_value",
+        "label": "Flow Value",
+        "file": "output/college.en/sonnet/html/concept_flow_value.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "ford_fulkerson_algorithm",
+        "label": "Ford Fulkerson Algorithm",
+        "file": "output/college.en/sonnet/html/concept_ford_fulkerson_algorithm.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "irrational_capacities_nontermination",
+        "label": "Irrational Capacities Nontermination",
+        "file": "output/college.en/sonnet/html/concept_irrational_capacities_nontermination.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "maximum_flow_problem",
+        "label": "Maximum Flow Problem",
+        "file": "output/college.en/sonnet/html/concept_maximum_flow_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "minimum_cut_problem",
+        "label": "Minimum Cut Problem",
+        "file": "output/college.en/sonnet/html/concept_minimum_cut_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "residual_capacity",
+        "label": "Residual Capacity",
+        "file": "output/college.en/sonnet/html/concept_residual_capacity.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "residual_graph",
+        "label": "Residual Graph",
+        "file": "output/college.en/sonnet/html/concept_residual_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "shortest_augmenting_path",
+        "label": "Shortest Augmenting Path",
+        "file": "output/college.en/sonnet/html/concept_shortest_augmenting_path.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "unit_capacity_network_algorithms",
+        "label": "Unit Capacity Network Algorithms",
+        "file": "output/college.en/sonnet/html/concept_unit_capacity_network_algorithms.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch12",
+    "name": "Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts",
+    "capstone": "project_selection",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "exam_scheduling",
+        "file": "output/college.en/sonnet/html/book_exam_scheduling.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "minimal_faculty_hiring",
+        "file": "output/college.en/sonnet/html/book_minimal_faculty_hiring.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "baseball_elimination",
+        "file": "output/college.en/sonnet/html/book_baseball_elimination.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "project_selection",
+        "file": "output/college.en/sonnet/html/book_project_selection.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "baseball_elimination",
+        "label": "Baseball Elimination",
+        "file": "output/college.en/sonnet/html/concept_baseball_elimination.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "bipartite_matching",
+        "label": "Bipartite Matching",
+        "file": "output/college.en/sonnet/html/concept_bipartite_matching.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "directed_acyclic_graph",
+        "label": "Directed Acyclic Graph",
+        "file": "output/college.en/sonnet/html/concept_directed_acyclic_graph.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "disjoint_path_cover",
+        "label": "Disjoint Path Cover",
+        "file": "output/college.en/sonnet/html/concept_disjoint_path_cover.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "exam_scheduling",
+        "label": "Exam Scheduling",
+        "file": "output/college.en/sonnet/html/concept_exam_scheduling.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "matching",
+        "label": "Matching",
+        "file": "output/college.en/sonnet/html/concept_matching.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "maxflow_mincut_theorem",
+        "label": "Maxflow Mincut Theorem",
+        "file": "output/college.en/sonnet/html/concept_maxflow_mincut_theorem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "maximum_flow",
+        "label": "Maximum Flow",
+        "file": "output/college.en/sonnet/html/concept_maximum_flow.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "minimal_faculty_hiring",
+        "label": "Minimal Faculty Hiring",
+        "file": "output/college.en/sonnet/html/concept_minimal_faculty_hiring.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "minimum_cut",
+        "label": "Minimum Cut",
+        "file": "output/college.en/sonnet/html/concept_minimum_cut.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "project_selection",
+        "label": "Project Selection",
+        "file": "output/college.en/sonnet/html/concept_project_selection.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "tuple_selection",
+        "label": "Tuple Selection",
+        "file": "output/college.en/sonnet/html/concept_tuple_selection.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  },
+  {
+    "id": "algorithms_ch13",
+    "name": "Algorithms (Jeff Erickson) — Ch13: NP-Hardness",
+    "capstone": "draughts_move_hardness",
+    "default_level": "college",
+    "has_navigator": true,
+    "has_book": true,
+    "books": [
+      {
+        "target": "canonical_np_hard_problems",
+        "file": "output/college.en/sonnet/html/book_canonical_np_hard_problems.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "np_hard_games_and_puzzles",
+        "file": "output/college.en/sonnet/html/book_np_hard_games_and_puzzles.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "traveling_salesman",
+        "file": "output/college.en/sonnet/html/book_traveling_salesman.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "draughts_move_hardness",
+        "file": "output/college.en/sonnet/html/book_draughts_move_hardness.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "generated_concepts": [
+      {
+        "name": "3sat",
+        "label": "3Sat",
+        "file": "output/college.en/sonnet/html/concept_3sat.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "boolean_formula",
+        "label": "Boolean Formula",
+        "file": "output/college.en/sonnet/html/concept_boolean_formula.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "canonical_np_hard_problems",
+        "label": "Canonical Np Hard Problems",
+        "file": "output/college.en/sonnet/html/concept_canonical_np_hard_problems.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "choosing_reduction_source",
+        "label": "Choosing Reduction Source",
+        "file": "output/college.en/sonnet/html/concept_choosing_reduction_source.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "conjunctive_normal_form",
+        "label": "Conjunctive Normal Form",
+        "file": "output/college.en/sonnet/html/concept_conjunctive_normal_form.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "decision_problem",
+        "label": "Decision Problem",
+        "file": "output/college.en/sonnet/html/concept_decision_problem.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "draughts_move_hardness",
+        "label": "Draughts Move Hardness",
+        "file": "output/college.en/sonnet/html/concept_draughts_move_hardness.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "hamiltonian_cycle",
+        "label": "Hamiltonian Cycle",
+        "file": "output/college.en/sonnet/html/concept_hamiltonian_cycle.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "karp_reduction",
+        "label": "Karp Reduction",
+        "file": "output/college.en/sonnet/html/concept_karp_reduction.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "min_vertex_cover",
+        "label": "Min Vertex Cover",
+        "file": "output/college.en/sonnet/html/concept_min_vertex_cover.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "np_class",
+        "label": "Np Class",
+        "file": "output/college.en/sonnet/html/concept_np_class.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "np_hard",
+        "label": "Np Hard",
+        "file": "output/college.en/sonnet/html/concept_np_hard.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "np_hard_games_and_puzzles",
+        "label": "Np Hard Games And Puzzles",
+        "file": "output/college.en/sonnet/html/concept_np_hard_games_and_puzzles.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "polynomial_time",
+        "label": "Polynomial Time",
+        "file": "output/college.en/sonnet/html/concept_polynomial_time.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reduction_general_pattern",
+        "label": "Reduction General Pattern",
+        "file": "output/college.en/sonnet/html/concept_reduction_general_pattern.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "reduction_proof_technique",
+        "label": "Reduction Proof Technique",
+        "file": "output/college.en/sonnet/html/concept_reduction_proof_technique.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "sat",
+        "label": "Sat",
+        "file": "output/college.en/sonnet/html/concept_sat.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "traveling_salesman",
+        "label": "Traveling Salesman",
+        "file": "output/college.en/sonnet/html/concept_traveling_salesman.html",
+        "model": "sonnet",
+        "language": "en"
+      }
+    ],
+    "tags": [
+      "computer-science"
+    ],
+    "source": {
+      "title": "Algorithms",
+      "authors": "Jeff Erickson",
+      "license": "CC BY 4.0",
+      "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
+      "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
+    }
+  }
+]
