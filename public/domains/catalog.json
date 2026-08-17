@@ -42,6 +42,12 @@
         "file": "output/college.en/sonnet/html/book_karatsuba_multiplication.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "divide_and_conquer",
+        "file": "output/college.zh/sonnet/html/book_divide_and_conquer_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -53,11 +59,25 @@
         "language": "en"
       },
       {
+        "name": "base_case_zh",
+        "label": "Base Case Zh",
+        "file": "output/college.zh/sonnet/html/concept_base_case_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "divide_and_conquer",
         "label": "Divide And Conquer",
         "file": "output/college.en/sonnet/html/concept_divide_and_conquer.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "divide_and_conquer_zh",
+        "label": "Divide And Conquer Zh",
+        "file": "output/college.zh/sonnet/html/concept_divide_and_conquer_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "fast_exponentiation",
@@ -72,6 +92,13 @@
         "file": "output/college.en/sonnet/html/concept_induction_proof.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "induction_proof_zh",
+        "label": "Induction Proof Zh",
+        "file": "output/college.zh/sonnet/html/concept_induction_proof_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "karatsuba_multiplication",
@@ -137,11 +164,25 @@
         "language": "en"
       },
       {
+        "name": "recursion_zh",
+        "label": "Recursion Zh",
+        "file": "output/college.zh/sonnet/html/concept_recursion_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "reduction",
         "label": "Reduction",
         "file": "output/college.en/sonnet/html/concept_reduction.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "reduction_zh",
+        "label": "Reduction Zh",
+        "file": "output/college.zh/sonnet/html/concept_reduction_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "split_multiply",
