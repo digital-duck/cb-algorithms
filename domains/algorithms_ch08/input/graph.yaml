@@ -1,0 +1,88 @@
+domain: Algorithms_JeffE
+primitives:
+  weighted_graph:
+    defines: A connected, undirected graph G = (V, E) together with a function w that assigns a real-valued
+      weight to each edge.
+    tier: 0
+  spanning_tree:
+    defines: A subgraph of G that is a tree connecting all vertices of V.
+    tier: 0
+  intermediate_spanning_forest:
+    defines: An acyclic subgraph F of G maintained during MST construction, always a subgraph of the minimum
+      spanning tree, that evolves by adding edges until it becomes the full MST.
+    tier: 0
+  fibonacci_heap:
+    defines: A priority queue data structure supporting Insert and DecreaseKey in constant amortized time
+      and ExtractMin in O(log n) amortized time, used to speed up Jarník's algorithm to O(E + V log V).
+    tier: 0
+  disjoint_set_data_structure:
+    defines: A data structure supporting MakeSet, Find, and Union operations to maintain a partition of
+      vertices into components, used by Kruskal's algorithm to test whether an edge is safe.
+    tier: 0
+concepts:
+  minimum_spanning_tree:
+    defines: The spanning tree T of a weighted graph G that minimizes the total weight w(T) = sum of edge
+      weights in T.
+    composed_of:
+    - weighted_graph
+    - spanning_tree
+    tier: 1
+  useless_edge:
+    defines: An edge not in F whose endpoints already lie in the same component of F, and which is therefore
+      excluded from the MST.
+    composed_of:
+    - intermediate_spanning_forest
+    tier: 1
+  edge_contraction:
+    defines: An operation that merges the two endpoints of an edge into a single node, redirecting incident
+      edges and removing redundant parallel edges, used to reformulate the three classical MST algorithms.
+    composed_of:
+    - weighted_graph
+    tier: 1
+  mst_uniqueness:
+    defines: If all edge weights in a connected graph are distinct, the graph has a unique minimum spanning
+      tree, proved by a greedy exchange argument.
+    composed_of:
+    - minimum_spanning_tree
+    tier: 2
+  safe_edge:
+    defines: The minimum-weight edge with exactly one endpoint in some component of F; every safe edge
+      must belong to the minimum spanning tree.
+    composed_of:
+    - intermediate_spanning_forest
+    - minimum_spanning_tree
+    tier: 2
+  tie_breaking_rule:
+    defines: A consistent comparison procedure (ShorterEdge) for breaking ties between equal-weight edges
+      so that algorithms can assume distinct weights without loss of generality.
+    composed_of:
+    - mst_uniqueness
+    tier: 3
+  generic_mst_algorithm:
+    defines: The strategy, common to all classical MST algorithms, of repeatedly adding safe edges to
+      the intermediate spanning forest F until it becomes a single spanning tree.
+    composed_of:
+    - safe_edge
+    - useless_edge
+    tier: 3
+applications:
+  boruvkas_algorithm:
+    defines: An MST algorithm that repeatedly identifies and adds all safe edges (one per component of
+      F) in each round, running in O(E log V) time.
+    needs:
+    - generic_mst_algorithm
+    tier: 4
+  jarniks_algorithm:
+    defines: An MST algorithm that grows a single tree T from an arbitrary start vertex by repeatedly
+      adding T's safe edge, implemented with a priority queue in O(E log V) time.
+    needs:
+    - generic_mst_algorithm
+    - fibonacci_heap
+    tier: 4
+  kruskals_algorithm:
+    defines: An MST algorithm that scans all edges in increasing order of weight and adds each edge to
+      F if it is safe, running in O(E log V) time dominated by sorting.
+    needs:
+    - generic_mst_algorithm
+    - disjoint_set_data_structure
+    tier: 4

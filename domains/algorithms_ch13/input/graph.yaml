@@ -1,0 +1,230 @@
+domain: Algorithms_JeffE
+primitives:
+  boolean_circuit:
+    defines: A collection of AND, OR, and NOT gates connected by wires, with input wires for switches
+      and an output wire for a result.
+    tier: 0
+  polynomial_time:
+    defines: An algorithm's running time bounded by a polynomial function O(n^c) of the input size, taken
+      as the minimal requirement for "efficiency".
+    tier: 0
+  decision_problem:
+    defines: A problem whose output is a single boolean value, Yes or No.
+    tier: 0
+  turing_machine:
+    defines: A restrictive formal model of computation (finite-state machine with an unbounded memory
+      tape) used to formally define P, NP, and co-NP via languages.
+    tier: 0
+  boolean_formula:
+    defines: An expression built from boolean variables and And/Or/Not operators, evaluated to True or
+      False under a variable assignment.
+    tier: 0
+concepts:
+  circuit_satisfiability:
+    defines: The problem of deciding, given a boolean circuit, whether some setting of its inputs makes
+      the output True.
+    composed_of:
+    - boolean_circuit
+    tier: 1
+  p_class:
+    defines: The set of decision problems that can be solved in polynomial time.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+  np_class:
+    defines: The set of decision problems where a Yes answer has a proof that can be checked in polynomial
+      time.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+  co_np_class:
+    defines: The set of decision problems where a No answer has a proof that can be checked in polynomial
+      time.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+  turing_reduction:
+    defines: A polynomial-time reduction where a Turing machine solves one problem using another problem's
+      solver as a black-box subroutine.
+    composed_of:
+    - turing_machine
+    - polynomial_time
+    tier: 1
+  karp_reduction:
+    defines: A polynomial-time computable function f mapping instances of one language to another such
+      that x is a Yes-instance iff f(x) is a Yes-instance.
+    composed_of:
+    - polynomial_time
+    - decision_problem
+    tier: 1
+  sat:
+    defines: The problem of deciding whether a given boolean formula has an assignment of values to its
+      variables that makes it evaluate to True.
+    composed_of:
+    - boolean_formula
+    tier: 1
+  conjunctive_normal_form:
+    defines: A boolean formula expressed as a conjunction (And) of clauses, each of which is a disjunction
+      (Or) of literals.
+    composed_of:
+    - boolean_formula
+    tier: 1
+  pspace:
+    defines: The set of decision problems solvable using an amount of memory bounded by a polynomial function
+      of the input size.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+  exp_class:
+    defines: The set of decision problems solvable in exponential time, i.e., at most 2^(n^c) steps for
+      some constant c.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+  np_hard:
+    defines: A problem Π such that a polynomial-time algorithm for Π would imply a polynomial-time algorithm
+      for every problem in NP.
+    composed_of:
+    - np_class
+    tier: 2
+  3sat:
+    defines: The restriction of Sat to 3CNF formulas, where every clause has exactly three literals.
+    composed_of:
+    - conjunctive_normal_form
+    - sat
+    tier: 2
+  pspace_hard:
+    defines: A problem to which every problem solvable in polynomial space can be reduced in polynomial
+      time.
+    composed_of:
+    - pspace
+    - polynomial_time
+    tier: 2
+  complexity_class_hierarchy:
+    defines: The extended chain of complexity classes (NEXP, EXPSPACE, doubly/triply exponential classes,
+      and ELEMENTARY) ordered by inclusion above P, NP, PSPACE, and EXP.
+    composed_of:
+    - pspace
+    - exp_class
+    - np_class
+    tier: 2
+  np_complete:
+    defines: A problem that is both NP-hard and a member of NP; informally, the hardest problems in NP.
+    composed_of:
+    - np_hard
+    - np_class
+    tier: 3
+  cook_levin_theorem:
+    defines: The theorem, proved by Cook (1971) and independently Levin (1973), that circuit satisfiability
+      is NP-hard.
+    composed_of:
+    - circuit_satisfiability
+    - np_hard
+    tier: 3
+  reduction_proof_technique:
+    defines: To prove problem A is NP-hard, describe a polynomial-time transformation from a problem already
+      known to be NP-hard into A.
+    composed_of:
+    - karp_reduction
+    - np_hard
+    tier: 3
+  qbf:
+    defines: The canonical PSPACE-hard problem of deciding whether a fully-quantified boolean formula
+      (using existential and universal quantifiers) is equivalent to True.
+    composed_of:
+    - pspace_hard
+    - boolean_formula
+    tier: 3
+  max_independent_set:
+    defines: The problem of finding the size of the largest subset of a graph's vertices with no edges
+      between them.
+    composed_of:
+    - 3sat
+    - reduction_proof_technique
+    tier: 4
+  reduction_general_pattern:
+    defines: 'The standard three-step recipe for a polynomial-time reduction from X to Y: transform instances,
+      and prove "good" instances map both ways, often via certificate transformations.'
+    composed_of:
+    - reduction_proof_technique
+    - karp_reduction
+    tier: 4
+  max_clique:
+    defines: The problem of finding the number of vertices in the largest complete subgraph of a given
+      graph.
+    composed_of:
+    - 3sat
+    - reduction_general_pattern
+    tier: 5
+  min_vertex_cover:
+    defines: The problem of finding the smallest set of vertices that touches every edge in a given graph.
+    composed_of:
+    - 3sat
+    - reduction_general_pattern
+    tier: 5
+  graph_coloring:
+    defines: The problem of assigning colors to vertices so adjacent vertices differ, here specialized
+      to deciding 3-colorability via gadget reductions from 3Sat.
+    composed_of:
+    - 3sat
+    - reduction_general_pattern
+    tier: 5
+  choosing_reduction_source:
+    defines: Heuristics for selecting which known NP-hard problem to reduce from, based on structural
+      similarity to the target problem.
+    composed_of:
+    - reduction_general_pattern
+    - canonical_np_hard_problems
+    tier: 6
+  hamiltonian_cycle:
+    defines: A cycle in a graph that visits every vertex exactly once; deciding its existence (directed
+      case) is shown NP-hard via reductions from vertex cover and 3Sat.
+    composed_of:
+    - min_vertex_cover
+    - 3sat
+    tier: 6
+  subset_sum:
+    defines: Given a set of positive integers and a target T, decide whether some subset sums exactly
+      to T.
+    composed_of:
+    - min_vertex_cover
+    tier: 6
+  pseudo_polynomial_hardness:
+    defines: A distinction between algorithms polynomial in numeric input values (pseudo-polynomial) versus
+      in input bit-length, giving rise to weakly vs. strongly NP-hard problems.
+    composed_of:
+    - subset_sum
+    - polynomial_time
+    tier: 7
+applications:
+  canonical_np_hard_problems:
+    defines: A reference list of widely-used NP-hard problems (PlanarCircuitSat, 1-in-3Sat, X3M, Partition,
+      SetCover, Max2Sat, MaxCut, etc.) useful as reduction sources.
+    needs:
+    - np_hard
+    - reduction_general_pattern
+    tier: 5
+  np_hard_games_and_puzzles:
+    defines: The observation that most interesting real-world puzzles and games (Minesweeper, Sudoku,
+      Tetris, Super Mario Bros., etc.) are NP-hard or have NP-hard generalizations.
+    needs:
+    - np_hard
+    - canonical_np_hard_problems
+    tier: 6
+  traveling_salesman:
+    defines: The problem of finding the shortest Hamiltonian cycle or path in a graph with weighted edges.
+    needs:
+    - hamiltonian_cycle
+    tier: 7
+  draughts_move_hardness:
+    defines: A real-world example showing that finding a legal maximum-capture move in generalized international
+      draughts is NP-hard, via reduction from directed Hamiltonian cycle.
+    needs:
+    - hamiltonian_cycle
+    - choosing_reduction_source
+    tier: 7

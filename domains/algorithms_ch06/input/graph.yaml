@@ -1,0 +1,170 @@
+domain: Algorithms_JeffE
+primitives:
+  graph:
+    defines: A pair of sets (V, E), where V is a finite set of vertices and E is a set of pairs of vertices
+      called edges.
+    tier: 0
+  undirected_edge:
+    defines: An edge represented as an unordered pair (or set of size two) of vertices.
+    tier: 0
+  directed_edge:
+    defines: An edge represented as an ordered pair of vertices, distinguished into a tail and a head.
+    tier: 0
+concepts:
+  degree:
+    defines: The number of neighbors of a vertex (undirected), or in-degree/out-degree (directed).
+    composed_of:
+    - graph
+    - undirected_edge
+    - directed_edge
+    tier: 1
+  subgraph:
+    defines: A graph G' = (V', E') is a subgraph of G if V' is a subset of V and E' is a subset of E.
+    composed_of:
+    - graph
+    tier: 1
+  walk_path:
+    defines: A walk is a sequence of pairwise-adjacent vertices; a walk visiting each vertex at most once
+      is a path.
+    composed_of:
+    - graph
+    tier: 1
+  planarity:
+    defines: A graph is planar if it has a drawing (embedding) where no two edges cross.
+    composed_of:
+    - graph
+    tier: 1
+  adjacency_list:
+    defines: An array of lists, each containing the neighbors of one vertex, requiring O(V + E) space.
+    composed_of:
+    - graph
+    tier: 1
+  adjacency_matrix:
+    defines: A V x V matrix of 0s and 1s indicating which pairs of vertices are joined by an edge.
+    composed_of:
+    - graph
+    tier: 1
+  reachability:
+    defines: A vertex v is reachable from u if the graph contains a walk (and therefore a path) between
+      u and v.
+    composed_of:
+    - walk_path
+    tier: 2
+  cycle_acyclic:
+    defines: A cycle is a closed walk that enters and leaves each vertex at most once; a graph with no
+      such subgraph is acyclic.
+    composed_of:
+    - walk_path
+    tier: 2
+  connectivity:
+    defines: An undirected graph is connected if every vertex is reachable from every other; maximal connected
+      subgraphs are components.
+    composed_of:
+    - reachability
+    tier: 3
+  reduction:
+    defines: Solving a new problem by transforming its input into the input of an existing algorithm and
+      reusing that algorithm as a black-box subroutine.
+    composed_of:
+    - reachability
+    tier: 3
+  tree:
+    defines: A connected acyclic graph, equivalently one component of a forest.
+    composed_of:
+    - connectivity
+    - cycle_acyclic
+    tier: 4
+  directed_graph_concepts:
+    defines: Directed analogues of walks, paths, and cycles; strongly connected if every vertex is reachable
+      from every other; acyclic if no directed cycle (a dag).
+    composed_of:
+    - directed_edge
+    - walk_path
+    - cycle_acyclic
+    - connectivity
+    tier: 4
+  spanning_tree:
+    defines: A subgraph that is a tree and contains every vertex of a connected graph G; a spanning forest
+      collects one per component.
+    composed_of:
+    - tree
+    - graph
+    tier: 5
+  whatever_first_search:
+    defines: A generic traversal algorithm that repeatedly pulls a vertex from a 'bag', marks it, and
+      adds its neighbors, marking exactly the vertices reachable from the start and producing a spanning
+      tree.
+    composed_of:
+    - graph
+    - reachability
+    - spanning_tree
+    tier: 6
+  depth_first_search:
+    defines: Whatever-first search implemented with a stack, producing a depth-first spanning tree in
+      O(V + E) time.
+    composed_of:
+    - whatever_first_search
+    tier: 7
+  breadth_first_search:
+    defines: Whatever-first search implemented with a queue, producing a breadth-first spanning tree with
+      shortest paths in O(V + E) time.
+    composed_of:
+    - whatever_first_search
+    tier: 7
+  best_first_search:
+    defines: Whatever-first search implemented with a priority queue, yielding minimum spanning tree,
+      shortest-path, and widest-path variants.
+    composed_of:
+    - whatever_first_search
+    tier: 7
+  wfs_all_disconnected:
+    defines: A wrapper that runs whatever-first search from each unmarked vertex to visit every vertex
+      of a possibly disconnected graph.
+    composed_of:
+    - whatever_first_search
+    - connectivity
+    tier: 7
+applications:
+  intersection_graph:
+    defines: A graph with a vertex for every object in a collection and an edge for every intersecting
+      pair of objects.
+    needs:
+    - graph
+    tier: 1
+  configuration_graph:
+    defines: A graph whose vertices are valid configurations of a puzzle or mechanism and whose edges
+      connect configurations reachable by a single move.
+    needs:
+    - graph
+    tier: 1
+  finite_state_automaton_graph:
+    defines: A DFA modeled as a labeled directed graph whose vertices are states and edges are transitions,
+      phrasing language questions as reachability.
+    needs:
+    - graph
+    - directed_edge
+    - reachability
+    tier: 3
+  dependency_graph:
+    defines: A dag whose vertices are recursive subproblems and whose edges point from a subproblem to
+      another that depends on it.
+    needs:
+    - graph
+    - directed_graph_concepts
+    - cycle_acyclic
+    tier: 5
+  subset_construction:
+    defines: A construction that implicitly represents a larger graph G' = (2^V, E') from a directed graph
+      G, used to convert NFAs into DFAs.
+    needs:
+    - finite_state_automaton_graph
+    - directed_graph_concepts
+    tier: 5
+  flood_fill:
+    defines: Recoloring every pixel in a connected region of a pixel map, solved by reducing to reachability
+      in a graph of same-colored adjacent pixels.
+    needs:
+    - reachability
+    - whatever_first_search
+    - reduction
+    tier: 7

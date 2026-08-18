@@ -1,0 +1,105 @@
+domain: Algorithms_JeffE
+sources:
+  depth_first_search:
+    label: Depth-First Search
+    sections: []
+  dfs_wrapper:
+    label: DFS Wrapper Algorithm (DFSAll)
+    sections:
+    - id: ch07_preorder_and_postorder
+      title: Preorder and Postorder
+  preorder_postorder:
+    label: Preorder and Postorder
+    sections:
+    - id: ch07_preorder_and_postorder
+      title: Preorder and Postorder
+  vertex_states:
+    label: Vertex States (New, Active, Finished)
+    sections:
+    - id: ch07_preorder_and_postorder
+      title: Preorder and Postorder
+  active_interval:
+    label: Active Interval
+    sections:
+    - id: ch07_preorder_and_postorder
+      title: Preorder and Postorder
+  edge_classification:
+    label: Edge Classification (Tree, Forward, Back, Cross)
+    sections:
+    - id: ch07_preorder_and_postorder
+      title: Preorder and Postorder
+  dag:
+    label: Directed Acyclic Graph (Dag)
+    sections:
+    - id: ch07_detecting_cycles
+      title: Detecting Cycles
+  cycle_detection:
+    label: Cycle Detection
+    sections:
+    - id: ch07_detecting_cycles
+      title: Detecting Cycles
+  topological_sort:
+    label: Topological Sort
+    sections:
+    - id: ch07_topological_sort
+      title: Topological Sort
+  graph_reversal:
+    label: Graph Reversal
+    sections:
+    - id: ch07_topological_sort
+      title: Topological Sort
+  dependency_graph:
+    label: Dependency Graph of a Recurrence
+    sections:
+    - id: ch07_memoization_and_dynamic_programming
+      title: Memoization and Dynamic Programming
+  memoization:
+    label: Memoization
+    sections:
+    - id: ch07_memoization_and_dynamic_programming
+      title: Memoization and Dynamic Programming
+  dynamic_programming:
+    label: Dynamic Programming
+    sections:
+    - id: ch07_memoization_and_dynamic_programming
+      title: Memoization and Dynamic Programming
+  longest_path_in_dag:
+    label: Longest Path in a Dag
+    sections:
+    - id: ch07_memoization_and_dynamic_programming
+      title: Memoization and Dynamic Programming
+  reachability:
+    label: Reachability
+    sections:
+    - id: ch07_strong_connectivity
+      title: Strong Connectivity
+  strong_connectivity:
+    label: Strong Connectivity
+    sections:
+    - id: ch07_strong_connectivity
+      title: Strong Connectivity
+  strong_component_graph:
+    label: Strong Component Graph (scc(G))
+    sections:
+    - id: ch07_strong_connectivity
+      title: Strong Connectivity
+  sink_source_component:
+    label: Sink and Source Components
+    sections:
+    - id: ch07_strong_components_in_linear_time
+      title: Strong Components in Linear Time
+  kosaraju_sharir_algorithm:
+    label: Kosaraju-Sharir Algorithm
+    sections:
+    - id: ch07_strong_components_in_linear_time
+      title: Strong Components in Linear Time
+  tarjan_low_function:
+    label: Low-Link Function (low(v))
+    sections:
+    - id: ch07_strong_components_in_linear_time
+      title: Strong Components in Linear Time
+  tarjan_algorithm:
+    label: Tarjan's Algorithm
+    sections:
+    - id: ch07_strong_components_in_linear_time
+      title: Strong Components in Linear Time

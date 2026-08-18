@@ -1,0 +1,105 @@
+domain: Algorithms_JeffE
+sources:
+  edge_weight:
+    label: Edge Weight
+    sections: []
+  negative_edge_weight:
+    label: Negative Edge Weight
+    sections:
+    - id: ch09_negative_edges
+      title: ♥Negative Edges
+  negative_cycle:
+    label: Negative Cycle
+    sections:
+    - id: ch09_negative_edges
+      title: ♥Negative Edges
+  shortest_path:
+    label: Shortest Path
+    sections:
+    - id: ch09_negative_edges
+      title: ♥Negative Edges
+  sssp_problem:
+    label: Single-Source Shortest Path (SSSP) Problem
+    sections:
+    - id: ch09_negative_edges
+      title: ♥Negative Edges
+  shortest_path_tree:
+    label: Shortest-Path Tree
+    sections:
+    - id: ch09_negative_edges
+      title: ♥Negative Edges
+  dist_pred_labels:
+    label: dist(v) and pred(v) Labels
+    sections:
+    - id: ch09_the_only_sssp_algorithm
+      title: The Only SSSP Algorithm
+  tense_edge:
+    label: Tense Edge
+    sections:
+    - id: ch09_the_only_sssp_algorithm
+      title: The Only SSSP Algorithm
+  edge_relaxation:
+    label: Edge Relaxation
+    sections:
+    - id: ch09_the_only_sssp_algorithm
+      title: The Only SSSP Algorithm
+  fords_generic_algorithm:
+    label: Ford's Generic Relaxation Algorithm
+    sections:
+    - id: ch09_the_only_sssp_algorithm
+      title: The Only SSSP Algorithm
+  fifo_queue:
+    label: FIFO Queue
+    sections:
+    - id: ch09_unweighted_graphs_breadth_first_search
+      title: 'Unweighted Graphs: Breadth-First Search'
+  breadth_first_search:
+    label: Breadth-First Search (BFS)
+    sections:
+    - id: ch09_unweighted_graphs_breadth_first_search
+      title: 'Unweighted Graphs: Breadth-First Search'
+  bfs_phase_analysis:
+    label: BFS Phase Analysis (Token Technique)
+    sections:
+    - id: ch09_unweighted_graphs_breadth_first_search
+      title: 'Unweighted Graphs: Breadth-First Search'
+  directed_acyclic_graph:
+    label: Directed Acyclic Graph (DAG)
+    sections:
+    - id: ch09_directed_acyclic_graphs_depth_first_sear
+      title: 'Directed Acyclic Graphs: Depth-First Search'
+  topological_order:
+    label: Topological Order
+    sections:
+    - id: ch09_directed_acyclic_graphs_depth_first_sear
+      title: 'Directed Acyclic Graphs: Depth-First Search'
+  dag_shortest_paths:
+    label: DAG Shortest Paths (DagSSSP)
+    sections:
+    - id: ch09_directed_acyclic_graphs_depth_first_sear
+      title: 'Directed Acyclic Graphs: Depth-First Search'
+  priority_queue:
+    label: Priority Queue
+    sections:
+    - id: ch09_best_first_dijkstra_s_algorithm
+      title: 'Best-First: Dijkstra’s Algorithm'
+  dijkstras_algorithm:
+    label: Dijkstra's Algorithm
+    sections:
+    - id: ch09_best_first_dijkstra_s_algorithm
+      title: 'Best-First: Dijkstra’s Algorithm'
+  bellman_ford:
+    label: Bellman-Ford Algorithm
+    sections:
+    - id: ch09_relax_all_the_edges_bellman_ford
+      title: 'Relax ALL the Edges: Bellman-Ford'
+  bellman_ford_dp_recurrence:
+    label: Bellman's Equation (dist≤i Recurrence)
+    sections:
+    - id: ch09_relax_all_the_edges_bellman_ford
+      title: 'Relax ALL the Edges: Bellman-Ford'
+  moores_algorithm:
+    label: Moore's Algorithm
+    sections:
+    - id: ch09_relax_all_the_edges_bellman_ford
+      title: 'Relax ALL the Edges: Bellman-Ford'

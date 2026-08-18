@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Segmentation | Algorithms Ch04</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="text-segmentation">Text Segmentation</h2>
+<p><strong>Definition.</strong> <em>Text segmentation</em> is the process of partitioning a character sequence $S = c_1 c_2 \cdots c_n$ into a sequence of non-overlapping, contiguous subsequences (segments) $S = w_1 \cdot w_2 \cdots w_k$, where each $w_i$ satisfies membership in a target unit class (characters, tokens, sentences, or paragraphs). Formally, given a vocabulary $\mathcal{V}$ and a string $S$, segmentation finds a sequence of indices $0 = i_0 < i_1 < \cdots < i_k = n$ such that each substring $w_j = c_{i_{j-1}+1} \cdots c_{i_j}$ is a valid unit. The segmentation is <em>ambiguous</em> when multiple valid partitions exist; resolving ambiguity requires a scoring function, typically a language model probability $P(w_1, w_2, \ldots, w_k)$.</p>
+<p><strong>Worked Example.</strong> Consider the string $S = \texttt{"unbelievable"}$. A greedy maximum-match algorithm scans left-to-right, always selecting the longest prefix that belongs to $\mathcal{V}$. Suppose $\mathcal{V}$ contains $\{\texttt{un}, \texttt{believe}, \texttt{able}, \texttt{unbelievable}\}$. The algorithm first checks $\texttt{unbelievable} \in \mathcal{V}$: match found, so the segmentation is the single token $[\texttt{unbelievable}]$. If $\texttt{unbelievable} \notin \mathcal{V}$, it backtracks to $\texttt{un}$, then continues from position 3, yielding $[\texttt{un}, \texttt{believe}, \texttt{able}]$. The two segmentations encode different semantic granularities, illustrating why vocabulary design critically determines downstream meaning.</p>
+<p><strong>Key Theorem (Viterbi Optimality).</strong> Let $P(w_1, \ldots, w_k) = \prod_{j=1}^{k} P(w_j \mid w_{j-1})$ be a bigram model. The segmentation maximizing this probability can be found in $O(n \cdot L)$ time via dynamic programming, where $L = \max_j |w_j|$. Define $\delta(i) = \max_{1 \le \ell \le L} \bigl[\delta(i - \ell) + \log P(c_{i-\ell+1}\cdots c_i)\bigr]$. The optimal segmentation is recovered by backtracking through the argmax pointers. This is the <em>Viterbi segmentation</em>, guaranteeing global optimality under the model.</p>
+<p><strong>Lab Cell.</strong></p>
+<pre><code>import sympy as sp
+from sympy import Function, Symbol
+
+# Demonstrate dynamic-programming segmentation symbolically
+def viterbi_segment(s, vocab, log_prob):
+    n = len(s)
+    dp = [-sp.oo] * (n + 1)
+    back = [None] * (n + 1)
+    dp[0] = 0
+    for i in range(1, n + 1):
+        for w in vocab:
+            l = len(w)
+            if i &gt;= l and s[i-l:i] == w:
+                score = dp[i - l] + log_prob.get(w, -sp.oo)
+                if score &gt; dp[i]:
+                    dp[i], back[i] = score, i - l
+    # Reconstruct
+    tokens, pos = [], n
+    while pos &gt; 0:
+        tokens.append(s[back[pos]:pos])
+        pos = back[pos]
+    return list(reversed(tokens))
+
+vocab     = {"un", "believe", "able", "unbelievable"}
+log_p     = {"un": -1.2, "believe": -0.8, "able": -1.0, "unbelievable": -0.5}
+result    = viterbi_segment("unbelievable", vocab, log_p)
+print(result)   # ['unbelievable']</code></pre>
+<p>The lab cell encodes $\log P$ values as floats; replacing them with symbolic <code>sp.Symbol</code> objects allows closed-form sensitivity analysis of how vocabulary log-probabilities shift the optimal boundary.</p>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>

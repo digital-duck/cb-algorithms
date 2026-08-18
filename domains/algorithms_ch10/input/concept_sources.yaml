@@ -1,0 +1,97 @@
+domain: Algorithms_JeffE
+sources:
+  single_source_shortest_path:
+    label: Single-Source Shortest Path (SSSP)
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  shortest_path_distance:
+    label: Shortest-Path Distance
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  negative_cycle:
+    label: Negative Cycle
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  dijkstras_algorithm:
+    label: Dijkstra's Algorithm
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  bellman_ford_algorithm:
+    label: Bellman-Ford Algorithm
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  all_pairs_shortest_paths:
+    label: All-Pairs Shortest Paths (APSP)
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  obvious_apsp:
+    label: Obvious APSP (Repeated SSSP)
+    sections:
+    - id: ch10_lots_of_single_sources
+      title: Lots of Single Sources
+  vertex_reweighting:
+    label: Vertex Reweighting (Price Function)
+    sections:
+    - id: ch10_reweighting
+      title: Reweighting
+  tense_edge:
+    label: Tense Edge
+    sections:
+    - id: ch10_johnson_s_algorithm
+      title: Johnson's Algorithm
+  johnsons_algorithm:
+    label: Johnson's Algorithm
+    sections:
+    - id: ch10_johnson_s_algorithm
+      title: Johnson's Algorithm
+  bounded_edge_dp_recurrence:
+    label: Bounded-Edge-Count DP Recurrence
+    sections:
+    - id: ch10_dynamic_programming
+      title: Dynamic Programming
+  shimbel_apsp:
+    label: Shimbel's Algorithm (ShimbelAPSP / AllPairsBellmanFord)
+    sections:
+    - id: ch10_dynamic_programming
+      title: Dynamic Programming
+  divide_and_conquer_apsp:
+    label: Divide-and-Conquer APSP (Fischer-Meyer / Leyzorek)
+    sections:
+    - id: ch10_divide_and_conquer
+      title: Divide and Conquer
+  min_plus_matrix_multiplication:
+    label: Min-Plus ("Funny") Matrix Multiplication
+    sections:
+    - id: ch10_funny_matrix_multiplication
+      title: Funny Matrix Multiplication
+  fast_matrix_multiplication:
+    label: Fast (Standard) Matrix Multiplication
+    sections:
+    - id: ch10_funny_matrix_multiplication
+      title: Funny Matrix Multiplication
+  floyd_warshall_algorithm:
+    label: (Kleene-Roy-)Floyd-Warshall(-Ingerman) Algorithm
+    sections:
+    - id: ch10_kleene_roy_floyd_warshall_ingerman
+      title: (Kleene-Roy-)Floyd-Warshall(-Ingerman)
+  restricted_intermediate_path:
+    label: Restricted-Intermediate-Vertex Path π(u,v,r)
+    sections:
+    - id: ch10_kleene_roy_floyd_warshall_ingerman
+      title: (Kleene-Roy-)Floyd-Warshall(-Ingerman)
+  arbitrage_detection:
+    label: Arbitrage Cycle Detection
+    sections:
+    - id: ch10_exercises
+      title: Exercises
+  transitive_closure:
+    label: Transitive Closure via Boolean/Fast Matrix Multiplication
+    sections:
+    - id: ch10_exercises
+      title: Exercises

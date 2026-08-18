@@ -1,0 +1,183 @@
+domain: Algorithms_JeffE
+primitives:
+  directed_graph:
+    defines: A graph G = (V, E) consisting of vertices and directed edges, used as the underlying structure
+      for flow networks.
+    tier: 0
+  flow_network:
+    defines: A directed graph with two special vertices, a source s and target t, together with a non-negative
+      capacity function on edges.
+    tier: 0
+  capacity_function:
+    defines: A function assigning a non-negative capacity to each edge, bounding how much flow that edge
+      can carry.
+    tier: 0
+concepts:
+  flow:
+    defines: A function f on the edges of a graph satisfying a conservation constraint at every vertex
+      except s and t.
+    composed_of:
+    - flow_network
+    tier: 1
+  cut:
+    defines: A partition of the vertices into disjoint subsets S and T with s in S and t in T.
+    composed_of:
+    - flow_network
+    tier: 1
+  flow_value:
+    defines: The total net flow out of the source vertex s, denoted |f|, which equals the total net flow
+      into t.
+    composed_of:
+    - flow
+    tier: 2
+  feasible_flow:
+    defines: A flow f is feasible with respect to a capacity function c if 0 <= f(e) <= c(e) for every
+      edge e.
+    composed_of:
+    - flow
+    - capacity_function
+    tier: 2
+  path_flow:
+    defines: The unit (s,t)-flow of value 1 corresponding to a directed path P.
+    composed_of:
+    - flow
+    tier: 2
+  cycle_flow:
+    defines: The (s,t)-flow of value 0 corresponding to a directed cycle C.
+    composed_of:
+    - flow
+    tier: 2
+  circulation:
+    defines: A flow with value 0 in which flow is conserved at every vertex, including s and t.
+    composed_of:
+    - flow
+    tier: 2
+  cut_capacity:
+    defines: The sum of the capacities of edges that start in S and end in T for a given (s,t)-cut.
+    composed_of:
+    - cut
+    - capacity_function
+    tier: 2
+  weak_duality_flows_cuts:
+    defines: For any feasible flow and any cut, the value of the flow is at most the capacity of the cut,
+      with equality under saturation conditions.
+    composed_of:
+    - feasible_flow
+    - cut_capacity
+    - flow_value
+    tier: 3
+  residual_capacity:
+    defines: A derived capacity on vertex pairs indicating how much additional flow can be pushed or reversed
+      given a current flow.
+    composed_of:
+    - feasible_flow
+    - capacity_function
+    tier: 3
+  flow_decomposition_theorem:
+    defines: Every non-negative (s,t)-flow can be written as a positive linear combination of directed
+      paths and cycles.
+    composed_of:
+    - path_flow
+    - cycle_flow
+    - flow
+    tier: 3
+  maxflow_mincut_theorem:
+    defines: In every flow network, the value of the maximum flow equals the capacity of the minimum cut.
+    composed_of:
+    - weak_duality_flows_cuts
+    - maximum_flow_problem
+    - minimum_cut_problem
+    tier: 4
+  residual_graph:
+    defines: The graph Gf consisting of all edges with positive residual capacity with respect to a current
+      flow f.
+    composed_of:
+    - residual_capacity
+    tier: 4
+  acyclic_flow:
+    defines: An (s,t)-flow whose positive-flow subgraph contains no directed cycle.
+    composed_of:
+    - flow_decomposition_theorem
+    tier: 4
+  flow_decomposition_lower_bound:
+    defines: Any path/cycle-based maximum-flow algorithm must take Omega(VE) time in the worst case.
+    composed_of:
+    - flow_decomposition_theorem
+    tier: 4
+  augmenting_path:
+    defines: A directed path from s to t in the residual graph along which additional flow can be pushed.
+    composed_of:
+    - residual_graph
+    tier: 5
+  bfs_level_graph:
+    defines: The unweighted shortest-path distance from s to a vertex v in the current residual graph.
+    composed_of:
+    - residual_graph
+    tier: 5
+  fattest_augmenting_path:
+    defines: Edmonds and Karp's rule of always choosing the augmenting path with the largest bottleneck
+      capacity.
+    composed_of:
+    - augmenting_path
+    - residual_capacity
+    tier: 6
+  shortest_augmenting_path:
+    defines: Edmonds and Karp's rule of always choosing the augmenting path with the fewest edges.
+    composed_of:
+    - augmenting_path
+    tier: 6
+  integrality_theorem:
+    defines: If all capacities are integers, there is a maximum flow such that the flow through every
+      edge is an integer.
+    composed_of:
+    - ford_fulkerson_algorithm
+    tier: 7
+  ford_fulkerson_running_time:
+    defines: With integer capacities, Ford-Fulkerson halts after at most |f*| iterations and runs in O(E|f*|)
+      time.
+    composed_of:
+    - ford_fulkerson_algorithm
+    tier: 7
+  edmonds_karp_polynomial_bounds:
+    defines: The fattest-path and shortest-path augmenting rules yield polynomial-time maximum-flow algorithms.
+    composed_of:
+    - fattest_augmenting_path
+    - shortest_augmenting_path
+    - bfs_level_graph
+    tier: 7
+applications:
+  maximum_flow_problem:
+    defines: The problem of computing a feasible (s,t)-flow of maximum value.
+    needs:
+    - feasible_flow
+    - flow_value
+    tier: 3
+  minimum_cut_problem:
+    defines: The problem of computing an (s,t)-cut whose capacity is as small as possible.
+    needs:
+    - cut_capacity
+    tier: 3
+  ford_fulkerson_algorithm:
+    defines: An algorithm that starts with the zero flow and repeatedly augments along paths in the residual
+      graph until none exist.
+    needs:
+    - augmenting_path
+    - maximum_flow_problem
+    tier: 6
+  irrational_capacities_nontermination:
+    defines: With irrational edge capacities, Ford-Fulkerson can fail to terminate or converge to the
+      maximum flow.
+    needs:
+    - ford_fulkerson_algorithm
+    tier: 7
+  advanced_maxflow_algorithms:
+    defines: More sophisticated techniques improving on Edmonds-Karp's running times, culminating in Orlin's
+      O(VE)-time algorithm.
+    needs:
+    - edmonds_karp_polynomial_bounds
+    tier: 8
+  unit_capacity_network_algorithms:
+    defines: Specialized faster maximum-flow algorithms for networks where every edge has capacity 1.
+    needs:
+    - edmonds_karp_polynomial_bounds
+    tier: 8

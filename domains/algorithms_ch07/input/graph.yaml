@@ -1,0 +1,137 @@
+domain: Algorithms_JeffE
+primitives:
+  depth_first_search:
+    defines: A graph traversal algorithm that recursively explores as far as possible along each branch
+      before backtracking, computed via a marking/recursion mechanism.
+    tier: 0
+  reachability:
+    defines: The relation where one vertex can reach another via a directed path, forming the set reach(u)
+      of all vertices reachable from u.
+    tier: 0
+concepts:
+  dfs_wrapper:
+    defines: A wrapper that repeatedly invokes depth-first search from each unvisited vertex so that every
+      vertex in the graph is visited.
+    composed_of:
+    - depth_first_search
+    tier: 1
+  preorder_postorder:
+    defines: Numbering of vertices assigned by a clock during DFS — pre when pushed onto the recursion
+      stack, post when popped off.
+    composed_of:
+    - depth_first_search
+    tier: 1
+  vertex_states:
+    defines: The three states a vertex passes through during DFSAll, determined by comparing the current
+      clock to its pre and post times.
+    composed_of:
+    - preorder_postorder
+    tier: 2
+  active_interval:
+    defines: The interval [v.pre, v.post] during which a vertex is on the recursion stack, used to characterize
+      ancestor/descendant relationships.
+    composed_of:
+    - preorder_postorder
+    tier: 2
+  edge_classification:
+    defines: A categorization of graph edges based on how the active intervals of their endpoints intersect
+      during a depth-first traversal.
+    composed_of:
+    - active_interval
+    tier: 3
+  dag:
+    defines: A directed graph containing no directed cycles, characterized by having sources, sinks, and
+      a valid topological ordering.
+    composed_of:
+    - reachability
+    tier: 1
+  graph_reversal:
+    defines: The operation of constructing rev(G) by reversing the direction of every edge, used to process
+      a dag in forward topological order via DFS.
+    composed_of:
+    - dag
+    tier: 2
+  dependency_graph:
+    defines: A graph with a vertex per subproblem and an edge between subproblems that depend on each
+      other, which must be acyclic for a recurrence to terminate.
+    composed_of:
+    - dag
+    tier: 2
+  strong_connectivity:
+    defines: An equivalence relation between vertices u and v where u can reach v and v can reach u, partitioning
+      the graph into strongly connected components.
+    composed_of:
+    - reachability
+    tier: 1
+  strong_component_graph:
+    defines: The dag obtained by contracting each strongly connected component of G into a single vertex
+      and collapsing parallel edges.
+    composed_of:
+    - strong_connectivity
+    - dag
+    tier: 2
+  sink_source_component:
+    defines: Strongly connected components that correspond to sinks or sources in the strong component
+      graph, used as the basis for linear-time SCC algorithms.
+    composed_of:
+    - strong_component_graph
+    tier: 3
+  tarjan_low_function:
+    defines: For a vertex v, the smallest starting time reachable via tree edges followed by at most one
+      non-tree edge, used to identify roots of sink components.
+    composed_of:
+    - preorder_postorder
+    - active_interval
+    tier: 3
+applications:
+  cycle_detection:
+    defines: An algorithm that determines whether a directed graph is acyclic by checking, during DFS,
+      whether any edge leads to an active vertex.
+    needs:
+    - depth_first_search
+    - edge_classification
+    tier: 4
+  topological_sort:
+    defines: An ordering of the vertices of a dag such that every edge points from an earlier to a later
+      vertex, obtained as the reverse of a postordering.
+    needs:
+    - dag
+    - preorder_postorder
+    tier: 2
+  memoization:
+    defines: A technique equivalent to depth-first search of a recurrence's dependency graph, where each
+      subproblem's value is computed and cached once.
+    needs:
+    - dependency_graph
+    - depth_first_search
+    tier: 3
+  dynamic_programming:
+    defines: An algorithmic technique equivalent to evaluating a recurrence's dependency graph in postorder,
+      so each subproblem is solved after its dependencies.
+    needs:
+    - dependency_graph
+    - topological_sort
+    tier: 3
+  longest_path_in_dag:
+    defines: The problem of finding the maximum-weight path between two vertices in a dag, solvable in
+      linear time via memoized DFS or postorder evaluation.
+    needs:
+    - memoization
+    - dynamic_programming
+    tier: 4
+  kosaraju_sharir_algorithm:
+    defines: A linear-time algorithm that computes all strongly connected components by performing DFS
+      on the reversed graph to obtain a postorder, then DFS on the original graph in that order.
+    needs:
+    - dfs_wrapper
+    - graph_reversal
+    - sink_source_component
+    tier: 4
+  tarjan_algorithm:
+    defines: A single-pass linear-time depth-first search algorithm that computes all strongly connected
+      components using an auxiliary stack and the low-link function.
+    needs:
+    - tarjan_low_function
+    - sink_source_component
+    - dfs_wrapper
+    tier: 4
