@@ -33,4 +33,10 @@ fi
 
 API_PORT="$(grep -m1 '^API_PORT=' "$REPO/.env" 2>/dev/null | cut -d= -f2 || true)"
 API_PORT="${API_PORT:-8201}"
-uvicorn api.app:app --host 0.0.0.0 --port "$API_PORT" --reload
+# Localhost-only: this backend now holds user-supplied LLM API keys
+# (Settings page) and exposes side-effecting GET endpoints (/api/generate,
+# /api/pdf) — 0.0.0.0 would let any device on the LAN reach them, and any
+# website the user visits could fire cross-origin requests against them.
+# If you genuinely need LAN access, bind an explicit interface IP, not
+# 0.0.0.0, and keep CORS narrow (see api/app.py).
+uvicorn api.app:app --host 127.0.0.1 --port "$API_PORT" --reload
