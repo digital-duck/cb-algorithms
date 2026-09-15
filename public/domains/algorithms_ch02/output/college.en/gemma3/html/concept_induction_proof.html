@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Induction Proof | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="induction-proof">Induction Proof</h2>
+<h3 id="definition">Definition</h3>
+<p>Induction proof is a powerful technique for proving statements about all natural numbers (0, 1, 2, 3,...). It relies on establishing two key steps: a <em>base case</em> and a <em>recursive step</em>. The base case demonstrates that the statement holds true for the starting value of the sequence (typically 0 or 1). The recursive step shows how, if the statement is true for some number <em>n</em>, it must also be true for the next number, <em>n+1</em>.  This creates a chain reaction – if both steps are proven, we’ve demonstrated that the statement holds for all numbers in the sequence. We often refer to the assumption made in the recursive step as the <em>induction hypothesis</em>.</p>
+<h3 id="picture-this">Picture this</h3>
+<p>Imagine you're building with LEGO bricks. The base case is like showing you have one brick—it’s a valid configuration. The recursive step is demonstrating that if you already have 'n' bricks arranged in a specific way, you can always add another brick to extend the structure according to the rules of your building set.  You don’t need to show <em>every</em> possible arrangement; just showing how adding one more brick maintains the correct configuration is sufficient.</p>
+<h3 id="worked-example">Worked example</h3>
+<p>Let's prove that the sum of the first <em>n</em> natural numbers is given by the formula:  $S_n = \frac{n(n+1)}{2}$.</p>
+<p><strong>Base Case (n=1):</strong> When <em>n</em>=1, $S_1 = 1$. The formula gives us $\frac{1(1+1)}{2} = \frac{2}{2} = 1$.  The formula holds true for the base case.</p>
+<p><strong>Recursive Step:</strong> Assume that $S_k = \frac{k(k+1)}{2}$ is true for some integer <em>k</em> ≥ 1. We want to show that $S_{k+1} = \frac{(k+1)(k+2)}{2}$.  We know that $S_{k+1} = S_k + (k+1)$. Substituting our assumption, we get:</p>
+<p>$S_{k+1} = \frac{k(k+1)}{2} + (k+1) = \frac{k(k+1) + 2(k+1)}{2} = \frac{(k+1)(k+2)}{2}$.</p>
+<p>This confirms that if the formula holds for <em>k</em>, it also holds for <em>k+1</em>.</p>
+<h3 id="problem-solving-application">Problem-solving application</h3>
+<p>Consider a recursive algorithm to calculate the factorial of a non-negative integer <em>n</em>.  A naive implementation might have errors, particularly with small values of <em>n</em>. Induction proof can be used to verify that such an algorithm correctly computes factorials. For example: if your algorithm attempts to compute $n!$ and it has an error in the base case (i.e., doesn’t correctly handle n=0 or n=1), then the entire result will be incorrect for all values of <em>n</em>.  The core idea is that by establishing a correct base case, we build up our proof from the ground up, ensuring correctness at every step of the recursion.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: gemma3)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

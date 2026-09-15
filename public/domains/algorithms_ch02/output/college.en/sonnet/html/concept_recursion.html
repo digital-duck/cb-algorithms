@@ -26,6 +26,8 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,36 +37,16 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="recursion">Recursion</h2>
-<p><strong>Definition.</strong> A function $f$ is defined <em>recursively</em> if its value at an argument is expressed in terms of its value at one or more strictly simpler arguments, together with one or more <em>base cases</em> that terminate the descent. Formally, a recursive definition specifies:</p>
-<li><strong>Base case(s):</strong> explicit values $f(n_0), f(n_1), \ldots$ for the smallest inputs.</li>
-<li><strong>Recursive case:</strong> a rule $f(n) = g\bigl(n,\, f(n-1),\, f(n-2),\ldots\bigr)$ for $n$ beyond the base cases, where $g$ involves only arguments strictly less than $n$.</li>
-<p>Well-foundedness—the guarantee that repeated application of the recursive case always reaches a base case—is what separates a valid recursive definition from a circular one.</p>
-<p><strong>Worked example: the factorial function.</strong> Define $n!$ for $n \in \mathbb{N}_0$ by</p>
-$$
-0! = 1, \qquad n! = n \cdot (n-1)! \quad \text{for } n \geq 1.
-$$
-<p>Computing $4!$ unwinds as follows:</p>
-$$
-4! = 4 \cdot 3! = 4 \cdot 3 \cdot 2! = 4 \cdot 3 \cdot 2 \cdot 1! = 4 \cdot 3 \cdot 2 \cdot 1 \cdot 0! = 24.
-$$
-<p>Each call reduces $n$ by $1$; since $n$ is a non-negative integer, the chain terminates at $0!$ in exactly $n$ steps. The <em>call stack</em> at depth $k$ holds the pending multiplication $k \cdot (\cdots)$, so the process requires $O(n)$ space as well as $O(n)$ time.</p>
-<p><strong>Key theorem (Structural Induction Principle).</strong> Let $P(n)$ be a property of natural numbers. If $P(0)$ holds, and $P(k)$ implies $P(k+1)$ for every $k \geq 0$, then $P(n)$ holds for all $n \in \mathbb{N}_0$. This principle is the mathematical counterpart of recursion: the base case mirrors the inductive base; the inductive step mirrors the recursive case. Any terminating recursion can therefore be reasoned about by induction, and correctness proofs for recursive algorithms follow this template directly.</p>
-<p><strong>Lab cell.</strong></p>
-<pre><code>from sympy import factorial, Symbol, Function, rsolve, symbols
-
-n = symbols('n', integer=True, nonneg=True)
-
-# Verify factorial values symbolically
-print([factorial(k) for k in range(7)])  # [1, 1, 2, 6, 24, 120, 720]
-
-# Solve the linear recurrence f(n) - n*f(n-1) = 0 closed-form insight
-f = Function('f')
-# SymPy's rsolve handles constant-coefficient recurrences;
-# factorial growth is confirmed by direct substitution.
-print(factorial(10))  # 3628800</code></pre>
-<p>The lab cell encourages you to substitute larger values and observe superlinear growth, building intuition for why naive recursion, left unoptimized, can be costly in practice.</p>
+<p>Recursion is a special case of reduction in which a problem is solved by reducing it to one or more smaller instances of <em>itself</em>, until the instances become trivial to solve directly. The trick to designing a recursive solution is to imagine a "Recursion Fairy" — an oracle that will correctly solve any smaller instance of your problem for you. Your only job is to (1) define a <strong>base case</strong> simple enough to solve without help, and (2) show how to combine the fairy's answer(s) on smaller inputs into a correct answer for your input.</p>
+<p><strong>Worked example: factorial.</strong> Define $n! = n \cdot (n-1)!$ for $n > 0$, with base case $0! = 1$. If the fairy hands you $(n-1)!$, you multiply by $n$ and you're done. In code:</p>
+<pre><code>def factorial(n):
+    if n == 0:
+        return 1                 # base case
+    return n * factorial(n - 1)  # trust the fairy on n-1</code></pre>
+<p><strong>Why this works — the formal justification.</strong> Trusting the fairy is not hand-waving; it is mathematical induction in disguise. The base case is the induction basis. The recursive step assumes the fairy's answer is correct for all smaller inputs (the induction hypothesis) and shows the combining step preserves correctness (the inductive step). Since every recursive call strictly decreases $n$ toward the base case, the recursion terminates, and induction guarantees the result is correct for every $n$.</p>
+<p><strong>Problem-solving application: Fibonacci and efficiency.</strong> Define $F(n) = F(n-1) + F(n-2)$, $F(0)=0, F(1)=1$. A direct translation of this recurrence into code is correct but wasteful: it recomputes $F(k)$ exponentially many times, giving time complexity $T(n) = T(n-1) + T(n-2) + O(1)$, which solves to $O(\phi^n)$ where $\phi \approx 1.618$. Recognizing this inefficiency is itself a problem-solving skill: by having the fairy remember answers she's already computed (memoization) or by building answers bottom-up (dynamic programming), the same recursive structure runs in $O(n)$ time. This pattern — trust the fairy, verify by induction, then analyze and optimize the resulting recurrence — is the core discipline for applying recursion to real algorithmic problems, from tree traversal to divide-and-conquer sorting.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

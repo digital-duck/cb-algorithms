@@ -26,6 +26,8 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,41 +37,20 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="divide-and-conquer">Divide And Conquer</h2>
-<p><strong>Definition.</strong> The <em>divide-and-conquer</em> paradigm is an algorithmic design strategy in which a problem of size $n$ is recursively decomposed into $a \geq 1$ subproblems, each of size $n/b$ (for some integer $b > 1$), solved independently, and then combined. The total work $T(n)$ satisfies the recurrence</p>
-$$T(n) = a\,T\!\left(\frac{n}{b}\right) + f(n), \qquad T(1) = \Theta(1),$$
-<p>where $f(n)$ denotes the cost of the divide and combine steps.</p>
-<hr>
-<p><strong>Worked Example: Merge Sort.</strong>   Consider sorting an array of $n$ elements. Merge sort divides the array into two halves ($a = 2$, $b = 2$), sorts each half recursively, then merges the two sorted halves in $\Theta(n)$ time. Its recurrence is</p>
-$$T(n) = 2\,T\!\left(\frac{n}{2}\right) + \Theta(n).$$
-<p>To build intuition, trace $n = 8$: the array splits into two groups of 4, then four groups of 2, then eight singletons — three levels of recursion. At each level the total merge work is $\Theta(n) = \Theta(8)$, and there are $\log_2 8 = 3$ levels, giving $T(8) = \Theta(8 \log 8)$.</p>
-<hr>
-<p><strong>Theorem (Master Theorem).</strong> Let $T(n) = a\,T(n/b) + f(n)$ with $a \geq 1$, $b > 1$. Define the <em>critical exponent</em> $c^* = \log_b a$. Then:</p>
-<li>If $f(n) = O(n^{c^<em> - \varepsilon})$ for some $\varepsilon > 0$, then $T(n) = \Theta(n^{c^</em>})$.</li>
-<li>If $f(n) = \Theta(n^{c^<em>})$, then $T(n) = \Theta(n^{c^</em>} \log n)$.</li>
-<li>If $f(n) = \Omega(n^{c^* + \varepsilon})$ and $a\,f(n/b) \leq c\,f(n)$ for some $c < 1$, then $T(n) = \Theta(f(n))$.</li>
-<p>For merge sort, $c^* = \log_2 2 = 1$ and $f(n) = \Theta(n^1)$, so Case 2 applies, confirming $T(n) = \Theta(n \log n)$.</p>
-<hr>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>from sympy import symbols, Function, rsolve, log, O
-
-n = symbols('n', positive=True)
-
-# Verify Master Theorem Case 2 numerically
-import math
-
-def merge_sort_ops(n):
-    """Count approximate operations via recurrence T(n) = 2T(n/2) + n."""
-    if n &lt;= 1:
-        return 0
-    return 2 * merge_sort_ops(n // 2) + n
-
-sizes = [8, 16, 32, 64, 128]
-for s in sizes:
-    ratio = merge_sort_ops(s) / (s * math.log2(s))
-    print(f"n={s:4d}  T(n)/(n log n) ≈ {ratio:.4f}")</code></pre>
-<p>Running this cell reveals that $T(n)/(n \log_2 n)$ converges to a constant near $1$, confirming the $\Theta(n \log n)$ bound empirically. Divide-and-conquer thus transforms an $O(n^2)$ sorting problem into one solvable in nearly linear-logarithmic time — a pattern that recurs throughout algorithm design.</p>
+<p>Divide-and-conquer is a recursive strategy for solving a problem by breaking it into smaller, independent subproblems of the same type, solving each subproblem recursively, and combining their solutions to produce the answer to the original problem. Formally, an algorithm is divide-and-conquer if it consists of three steps: <strong>divide</strong> the input of size $n$ into $a$ subproblems each of size $n/b$; <strong>conquer</strong> each subproblem recursively (with a base case for small $n$); and <strong>combine</strong> the subsolutions, at cost $f(n)$, into a solution for the full input.</p>
+<p><strong>Worked example.</strong> Merge sort applies this pattern to sorting. Divide an array of $n$ elements into two halves. Conquer by recursively sorting each half. Combine by merging the two sorted halves into one sorted array in $O(n)$ time. The base case is an array of length 0 or 1, which is trivially sorted.</p>
+<p><strong>Analysis via the recurrence.</strong> The running time of a divide-and-conquer algorithm satisfies a recurrence of the form</p>
+$$
+T(n) = a\,T\!\left(\frac{n}{b}\right) + f(n),
+$$
+<p>where $a$ is the number of subproblems, $n/b$ is their size, and $f(n)$ is the cost of dividing and combining. For merge sort, $a = 2$, $b = 2$, and $f(n) = O(n)$, giving $T(n) = 2T(n/2) + O(n)$. The <strong>Master Theorem</strong> solves recurrences of this form by comparing $f(n)$ to $n^{\log_b a}$:</p>
+<li>If $f(n) = O(n^{\log_b a - \epsilon})$ for some $\epsilon > 0$, then $T(n) = \Theta(n^{\log_b a})$.</li>
+<li>If $f(n) = \Theta(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a}\log n)$.</li>
+<li>If $f(n) = \Omega(n^{\log_b a + \epsilon})$ and $a f(n/b) \le c f(n)$ for some $c<1$, then $T(n) = \Theta(f(n))$.</li>
+<p>For merge sort, $\log_b a = \log_2 2 = 1$, so $f(n) = \Theta(n^1)$ matches the second case, giving $T(n) = \Theta(n\log n)$ — the classic bound that beats the $\Theta(n^2)$ cost of insertion sort.</p>
+<p><strong>Problem-solving application.</strong> When designing a new algorithm, check whether a problem exhibits <em>optimal substructure</em>: can it be split into smaller, independent instances whose solutions combine cheaply into the full solution? If so, write the recurrence, apply the Master Theorem, and compare the resulting complexity against simpler iterative approaches — as with binary search ($T(n) = T(n/2) + O(1)$, giving $O(\log n)$) or Strassen's matrix multiplication, which reduces the divide step's subproblem count to beat the naive $O(n^3)$ bound.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

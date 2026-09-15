@@ -26,6 +26,8 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,27 +37,12 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="base-case">Base Case</h2>
-<p><strong>Definition.</strong> Let $P(n)$ be a predicate defined on the natural numbers $\mathbb{N}$. The <em>base case</em> of a proof by mathematical induction is the direct verification that $P(n_0)$ holds for some initial value $n_0 \in \mathbb{N}$, typically $n_0 = 0$ or $n_0 = 1$. Without this anchor, the inductive step — which asserts $P(k) \Rightarrow P(k+1)$ — has no truth value to propagate, rendering the entire argument vacuous. The base case is therefore not a formality; it is the logical seed from which all subsequent cases grow.</p>
-<p>More precisely, mathematical induction rests on the well-ordering principle: every non-empty subset of $\mathbb{N}$ has a least element. If $P(n)$ failed for some $n$, the set $S = \{n \in \mathbb{N} : \lnot P(n)\}$ would have a minimum $m$. The base case rules out $m = n_0$, and the inductive step rules out any $m > n_0$, so $S$ must be empty, giving $P(n)$ for all $n \geq n_0$.</p>
-<p><strong>Worked Example.</strong> Prove that the sum of the first $n$ positive integers satisfies</p>
-$$\sum_{k=1}^{n} k = \frac{n(n+1)}{2}.$$
-<p><em>Base case</em> ($n = 1$): The left-hand side equals $1$. The right-hand side equals $\frac{1 \cdot 2}{2} = 1$. Since $1 = 1$, $P(1)$ is verified. $\square$</p>
-<p>The inductive step (not the focus here) would assume $P(m)$ and derive $P(m+1)$ by adding $m+1$ to both sides.</p>
-<p><strong>Key Theorem (Principle of Mathematical Induction).</strong> Let $P(n)$ be a predicate on $\mathbb{N}$. If (i) $P(n_0)$ holds, and (ii) for every $k \geq n_0$, $P(k) \Rightarrow P(k+1)$, then $P(n)$ holds for all $n \geq n_0$.</p>
-<p>Condition (i) is precisely the base case. Altering $n_0$ shifts the domain of validity: choosing $n_0 = 3$ proves $P(n)$ only for $n \geq 3$, so selecting the correct base is part of the mathematical content of the proof.</p>
-<p><strong>Lab Cell (SymPy).</strong></p>
-<pre><code>from sympy import symbols, summation, factor
-
-k, n = symbols('k n', positive=True, integer=True)
-closed_form = factor(summation(k, (k, 1, n)))
-print(closed_form)          # n*(n + 1)/2
-
-# Verify the base case numerically
-base = closed_form.subs(n, 1)
-print(base)                 # 1</code></pre>
-<p>Running this cell confirms symbolically that the formula evaluates to $1$ when $n = 1$, matching the direct computation. SymPy's <code>summation</code> derives the closed form independently, so the agreement constitutes a machine-checked base case verification.</p>
+<p>Every recursive definition splits a problem into two parts: one or more <em>recursive cases</em>, which reduce a problem to a smaller instance of itself, and at least one <em>base case</em>, which is solved directly, without invoking the recursion again. The base case is what stops the chain of reductions. Without it, a recursive function calls itself indefinitely, consuming stack frames until the program crashes with a stack-overflow error — the computational analogue of an infinite regress.</p>
+<p>Formally, if a recursive function $f$ is defined by a rule $f(n) = g(n, f(h(n)))$ for some reducing function $h$, termination requires a set $B$ (the base cases) and a well-founded measure — typically $n$ itself, if $h(n) < n$ — such that every chain of applications $n, h(n), h(h(n)), \dots$ reaches an element of $B$ in finitely many steps. This is why factorial is defined as $n! = n \cdot (n-1)!$ for $n > 0$, with base case $0! = 1$: each call reduces $n$ by exactly 1, so the sequence $n, n-1, n-2, \dots$ must hit $0$ after finitely many steps, since $n$ is a nonnegative integer.</p>
+<p>Consider the recursive sum of a list, <code>sum([a1, a2, ..., ak])</code>. The recursive case is <code>a1 + sum([a2, ..., ak])</code>, reducing the list's length by one each call. The base case is <code>sum([]) = 0</code> — an empty list requires no further reduction, and returning $0$ directly halts the recursion. Omitting this line, or writing it incorrectly (say, <code>sum([]) = sum([])</code>), breaks termination entirely, since there's no list smaller than the empty list to reduce to.</p>
+<p>Problem-solving application: when writing any recursive algorithm, identify the base case <em>first</em>, before the recursive case. Ask: "What is the smallest, simplest input I can answer without recursion?" For a binary search on a sorted array, the base case is an empty search interval (element not found) or a single element that matches the target. For a tree traversal, it's an empty subtree (return immediately). Getting the base case wrong — off-by-one in an array bound, or missing an empty-input check — is the single most common source of infinite recursion and incorrect results in recursive code, so verify it against the smallest possible input before trusting the recursive logic built on top of it.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

@@ -26,6 +26,8 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,28 +37,16 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="induction-proof">Induction Proof</h2>
-<p><strong>Definition.</strong> Mathematical induction is a proof technique used to establish that a proposition $P(n)$ holds for every natural number $n \geq n_0$. The method proceeds in two steps. First, the <em>base case</em>: verify that $P(n_0)$ is true. Second, the <em>inductive step</em>: assume $P(k)$ is true for some arbitrary $k \geq n_0$ (the <em>inductive hypothesis</em>), then prove that $P(k+1)$ follows necessarily. Because the base case anchors the chain and the inductive step propagates it, the principle guarantees $P(n)$ for all $n \geq n_0$ by the well-ordering property of $\mathbb{N}$.</p>
-<p><strong>Worked Example.</strong> Prove that the sum of the first $n$ positive integers satisfies</p>
-$$S(n) = \sum_{i=1}^{n} i = \frac{n(n+1)}{2}.$$
-<p><em>Base case</em> ($n = 1$): $S(1) = 1 = \frac{1 \cdot 2}{2} = 1$. ✓</p>
-<p><em>Inductive step</em>: Assume $S(k) = \frac{k(k+1)}{2}$ for some $k \geq 1$. Then</p>
-$$S(k+1) = S(k) + (k+1) = \frac{k(k+1)}{2} + (k+1) = (k+1)\!\left(\frac{k}{2} + 1\right) = \frac{(k+1)(k+2)}{2}.$$
-<p>This is precisely the formula evaluated at $k+1$, so the inductive step holds. By the principle of mathematical induction, the identity is true for all $n \geq 1$.</p>
-<p><strong>Key Theorem (Principle of Mathematical Induction).</strong> Let $P(n)$ be a proposition defined for $n \in \mathbb{N}$. If (i) $P(n_0)$ is true, and (ii) $P(k) \Rightarrow P(k+1)$ for every $k \geq n_0$, then $P(n)$ is true for all $n \geq n_0$.</p>
-<p><em>Proof sketch.</em> Suppose the conclusion fails; let $S = \{n \geq n_0 : \lnot P(n)\}$ be nonempty. By the well-ordering principle, $S$ has a least element $m$. Since $P(n_0)$ holds, $m > n_0$, so $m - 1 \geq n_0$ and $P(m-1)$ is true. By the inductive step, $P(m)$ must also be true — a contradiction. Hence $S = \emptyset$.</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>from sympy import symbols, summation, factor, simplify
-
-n, i = symbols('n i', positive=True, integer=True)
-closed_form = factor(summation(i, (i, 1, n)))
-print(closed_form)          # n*(n + 1)/2
-
-# Spot-check for n = 1 ... 6
-for k in range(1, 7):
-    assert sum(range(1, k+1)) == k*(k+1)//2
-print("All checks passed.")</code></pre>
+<p>Mathematical induction is the standard method for proving that a statement $P(n)$ holds for every natural number $n \geq n_0$. It works because of a structural fact about the natural numbers: if a claim is true at some starting point, and truth at any point guarantees truth at the next point, then the claim is true everywhere from that starting point onward. Formally, induction has two parts. The <strong>base case</strong> establishes $P(n_0)$ directly. The <strong>inductive step</strong> assumes $P(k)$ holds for an arbitrary $k \geq n_0$ — this assumption is called the <em>induction hypothesis</em> — and uses it to prove $P(k+1)$. Once both parts are shown, $P(n)$ holds for all $n \geq n_0$.</p>
+<p>In computer science, induction is inseparable from recursion, and it is useful to think of the induction hypothesis as a "Recursion Fairy": when you call a recursive function on a smaller input, you are allowed to <em>assume</em> it behaves correctly on that smaller input — the fairy grants your wish — provided you can show your function combines that correct result into a correct answer for the original input, and that recursion eventually bottoms out at a base case you handle explicitly.</p>
+<p><strong>Worked example.</strong> Prove that for all $n \geq 1$, $\sum_{i=1}^{n} i = \frac{n(n+1)}{2}$.</p>
+<p><em>Base case</em> ($n=1$): $\sum_{i=1}^{1} i = 1$, and $\frac{1(2)}{2} = 1$. ✓</p>
+<p><em>Inductive step</em>: Assume $\sum_{i=1}^{k} i = \frac{k(k+1)}{2}$ for some $k \geq 1$. Then</p>
+$$\sum_{i=1}^{k+1} i = \left(\sum_{i=1}^{k} i\right) + (k+1) = \frac{k(k+1)}{2} + (k+1) = \frac{(k+1)(k+2)}{2}.$$
+<p>This matches the formula with $n = k+1$, completing the step.</p>
+<p><strong>Problem-solving application.</strong> To prove a recursive algorithm correct — say, one computing $n!$ via <code>fact(n) = n &lt;em&gt; fact(n-1)</code>, base case <code>fact(0) = 1</code> — apply the same template. Base case: <code>fact(0)</code> correctly returns $0! = 1$. Inductive step: assume <code>fact(k)</code> correctly returns $k!$ (invoke the Recursion Fairy), and show `fact(k+1) = (k+1) </em> fact(k) = (k+1) \cdot k! = (k+1)!$, which is correct. Notice the discipline this demands: you must never trust the recursive call <em>unconditionally</em> — you trust it only because the induction hypothesis licenses it, and only after confirming the base case terminates the recursion. This same reasoning extends to <em>strong induction</em>, where you assume $P(j)$ for all $j < k$ rather than just $j = k-1$, which is essential for algorithms like mergesort that recurse on more than one smaller subproblem simultaneously.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

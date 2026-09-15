@@ -26,6 +26,8 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,32 +37,20 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="quicksort">Quicksort</h2>
-<p><strong>Definition.</strong> Quicksort is a comparison-based, in-place sorting algorithm that operates by the <em>divide-and-conquer</em> paradigm. Given an array $A[1..n]$, the algorithm selects a <em>pivot</em> element $p \in A$, partitions the remaining elements into two subarrays $L = \{x \in A : x \leq p\}$ and $R = \{x \in A : x > p\}$, and recursively sorts $L$ and $R$. The sorted output is then the concatenation $\text{sort}(L) \cdot p \cdot \text{sort}(R)$. The partition step runs in $\Theta(n)$ time by a single left-to-right scan, maintaining two pointers that swap out-of-place elements.</p>
-<p><strong>Worked Example.</strong> Consider $A = [3, 6, 8, 10, 1, 2, 1]$. Choose the last element as pivot: $p = 1$.</p>
-<li>Scan left to right; elements $\leq 1$: $\{1\}$; elements $> 1$: $\{3, 6, 8, 10, 2\}$.</li>
-<li>After partition: $[1, 1, 3, 6, 8, 10, 2]$ with $p = 1$ placed at index 1.</li>
-<li>Recurse on $L = [1]$ (already sorted) and $R = [3, 6, 8, 10, 2]$.</li>
-<li>In $R$, take $p = 2$: partition gives $[2, 3, 6, 8, 10]$; recurse further.</li>
-<li>Final result: $[1, 1, 2, 3, 6, 8, 10]$.</li>
-<p>Each recursive call reduces the problem size, provided the pivot does not always fall at an extreme.</p>
-<p><strong>Key Theorem (Average-Case Complexity).</strong> When the pivot is chosen uniformly at random from the subarray, the expected number of comparisons performed by quicksort on an input of size $n$ satisfies</p>
-$$T(n) = 2(n+1)H_n - 4n,$$
-<p>where $H_n = \sum_{k=1}^{n} \frac{1}{k}$ is the $n$-th harmonic number. Since $H_n = \ln n + O(1)$, we obtain $T(n) = \Theta(n \log n)$ in expectation. In the worst case — a sorted array with a fixed first- or last-element pivot — every partition produces subarrays of sizes $0$ and $n-1$, yielding $T(n) = \Theta(n^2)$. Randomized pivot selection or the <em>median-of-three</em> heuristic makes worst-case inputs exponentially unlikely.</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>from sympy import symbols, harmonic, simplify, log, O
-
-n = symbols('n', positive=True, integer=True)
-
-# Average comparisons formula
-T_avg = 2*(n + 1)*harmonic(n) - 4*n
-print("T(10) =", T_avg.subs(n, 10).evalf(4))
-
-# Confirm asymptotic growth vs n*log(n)
-ratio = T_avg / (n * log(n))
-print("T(1000)/(1000·ln 1000) =", ratio.subs(n, 1000).evalf(4))</code></pre>
-<p>Running this cell for $n = 1000$ yields a ratio near $2$, confirming that average-case quicksort performs approximately $2n \ln n$ comparisons — about $39\%$ fewer than the worst-case upper bound and competitive with merge sort, which requires exactly $\lceil n \log_2 n \rceil$ comparisons in the best case.</p>
+<p>Quicksort is a divide-and-conquer algorithm that sorts an array by partitioning it around a chosen element, the <em>pivot</em>, into two groups: elements smaller than the pivot and elements larger than it. The pivot itself lands in its final sorted position. The two subarrays are then sorted recursively, and because partitioning places the pivot correctly, no merging step is needed afterward — unlike mergesort.</p>
+<p><strong>Partitioning.</strong> Given array $A[lo..hi]$, pick a pivot value $p$ (commonly $A[hi]$). Scan the array, moving all elements $\le p$ to the left side and all elements $> p$ to the right, then place $p$ between them. This takes $\Theta(n)$ time for a subarray of size $n$, using only constant extra space (in-place).</p>
+<p><strong>Worked example.</strong> Sort $[7, 2, 9, 4, 1]$ using the last element as pivot:</p>
+<li>Pivot $= 1$. Nothing is smaller, so $1$ stays at index 0: $[1, 7, 2, 9, 4]$.</li>
+<li>Recurse on $[7, 2, 9, 4]$, pivot $=4$: elements $\le 4$ are $\{2\}$, so partition gives $[2, 4, 7, 9]$... continuing recursively on $[7,9]$ eventually yields the sorted array $[1, 2, 4, 7, 9]$.</li>
+<p>Each partition step fixes one element's final position, and the recursion tree shrinks the problem size until subarrays of length $\le 1$ are trivially sorted.</p>
+<p><strong>Complexity analysis.</strong> If the pivot always splits the array evenly, the recurrence is</p>
+$$T(n) = 2T(n/2) + \Theta(n),$$
+<p>which solves by the Master Theorem to $T(n) = \Theta(n \log n)$. But if the array is already sorted and the pivot is always the last element, every partition splits off just one element, giving</p>
+$$T(n) = T(n-1) + \Theta(n) = \Theta(n^2).$$
+<p>This worst case is why practical implementations choose the pivot carefully — via random selection, or the "median-of-three" heuristic (comparing first, middle, and last elements) — which makes the $O(n^2)$ case statistically improbable rather than eliminating it.</p>
+<p><strong>Problem-solving application.</strong> Quicksort's average-case efficiency and in-place memory footprint make it the default choice in most language standard libraries for general sorting (though many, like Java's, switch to insertion sort for small subarrays and use dual-pivot variants for further speedup). When solving algorithm-design problems, recognize quicksort's partition step itself as a reusable subroutine — it underlies the classic $O(n)$ "median/k-th smallest element" selection algorithm (quickselect), since you only need to recurse into the side of the partition containing the target rank.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

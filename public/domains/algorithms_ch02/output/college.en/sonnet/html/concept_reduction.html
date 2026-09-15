@@ -26,6 +26,8 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,35 +37,14 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="reduction">Reduction</h2>
-<p><strong>Definition.</strong> A <em>reduction</em> is a systematic transformation that maps a mathematical object to a canonical representative within its equivalence class, preserving the properties of interest while eliminating inessential complexity. Formally, given a set $S$ and an equivalence relation $\sim$ on $S$, a reduction is a function $r: S \to S$ satisfying three properties:</p>
-<li><strong>Equivalence preservation:</strong> $r(x) \sim x$ for all $x \in S$.</li>
-<li><strong>Idempotency:</strong> $r(r(x)) = r(x)$ for all $x \in S$.</li>
-<li><strong>Canonicity:</strong> $x \sim y \implies r(x) = r(y)$.</li>
-<p>Together these guarantee that equivalent objects share a unique canonical form, and that applying the reduction a second time has no further effect.</p>
-<p><strong>Worked Example.</strong> Fix $n = 7$ and define $a \sim b$ if and only if $7 \mid (a - b)$. The modular reduction $r(x) = x \bmod 7$ maps every integer to its remainder in $\{0, 1, 2, 3, 4, 5, 6\}$.</p>
-$$r(23) = 23 - 3 \cdot 7 = 2, \qquad r(-4) = -4 + 7 = 3, \qquad r(14) = 0.$$
-<p>Verification of canonicity: $23 \sim 2$ because $7 \mid (23 - 2) = 21$. ✓ Idempotency holds trivially since $2 \in \{0,\ldots,6\}$ implies $r(2) = 2$.</p>
-<p><strong>Key Theorem (Division Algorithm).</strong> For any integers $a$ and $n > 0$ there exist <em>unique</em> integers $q$ and $r$ with $0 \le r < n$ such that</p>
-$$a = q\,n + r.$$
-<p>The remainder $r = a \bmod n$ is the canonical representative of the equivalence class $[a]$ in $\mathbb{Z}/n\mathbb{Z}$.</p>
-<p><em>Proof sketch.</em> Existence: the set $\{a - kn : k \in \mathbb{Z},\ a - kn \ge 0\}$ is non-empty (take $k$ sufficiently negative) and bounded below, so it has a minimum element $r$. If $r \ge n$ then $r - n \ge 0$ is a smaller element, a contradiction; hence $0 \le r < n$. Uniqueness follows from the fact that two remainders in $\{0,\ldots,n-1\}$ whose difference is divisible by $n$ must be equal. $\square$</p>
-<p>Reduction is a pervasive paradigm: Gaussian elimination reduces a matrix to row echelon form; the Euclidean algorithm reduces a GCD computation to successively smaller remainders; polynomial long division reduces a rational function to a proper fraction. In each instance the same triad—equivalence preservation, idempotency, canonicity—holds.</p>
-<pre><code># Lab: modular reduction in SymPy
-from sympy import Mod, factorint
-
-n = 7
-samples = [23, -4, 14, 100]
-canonical = {a: Mod(a, n) for a in samples}
-print(canonical)   # {23: 2, -4: 3, 14: 0, 100: 2}
-
-# Verify idempotency
-assert all(Mod(Mod(a, n), n) == Mod(a, n) for a in samples)
-
-# Reduction in a larger modulus: count equivalence classes
-classes = {r: [a for a in range(30) if Mod(a, n) == r] for r in range(n)}
-print(classes)</code></pre>
+<p>A <strong>reduction</strong> solves problem $A$ by transforming its input into an input for problem $B$, invoking an algorithm for $B$ as a black box, and transforming $B$'s output back into a solution for $A$. Correctness follows entirely from the correctness of the transformations and the <em>specification</em> of $B$'s algorithm — never from knowledge of how that algorithm is implemented internally. This is what makes reductions powerful: you can swap in a faster algorithm for $B$ later, and $A$'s correctness proof does not change.</p>
+<p><strong>Worked example.</strong> Suppose you need to find the <em>median</em> of an unsorted array of $n$ numbers, but the only tool available is a black-box sorting algorithm, $\text{SORT}(A)$, guaranteed to return $A$ in ascending order. The reduction is: call $\text{SORT}(A)$ to get sorted array $A'$, then return $A'[n/2]$ (adjusting for even/odd length). Correctness holds because $\text{SORT}$'s specification guarantees $A'$ is sorted — it doesn't matter whether $\text{SORT}$ is merge sort, quicksort, or radix sort internally. If $\text{SORT}$ runs in $O(n \log n)$, the reduction gives an $O(n \log n)$ median-finding algorithm for free, with zero additional proof burden beyond "indexing the middle of a sorted array gives the median."</p>
+<p><strong>Problem-solving application.</strong> Reductions are the backbone of complexity theory and algorithm design because they let you reuse both <em>correctness</em> and <em>efficiency</em> results. Two disciplined habits make reductions rigorous:</p>
+<li><strong>Specify the interface, not the implementation.</strong> State exactly what $B$'s algorithm promises (input format, output format, guarantees) and prove your transformation satisfies $B$'s preconditions and correctly interprets $B$'s postconditions.</li>
+<li><strong>Account for transformation cost.</strong> If $A \to B$ transformation takes $O(f(n))$ time and $B$ costs $O(g(m))$ on an input of size $m$, the total cost for $A$ is $O(f(n) + g(m(n)))$. A reduction that blows up input size (e.g., $m = 2^n$) can make an efficient $B$ useless for $A$.</li>
+<p>This second point is why reductions also <em>prove hardness</em>: if a known-hard problem $H$ reduces to $A$ in polynomial time, then an efficient algorithm for $A$ would yield an efficient algorithm for $H$ — evidence that $A$ is at least as hard as $H$. This same black-box logic underlies NP-completeness proofs, where problems like 3-SAT are reduced to Vertex Cover, Clique, or Subset Sum, establishing a shared lower bound on their difficulty without ever opening up an actual SAT solver.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

@@ -48,6 +48,24 @@
         "file": "output/college.zh/sonnet/html/book_divide_and_conquer_zh.html",
         "model": "sonnet",
         "language": "zh"
+      },
+      {
+        "target": "induction_proof",
+        "file": "output/college.en/sonnet/html/book_induction_proof.html",
+        "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "target": "induction_proof",
+        "file": "output/college.en/gemma3/html/book_induction_proof.html",
+        "model": "gemma3",
+        "language": "en"
+      },
+      {
+        "target": "reduction",
+        "file": "output/college.en/sonnet/html/book_reduction.html",
+        "model": "sonnet",
+        "language": "en"
       }
     ],
     "generated_concepts": [
@@ -84,6 +102,13 @@
         "label": "Fast Exponentiation",
         "file": "output/college.en/sonnet/html/concept_fast_exponentiation.html",
         "model": "sonnet",
+        "language": "en"
+      },
+      {
+        "name": "induction_proof",
+        "label": "Induction Proof",
+        "file": "output/college.en/gemma3/html/concept_induction_proof.html",
+        "model": "gemma3",
         "language": "en"
       },
       {
@@ -208,7 +233,23 @@
       "license": "CC BY 4.0",
       "url": "https://jeffe.cs.illinois.edu/teaching/algorithms/",
       "attribution": "Access for free at jeffe.cs.illinois.edu/teaching/algorithms/. © Jeff Erickson."
-    }
+    },
+    "pdfs": [
+      {
+        "target": "induction_proof",
+        "level": "college",
+        "language": "en",
+        "model": "gemma3",
+        "file": "output/college.en/gemma3/pdf/concept_induction_proof.pdf"
+      },
+      {
+        "target": "quicksort",
+        "level": "college",
+        "language": "en",
+        "model": "sonnet",
+        "file": "output/college.en/sonnet/pdf/concept_quicksort.pdf"
+      }
+    ]
   },
   {
     "id": "algorithms_ch03",
