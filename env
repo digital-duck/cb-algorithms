@@ -1,14 +1,14 @@
 # ── Ports ────────────────────────────────────────────────────────────────────
-PORT_DIGITS=01
+PORT_DIGITS="01"
 
 # Backend API port — read by start-api.sh and vite.config.js proxy
-API_PORT=82${PORT_DIGITS}
+API_PORT="82${PORT_DIGITS}"
 # OAuth callback sent to the backend; must be an authorized redirect URI in
 # the Google Cloud Console. Default matches the API_PORT above.
 CB_GOOGLE_REDIRECT_URI=http://localhost:${API_PORT}/api/auth/google/callback
 
 # Frontend dev server port — read by vite.config.js (server.port)
-DEV_PORT=84${PORT_DIGITS}
+DEV_PORT="84${PORT_DIGITS}"
 # Where the backend redirects the browser after OAuth completes.
 # Must match DEV_PORT above.
 CB_FRONTEND_URL=http://localhost:${DEV_PORT}/cb-algorithms/
