@@ -11,6 +11,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +28,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,34 +43,38 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="dfs-wrapper">Dfs Wrapper</h2>
-<p><strong>Definition.</strong> A <em>DFS wrapper</em> is a higher-order function that encapsulates the bookkeeping infrastructure of depth-first search — visited-node tracking, recursion stack management, and result accumulation — behind a clean interface. Formally, given a graph $G = (V, E)$ and a user-supplied callback $f : V \to \text{Action}$, the wrapper $\texttt{dfs\_wrapper}(G, s, f)$ initiates a depth-first traversal from source vertex $s \in V$, invoking $f$ at each discovered vertex while guaranteeing that every reachable vertex is visited exactly once. The wrapper pattern separates <em>traversal policy</em> (DFS order, cycle avoidance) from <em>traversal purpose</em> (what to compute), yielding reusable infrastructure across problems such as topological sorting, connected-component labeling, and cycle detection.</p>
-<p><strong>Worked Example.</strong> Consider the directed graph $G$ with $V = \{1, 2, 3, 4\}$ and edges $E = \{(1,2),(1,3),(2,4),(3,4)\}$. A DFS wrapper initialized at $s = 1$ maintains a set $\text{visited} = \emptyset$ and a stack. On entry to vertex $v$ it executes $f(v)$ — say, appending $v$ to an output list — then recurses on each unvisited neighbor. The traversal visits vertices in the order $1 \to 2 \to 4 \to 3$, producing the pre-order sequence $[1, 2, 4, 3]$. Crucially, vertex $4$, reachable from both $2$ and $3$, is processed only once because the wrapper tests membership in $\text{visited}$ before each recursive call.</p>
-<p><strong>Theorem (Correctness and Complexity).</strong> Let $G = (V, E)$ be a finite directed or undirected graph. A DFS wrapper with an $O(1)$ membership-test data structure (e.g., a hash set) visits every vertex reachable from $s$ exactly once and traverses every incident edge at most twice. The total time complexity is $\Theta(|V| + |E|)$ and the space complexity is $O(|V|)$ for the visited set plus $O(|V|)$ for the implicit recursion stack in the worst case (a path graph).</p>
-<p><em>Proof sketch.</em> Each vertex enters $\text{visited}$ upon first discovery and is never re-enqueued, so visits are unique. Every edge $(u, v)$ is inspected when $u$ is processed; if $v$ is already visited the call returns immediately, bounding edge work by $2|E|$. $\square$</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>import sympy
-from sympy.combinatorics.named_groups import SymmetricGroup
-
-# Build adjacency list for a small graph
-graph = {1: [2, 3], 2: [4], 3: [4], 4: []}
-
-def dfs_wrapper(graph, start, callback):
+<p>A single call to depth-first search only explores the connected component containing its starting vertex. If a graph has multiple components — for example, a social network with isolated clusters, or a road map with disconnected regions — one DFS call leaves the rest of the graph untouched. The <strong>DFS wrapper</strong> solves this by iterating over every vertex in the graph and launching a fresh DFS from any vertex not yet visited, guaranteeing that all vertices, across all components, are eventually explored.</p>
+<p>The wrapper maintains one shared <code>visited</code> set across all calls. For each vertex $v$ in the vertex set $V$, it checks whether $v$ has been visited; if not, it calls <code>dfs(v)</code>, which recursively visits $v$'s entire component before returning control to the wrapper.</p>
+<pre><code>def dfs_wrapper(graph):
     visited = set()
-    def _dfs(v):
-        if v in visited:
-            return
-        visited.add(v)
-        callback(v)
-        for neighbor in graph[v]:
-            _dfs(neighbor)
-    _dfs(start)
+    components = []
+    for v in graph.vertices:
+        if v not in visited:
+            component = []
+            dfs(graph, v, visited, component)
+            components.append(component)
+    return components
 
-order = []
-dfs_wrapper(graph, 1, order.append)
-print("DFS pre-order:", order)  # [1, 2, 4, 3]</code></pre>
-<p>Running this cell confirms the pre-order sequence derived above, and substituting a different callback (such as recording finish times) repurposes the same wrapper for topological sorting without altering traversal logic.</p>
+def dfs(graph, v, visited, component):
+    visited.add(v)
+    component.append(v)
+    for neighbor in graph.neighbors(v):
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited, component)</code></pre>
+<p>Consider a graph with vertices $\{1,2,3,4,5,6\}$ and edges forming two components: $\{1,2,3\}$ and $\{4,5,6\}$. Iterating vertices in order, the wrapper starts DFS at vertex 1, visiting $\{1,2,3\}$. Vertex 4 is the next unvisited vertex, so DFS restarts there, visiting $\{4,5,6\}$. The wrapper returns two components — the correct decomposition of the graph.</p>
+<p>This pattern is the standard method for computing <strong>connected components</strong> (undirected graphs) or performing a full <strong>topological sort</strong> and <strong>cycle detection</strong> (directed graphs), since both require visiting every vertex regardless of how many disconnected pieces the graph contains. Because each vertex is visited exactly once and each edge examined at most twice, the wrapper preserves DFS's overall $O(|V| + |E|)$ time complexity — the outer loop adds only $O(|V|)$ overhead for the visited-checks, not a new asymptotic cost.</p>
+<pre class="mermaid">flowchart TD
+    A[Start: for each vertex v in V] --> B{v visited?}
+    B -->|No| C[Call dfs from v]
+    C --> D[Mark entire component visited]
+    D --> B
+    B -->|Yes| E[Move to next vertex]
+    E --> B
+    B -->|All vertices checked| F[Return all components]</pre>
+<p><em>The wrapper loop restarts DFS at each unvisited vertex until the whole graph, including disconnected components, has been traversed.</em></p>
+<p>When solving problems, always check whether a graph might be disconnected before writing a single DFS call — the wrapper is what makes DFS a complete graph-traversal algorithm rather than a component-local one.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

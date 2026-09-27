@@ -11,6 +11,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +28,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,34 +43,16 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="strong-component-graph">Strong Component Graph</h2>
-<p><strong>Definition.</strong> Let $G = (V, E)$ be a directed graph. A <em>strongly connected component</em> (SCC) of $G$ is a maximal subset $S \subseteq V$ such that for every ordered pair $(u, v)$ with $u, v \in S$, there exists a directed path from $u$ to $v$ and a directed path from $v$ to $u$. The <em>strong component graph</em> (also called the <em>condensation</em> of $G$), denoted $G^{\mathrm{SCC}}$, is the directed graph whose vertices are the SCCs of $G$ and whose edges are defined by</p>
-$$
-[S_i] \to [S_j] \in E(G^{\mathrm{SCC}}) \iff i \neq j \text{ and } \exists\, u \in S_i,\, v \in S_j \text{ such that } (u,v) \in E.
-$$
-<p>A fundamental consequence of maximality is that $G^{\mathrm{SCC}}$ contains no directed cycle; that is, $G^{\mathrm{SCC}}$ is always a <em>directed acyclic graph</em> (DAG).</p>
-<p><strong>Worked Example.</strong> Consider the graph $G$ with vertices $\{1,2,3,4,5\}$ and edges</p>
-$$
-1\!\to\!2,\quad 2\!\to\!3,\quad 3\!\to\!1,\quad 3\!\to\!4,\quad 4\!\to\!5,\quad 5\!\to\!4.
-$$
-<p>Applying Kosaraju's algorithm (two depth-first search passes, the second on the transpose $G^T$) identifies the SCCs as $S_1 = \{1,2,3\}$, $S_2 = \{4,5\}$. The condensation $G^{\mathrm{SCC}}$ has two nodes with the single edge $[S_1]\to[S_2]$, confirming it is a DAG.</p>
-<p><strong>Key Theorem (Uniqueness of the Condensation).</strong> <em>Every directed graph $G$ has a unique condensation $G^{\mathrm{SCC}}$, and $G^{\mathrm{SCC}}$ is a DAG.</em> Proof sketch: Uniqueness follows because the SCCs partition $V$ (reflexivity, symmetry, and transitivity of mutual reachability constitute an equivalence relation). Acyclicity follows by contradiction: a directed cycle among distinct SCCs $[S_i]\to\cdots\to[S_i]$ would imply all vertices in those components are mutually reachable, contradicting their maximality as separate SCCs. $\square$</p>
-<p>The condensation is practically significant: any algorithm that requires acyclicity — topological sort, dynamic programming on graphs, reachability queries — can be applied to $G^{\mathrm{SCC}}$ even when $G$ itself contains cycles.</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>import sympy as sp
-import networkx as nx
-
-G = nx.DiGraph()
-G.add_edges_from([(1,2),(2,3),(3,1),(3,4),(4,5),(5,4)])
-
-sccs = list(nx.strongly_connected_components(G))
-condensation = nx.condensation(G, scc=sccs)
-
-print("SCCs:", sccs)
-print("Condensation edges:", list(condensation.edges()))
-print("Is DAG:", nx.is_directed_acyclic_graph(condensation))</code></pre>
-<p>Running this cell produces <code>SCCs: [{1,2,3}, {4,5}]</code>, one condensation edge, and confirms the DAG property, matching the hand computation above.</p>
+<p><strong>Definition.</strong> Let $G = (V, E)$ be a directed graph, and let $C_1, C_2, \ldots, C_k$ be its strongly connected components (SCCs) — the maximal subsets of vertices where every vertex can reach every other vertex within the same subset. The <strong>strong component graph</strong> (also called the <em>condensation</em> of $G$, denoted $G^{SCC}$) is formed by contracting each $C_i$ into a single vertex $v_i$, and drawing an edge $v_i \to v_j$ whenever $G$ contains at least one edge from a vertex in $C_i$ to a vertex in $C_j$ (with $i \neq j$), collapsing any duplicate edges into one.</p>
+<p><strong>Theorem.</strong> For any directed graph $G$, the condensation $G^{SCC}$ is a directed acyclic graph (DAG).</p>
+<p><strong>Proof sketch.</strong> Suppose $G^{SCC}$ contained a cycle $v_1 \to v_2 \to \cdots \to v_m \to v_1$. Each edge $v_i \to v_{i+1}$ corresponds to a path in $G$ from some vertex in $C_i$ to some vertex in $C_{i+1}$. Since each $C_i$ is internally strongly connected, we can walk from any vertex of $C_i$ to any other vertex of $C_i$. Chaining these paths together produces a closed walk visiting every vertex in $C_1, \ldots, C_m$, meaning any vertex in $C_1$ can reach any vertex in $C_2$ and vice versa. This makes $C_1 \cup C_2 \cup \cdots \cup C_m$ mutually reachable — a single strongly connected set — contradicting the maximality of each $C_i$ as a <em>separate</em> SCC. Hence no cycle can exist. $\blacksquare$</p>
+<p><strong>Worked example.</strong> Consider $G$ with vertices $\{a, b, c, d, e\}$ and edges $a\to b$, $b \to c$, $c \to a$, $c \to d$, $d \to e$, $e \to d$. Running Tarjan's or Kosaraju's algorithm identifies $C_1 = \{a, b, c\}$ and $C_2 = \{d, e\}$. The condensation has two vertices, $v_1$ (for $C_1$) and $v_2$ (for $C_2$), with a single edge $v_1 \to v_2$ (from the original edge $c \to d$), collapsing what would have been one edge into the DAG.</p>
+<p><strong>Problem-solving application.</strong> The DAG-ness of $G^{SCC}$ is what makes it computationally powerful: once you condense a graph, you can run any DAG algorithm — topological sort, longest path, dynamic programming — on the condensation instead of the original graph. This is the key step in solving problems like "find the minimum number of edges to add so that $G$ becomes strongly connected" (count source and sink components in $G^{SCC}$) or "determine reachability queries efficiently" (compute reachability once on the smaller DAG rather than on $G$).</p>
+<pre class="mermaid">graph LR
+    C1["C1 = {a, b, c}"] --> C2["C2 = {d, e}"]</pre>
+<p><em>The condensation collapses each strongly connected component into a single node, producing an acyclic graph.</em></p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

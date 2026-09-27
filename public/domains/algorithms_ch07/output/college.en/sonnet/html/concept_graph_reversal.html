@@ -11,6 +11,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +28,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,34 +43,26 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="graph-reversal">Graph Reversal</h2>
-<p><strong>Definition.</strong> Let $G = (V, E)$ be a directed graph (digraph), where $V$ is a finite set of vertices and $E \subseteq V \times V$ is a set of directed edges. The <em>reversal</em> (or <em>transpose</em>) of $G$, denoted $G^R = (V, E^R)$, is the digraph obtained by reversing the direction of every edge in $E$. Formally,</p>
-$$E^R = \{(v, u) \mid (u, v) \in E\}.$$
-<p>Note that $G^R$ shares the same vertex set $V$ and the same number of edges as $G$; only orientation changes. If $G$ is represented as an adjacency list, constructing $G^R$ requires iterating over each edge $(u, v)$ and inserting $(v, u)$ into the new structure, an operation that runs in $\Theta(|V| + |E|)$ time.</p>
-<p><strong>Worked Example.</strong> Consider the digraph $G$ with $V = \{1, 2, 3, 4\}$ and edges</p>
-$$E = \{(1,2),\,(1,3),\,(2,4),\,(3,4)\}.$$
-<p>This represents a diamond-shaped dependency graph: vertex $1$ is the unique source and vertex $4$ the unique sink. Applying reversal yields</p>
-$$E^R = \{(2,1),\,(3,1),\,(4,2),\,(4,3)\}.$$
-<p>In $G^R$, vertex $4$ becomes the unique source and vertex $1$ the unique sink. Every path from $1$ to $4$ in $G$ corresponds to a path from $4$ to $1$ in $G^R$, and vice versa. This correspondence is exact: if $\pi = v_0 \to v_1 \to \cdots \to v_k$ is a directed path in $G$, then $v_k \to v_{k-1} \to \cdots \to v_0$ is a directed path in $G^R$.</p>
-<p><strong>Theorem (Involution).</strong> For any digraph $G$, $(G^R)^R = G$.</p>
-<p><em>Proof sketch.</em> Reversing every edge in $E$ produces $E^R$; reversing every edge in $E^R$ produces $\{(u,v) \mid (v,u) \in E^R\} = \{(u,v) \mid (u,v) \in E\} = E$. Hence the operation is its own inverse. $\blacksquare$</p>
-<p>Graph reversal is central to Kosaraju's algorithm for computing strongly connected components: a vertex $u$ can reach $v$ in $G$ and $v$ can reach $u$ in $G^R$ precisely when $u$ and $v$ belong to the same strongly connected component.</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>import sympy as sp
-from sympy.combinatorics.named_groups import SymmetricGroup
-
-# Represent G as an edge list, then compute G^R
-edges = [(1, 2), (1, 3), (2, 4), (3, 4)]
-edges_R = [(v, u) for u, v in edges]
-
-print("Original edges:", edges)
-print("Reversed edges:", edges_R)
-
-# Verify involution: reversing twice recovers the original
-edges_RR = [(v, u) for u, v in edges_R]
-assert set(edges_RR) == set(edges), "Involution property violated"
-print("Involution verified:", edges_RR)</code></pre>
+<p>Given a directed graph $G = (V, E)$, the <strong>reverse graph</strong> (also called the transpose) $G^R = (V, E^R)$ has the same vertex set but every edge direction flipped: $(u, v) \in E \iff (v, u) \in E^R$. Reversal is a purely structural transformation — it changes no vertex, adds no new connectivity information, and can be computed in $O(V + E)$ time by scanning the adjacency list once and inserting each edge into the opposite direction's list.</p>
+<p>Reversal matters because certain properties of a DAG are easier to compute in one direction than the other. A canonical use case: suppose you want to process the DAG in forward topological order using a DFS-based postorder trick. A plain DFS postorder gives you a valid order for <em>reverse</em> topological processing (finish times decrease from sinks to sources). To get the forward order directly via DFS traversal semantics, you instead run DFS on $G^R$ and read off finishing order — because "last to finish in $G^R$" corresponds to "first in topological order of $G$."</p>
+<p>Worked example: let $G$ have edges $A \to B$, $A \to C$, $B \to D$, $C \to D$. Then $G^R$ has edges $B \to A$, $C \to A$, $D \to B$, $D \to C$. In $G$, $A$ is a source and $D$ is a sink; in $G^R$, those roles swap — $D$ becomes the source and $A$ the sink. This role-swap is the entire content of reversal: sources become sinks, sinks become sources, and every path $u \rightsquigarrow v$ in $G$ becomes a path $v \rightsquigarrow u$ in $G^R$.</p>
+<p>The most important algorithmic payoff appears in <strong>Kosaraju's algorithm</strong> for finding strongly connected components. It runs DFS on $G$ to compute finishing times, reverses the graph, then runs DFS on $G^R$ processing vertices in decreasing order of finish time. Each DFS tree produced in this second pass is exactly one strongly connected component. The correctness argument hinges on a key lemma: if $C_1$ and $C_2$ are distinct SCCs with an edge from $C_1$ to $C_2$ in $G$, then the vertex with the latest finish time overall must lie in $C_1$ — a fact that reverses cleanly to guarantee the second DFS never "leaks" across components. When implementing this, a common bug is forgetting that adjacency-list reversal must preserve edge weights or metadata if the algorithm downstream (e.g., computing shortest paths on $G^R$) depends on them.</p>
+<pre class="mermaid">graph LR
+  subgraph G [Original Graph]
+    A1[A] --> B1[B]
+    A1 --> C1[C]
+    B1 --> D1[D]
+    C1 --> D1
+  end
+  subgraph GR [Reversed Graph]
+    B2[B] --> A2[A]
+    C2[C] --> A2
+    D2[D] --> B2
+    D2 --> C2
+  end</pre>
+<p><em>Reversing every edge in $G$ turns source $A$ into a sink and sink $D$ into a source in $G^R$.</em></p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

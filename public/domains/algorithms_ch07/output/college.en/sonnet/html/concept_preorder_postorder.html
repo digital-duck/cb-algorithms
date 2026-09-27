@@ -11,6 +11,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +28,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,51 +43,19 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="preorder-postorder">Preorder Postorder</h2>
-<p><strong>Definition.</strong> Let $T$ be a rooted tree with root $r$, and let $\text{children}(v)$ denote the ordered list of children of a node $v$. A <em>preorder traversal</em> of $T$ visits $r$ first, then recursively traverses each subtree in left-to-right order. A <em>postorder traversal</em> visits each subtree recursively before visiting the root. Formally, if we write $\pi_{\text{pre}}(T)$ and $\pi_{\text{post}}(T)$ for the resulting node sequences:</p>
-$$\pi_{\text{pre}}(T) = r,\; \pi_{\text{pre}}(T_1),\; \pi_{\text{pre}}(T_2),\; \ldots,\; \pi_{\text{pre}}(T_k)$$
-$$\pi_{\text{post}}(T) = \pi_{\text{post}}(T_1),\; \pi_{\text{post}}(T_2),\; \ldots,\; \pi_{\text{post}}(T_k),\; r$$
-<p>where $T_1, T_2, \ldots, T_k$ are the subtrees rooted at the children of $r$.</p>
-<p><strong>Worked Example.</strong> Consider the binary tree with root $A$, left child $B$ (with leaves $D$, $E$), and right child $C$ (with leaf $F$).</p>
-<pre><code>        A
-       / \
-      B   C
-     / \   \
-    D   E   F</code></pre>
-<p>Preorder visits the root before descending: $A, B, D, E, C, F$. Postorder processes all descendants before the root: $D, E, B, F, C, A$. Notice that in preorder, every node appears before all of its descendants, while in postorder every node appears after all of its descendants. This structural guarantee is the key property exploited in algorithms.</p>
-<p><strong>Key Theorem.</strong> <em>(Ancestor ordering)</em> Let $u$ and $v$ be nodes in a rooted tree $T$. Then $u$ is a proper ancestor of $v$ if and only if $u$ appears before $v$ in $\pi_{\text{pre}}(T)$ and after $v$ in $\pi_{\text{post}}(T)$. Equivalently, assigning each node $v$ the pair $(\text{pre}(v), \text{post}(v))$ of its positions in the two traversals, the ancestor relation satisfies:</p>
-$$u \text{ is an ancestor of } v \iff \text{pre}(u) < \text{pre}(v) \text{ and } \text{post}(u) > \text{post}(v).$$
-<p>This allows $O(1)$ ancestor queries after $O(n)$ preprocessing — a foundational technique in XML indexing, compiler symbol tables, and dependency resolution.</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>from sympy import symbols
-from sympy.combinatorics import Permutation
-
-# Build tree as adjacency dict and run both traversals
-tree = {'A': ['B','C'], 'B': ['D','E'], 'C': ['F'],
-        'D': [], 'E': [], 'F': []}
-
-def preorder(node):
-    yield node
-    for child in tree[node]:
-        yield from preorder(child)
-
-def postorder(node):
-    for child in tree[node]:
-        yield from postorder(child)
-    yield node
-
-pre  = list(preorder('A'))
-post = list(postorder('A'))
-print("Preorder: ", pre)
-print("Postorder:", post)
-
-# Verify ancestor theorem for pair (A, E)
-pre_idx  = {n: i for i, n in enumerate(pre)}
-post_idx = {n: i for i, n in enumerate(post)}
-u, v = 'A', 'E'
-print(f"{u} ancestor of {v}:",
-      pre_idx[u] &lt; pre_idx[v] and post_idx[u] &gt; post_idx[v])</code></pre>
+<p>When depth-first search (DFS) explores a graph, it does more than mark vertices as visited — it can also record <em>when</em> each vertex enters and leaves the recursion. Imagine a clock that ticks once every time DFS pushes a vertex onto the call stack and once every time it pops a vertex off. The tick recorded on the push is the vertex's <strong>preorder number</strong> (also called discovery time), and the tick recorded on the pop is its <strong>postorder number</strong> (finish time). Every vertex $v$ therefore gets an interval $[\text{pre}(v), \text{post}(v)]$ describing exactly when it was "open" during the search.</p>
+<p>These numbers are not arbitrary bookkeeping — they encode the entire nesting structure of the recursion. If $u$ is an ancestor of $v$ in the DFS tree, then $u$'s interval strictly contains $v$'s: $\text{pre}(u) < \text{pre}(v) < \text{post}(v) < \text{post}(u)$. If neither vertex is an ancestor of the other, their intervals are disjoint. This is the <strong>parenthesis theorem</strong>: DFS intervals behave exactly like a well-formed sequence of matched parentheses, where "(" is a preorder tick and ")" is a postorder tick.</p>
+<p><strong>Worked example.</strong> Run DFS from vertex $A$ on a graph with edges $A\!\to\!B$, $A\!\to\!C$, $B\!\to\!D$. Starting the clock at 1: push $A$ (pre=1), push $B$ (pre=2), push $D$ (pre=3), $D$ has no unvisited neighbors so pop $D$ (post=4), pop $B$ (post=5), push $C$ (pre=6), pop $C$ (post=7), pop $A$ (post=8). Notice $A=[1,8]$ contains $B=[2,5]$, which contains $D=[3,4]$, while $C=[6,7]$ sits entirely after $B$'s interval closes — consistent with $C$ not being a descendant of $B$.</p>
+<p><strong>Problem-solving application.</strong> Pre/post numbers let you answer ancestor queries in $O(1)$ time without walking the tree: $u$ is an ancestor of $v$ if and only if $\text{pre}(u) \le \text{pre}(v)$ and $\text{post}(v) \le \text{post}(u)$. They also classify every edge in one pass: a <em>back edge</em> (the signature of a cycle in a directed graph) is exactly an edge $(u,v)$ where $v$ is still open (pre started, post not yet reached) when $u$ examines it. This is precisely how cycle detection and topological-sort validity checks are implemented in $O(V+E)$ time.</p>
+<pre class="mermaid">graph TD
+    A["A: pre=1"] --> B["B: pre=2"]
+    A --> C["C: pre=6, post=7"]
+    B --> D["D: pre=3, post=4"]
+    B2["B: post=5"]
+    A2["A: post=8"]</pre>
+<p><em>DFS tree annotated with preorder (push) and postorder (pop) clock values; nested intervals reveal the ancestor-descendant structure.</em></p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

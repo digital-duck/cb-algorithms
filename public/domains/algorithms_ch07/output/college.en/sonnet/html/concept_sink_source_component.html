@@ -11,6 +11,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +28,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,30 +43,12 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="sink-source-component">Sink Source Component</h2>
-<p><strong>Definition.</strong> Let $G = (V, E)$ be a finite directed graph. A vertex $v \in V$ is called a <em>source</em> if $\deg^-(v) = 0$ (no incoming edges) and a <em>sink</em> if $\deg^+(v) = 0$ (no outgoing edges). More generally, after computing the <em>strongly connected components</em> (SCCs) of $G$ and forming the <em>condensation</em> $\hat{G}$—a directed acyclic graph (DAG) whose vertices are the SCCs of $G$—we call an SCC $C$ a <strong>source component</strong> if $\hat{C}$ has in-degree zero in $\hat{G}$, and a <strong>sink component</strong> if it has out-degree zero. A component that is simultaneously a source and a sink (i.e., $\hat{G}$ has a single vertex) is called a <strong>trivial sink-source component</strong>.</p>
-<p><strong>Worked Example.</strong> Consider $G$ with vertex set $\{1, 2, 3, 4, 5\}$ and directed edges</p>
-$$E = \{(1,2),(2,1),(2,3),(3,4),(4,5),(5,3)\}.$$
-<p>Running Tarjan's algorithm yields three SCCs: $C_1 = \{1,2\}$, $C_2 = \{3,4,5\}$, and the isolated vertex would not arise here. The condensation $\hat{G}$ has two vertices $\hat{C}_1, \hat{C}_2$ and a single edge $\hat{C}_1 \to \hat{C}_2$. Hence $C_1$ is a <strong>source component</strong> (in-degree 0 in $\hat{G}$) and $C_2$ is a <strong>sink component</strong> (out-degree 0). No vertex in $C_2$ can reach $C_1$, which reflects the irreversibility of information flow between the two groups.</p>
-<p><strong>Key Theorem.</strong> <em>Every finite directed graph $G$ with at least one vertex possesses at least one source component and at least one sink component in its condensation.</em></p>
-<p><em>Proof sketch.</em> Because $\hat{G}$ is a DAG on a finite vertex set, it contains at least one topological ordering. The first element of any such ordering has in-degree 0 (a source component) and the last has out-degree 0 (a sink component). $\square$</p>
-<p>This theorem has immediate algorithmic consequences: to find all vertices from which every other vertex is reachable, it suffices to examine source components; to identify vertices that absorb all paths, examine sink components.</p>
-<p><strong>Lab Cell (SymPy / NetworkX).</strong></p>
-<pre><code>import networkx as nx
-
-G = nx.DiGraph([(1,2),(2,1),(2,3),(3,4),(4,5),(5,3)])
-
-sccs = list(nx.strongly_connected_components(G))
-cond = nx.condensation(G, scc=sccs)
-
-sources = [v for v, d in cond.in_degree()  if d == 0]
-sinks   = [v for v, d in cond.out_degree() if d == 0]
-
-for label, nodes in [("Source components", sources),
-                     ("Sink components",   sinks)]:
-    print(label, [cond.nodes[n]["members"] for n in nodes])</code></pre>
-<p>Running this prints each component's member set, confirming $\{1,2\}$ as the unique source component and $\{3,4,5\}$ as the unique sink component.</p>
+<p>In the component graph $G^{SCC}$ formed by contracting each strongly connected component (SCC) of a directed graph $G$ into a single node, every node has a well-defined in-degree and out-degree. A <strong>source component</strong> is an SCC with in-degree 0 in $G^{SCC}$ — no edges enter it from any other component. A <strong>sink component</strong> is an SCC with out-degree 0 — no edges leave it. Because $G^{SCC}$ is always a DAG (contracting cycles removes all cycles by construction), every DAG has at least one source and at least one sink, so every graph with at least one SCC has at least one source component and one sink component.</p>
+<p>This structural fact is the engine behind linear-time SCC algorithms. Kosaraju's algorithm exploits it directly: run a depth-first search (DFS) on $G$ and record finishing times; the vertex with the <em>last</em> finishing time lies in a source component of $G^{SCC}$. Then run DFS on the transpose graph $G^T$ (all edges reversed) starting from that vertex, in decreasing order of finishing time. Reversing edges swaps sources and sinks, so this second pass peels off one component at a time, always discovering a sink component of the <em>current</em> $G^{SCC}$ first — guaranteeing the DFS tree in $G^T$ never leaks into an already-processed component.</p>
+<p><strong>Worked example.</strong> Consider $G$ with edges $A \to B$, $B \to A$, $B \to C$, $C \to D$, $D \to C$. The SCCs are $\{A,B\}$ and $\{C,D\}$, with a single edge $\{A,B\} \to \{C,D\}$ in $G^{SCC}$. Here $\{A,B\}$ is the source component (in-degree 0) and $\{C,D\}$ is the sink component (out-degree 0). A DFS from $A$ finishes $C$ or $D$ last only after finishing $A,B$ last relative to $\{C,D\}$ — so the last-finished vertex overall lies in $\{A,B\}$, correctly identifying the source. Running DFS on $G^T$ from that vertex recovers exactly $\{A,B\}$ before touching $\{C,D\}$.</p>
+<p><strong>Problem-solving application.</strong> When asked to find <em>any</em> sink component without computing the full SCC decomposition, pick an arbitrary vertex, follow outgoing edges greedily (never backtracking to already-visited components), and the last SCC reached before getting stuck is necessarily a sink — this shortcut is useful in Tarjan's algorithm, where sink components are identified and popped off the DFS stack as soon as a node's low-link value equals its own DFS index.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>

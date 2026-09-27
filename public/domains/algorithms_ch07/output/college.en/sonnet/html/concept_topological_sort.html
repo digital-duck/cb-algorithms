@@ -11,6 +11,8 @@ MathJax = {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
@@ -26,6 +28,12 @@ p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
 footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
       font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
 footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
 .page{max-width:780px;margin:0 auto;padding:40px 32px}
 section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
 section:first-of-type{border-top:none;padding-top:0}
@@ -35,30 +43,19 @@ section:first-of-type{border-top:none;padding-top:0}
 <div class="page">
   <main>
     <h2 id="topological-sort">Topological Sort</h2>
-<p><strong>Definition.</strong> Let $G = (V, E)$ be a <em>directed acyclic graph</em> (DAG). A <strong>topological sort</strong> of $G$ is a linear ordering $v_1, v_2, \ldots, v_n$ of all vertices such that for every directed edge $(v_i, v_j) \in E$, the index $i < j$. Equivalently, no vertex appears before a vertex on which it depends. A topological sort exists if and only if $G$ contains no directed cycle.</p>
-<p><strong>Worked Example.</strong> Consider a simplified course prerequisite graph with vertices $\{A, B, C, D, E\}$ and directed edges representing "must be taken before":</p>
-$$E = \{(A, C),\; (B, C),\; (C, D),\; (C, E)\}$$
-<p>We apply <strong>Kahn's algorithm</strong>: compute the in-degree of each vertex.</p>
-<p>| Vertex | In-degree | |--------|-----------| | $A$    | 0         | | $B$    | 0         | | $C$    | 2         | | $D$    | 1         | | $E$    | 1         |</p>
-<p>Initialize a queue $Q = \{A, B\}$ (in-degree zero). Repeatedly dequeue a vertex $u$, append it to the result, and decrement the in-degree of each neighbor; enqueue any neighbor whose in-degree reaches zero.</p>
-$$\text{Step 1: dequeue } A \Rightarrow \text{result} = [A],\quad \deg^-(C) = 1$$
-$$\text{Step 2: dequeue } B \Rightarrow \text{result} = [A, B],\quad \deg^-(C) = 0 \Rightarrow Q = \{C\}$$
-$$\text{Step 3: dequeue } C \Rightarrow \text{result} = [A, B, C],\quad Q = \{D, E\}$$
-$$\text{Steps 4–5:} \quad \text{result} = [A, B, C, D, E]$$
-<p>This is one valid topological ordering; $[B, A, C, E, D]$ is another.</p>
-<p><strong>Key Theorem.</strong> Kahn's algorithm runs in $O(|V| + |E|)$ time. If the queue empties before all vertices are processed—that is, the final result contains fewer than $|V|$ vertices—then $G$ contains a directed cycle and no topological sort exists.</p>
-<p><em>Proof sketch.</em> Each vertex is enqueued exactly once (when its in-degree reaches zero) and each edge is examined exactly once when its source is dequeued, giving the linear bound. A cycle prevents every vertex in the cycle from ever reaching in-degree zero, so they are never enqueued. $\square$</p>
-<p><strong>Lab Cell.</strong></p>
-<pre><code>from sympy import symbols
-from sympy.combinatorics.permutations import Permutation
-import networkx as nx
-
-G = nx.DiGraph([("A","C"), ("B","C"), ("C","D"), ("C","E")])
-assert nx.is_directed_acyclic_graph(G), "Cycle detected — topological sort undefined"
-order = list(nx.topological_sort(G))
-print("Topological order:", order)</code></pre>
+<p>A topological sort of a directed acyclic graph (DAG) is a linear ordering $v_1, v_2, \dots, v_n$ of its vertices such that for every directed edge $(u, v)$, $u$ appears before $v$ in the ordering. Intuitively, if edges represent dependencies — "task $u$ must finish before task $v$ starts" — a topological order is a valid schedule that respects every dependency. A topological ordering exists if and only if the graph has no directed cycle, since a cycle would force a vertex to precede itself.</p>
+<p>The standard algorithm builds on depth-first search (DFS). Run DFS from every unvisited vertex, and record each vertex's <em>postorder</em> time — the moment DFS finishes exploring all of that vertex's descendants. The key theorem is: <strong>for any edge $(u, v)$ in a DAG, $u$ finishes after $v$ in a DFS traversal.</strong> This holds because when DFS is at $u$ and explores edge $(u, v)$, either $v$ is unvisited (so DFS recurses into $v$ and finishes it before returning to finish $u$), or $v$ is already finished (so it finished earlier). Either way, $v$'s finish time precedes $u$'s. Reversing the postorder — largest finish time first — therefore guarantees every edge points from earlier to later in the resulting sequence, which is exactly the topological sort.</p>
+<p><strong>Worked example.</strong> Consider course prerequisites: Calculus I $\to$ Calculus II, Calculus I $\to$ Linear Algebra, Calculus II $\to$ Differential Equations, Linear Algebra $\to$ Differential Equations. Running DFS from Calculus I visits Calculus II, then Differential Equations (a dead end, finishes first), back up to finish Calculus II, then explores Linear Algebra, which finds Differential Equations already visited, so Linear Algebra finishes, then Calculus I finishes last. Postorder: Diff Eq, Calc II, Linear Algebra, Calc I. Reversed: <strong>Calc I, Linear Algebra, Calc II, Diff Eq</strong> — a valid schedule.</p>
+<p><strong>Complexity.</strong> Since the algorithm is a single DFS pass plus a reversal, it runs in $O(V + E)$ time, linear in the graph size — no repeated searching is needed.</p>
+<pre class="mermaid">graph TD
+    A["Calculus I"] --> B["Calculus II"]
+    A --> C["Linear Algebra"]
+    B --> D["Differential Equations"]
+    C --> D</pre>
+<p><em>A prerequisite DAG; a valid topological order is Calculus I, Linear Algebra, Calculus II, Differential Equations.</em></p>
+<p>Topological sort underlies build systems (compiling files in dependency order), spreadsheet formula evaluation, and task scheduling — anywhere "do $X$ before $Y$" constraints must be turned into one concrete execution sequence.</p>
   </main>
-  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
 </div>
 </body>
 </html>
