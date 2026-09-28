@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Reversal | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="graph-reversal">Graph Reversal</h2>
+<p><strong>定义。</strong> 给定一个有向图 $G = (V, E)$，其反向图（reverse graph，亦称转置图 transpose graph）$G^R = (V, E^R)$ 定义为：保持顶点集合 $V$ 不变，将每条边的方向取反，即</p>
+$$
+E^R = \{(v, u) \mid (u, v) \in E\}
+$$
+<p>图的反转在处理<strong>有向无环图</strong>（DAG）时尤为重要：许多算法（例如求每个顶点到某一源点的最长路径、或按依赖关系的逆序处理任务）需要先按拓扑序遍历，但更容易实现的是在反向图上做深度优先搜索（DFS），再把结果倒过来读。</p>
+<p><strong>构造方法。</strong> 若 $G$ 用邻接表存储，反转的做法是遍历每条边 $(u, v)$，将其从 $u$ 的邻接表中移出，加入到 $v$ 的邻接表中：</p>
+<pre><code>def reverse_graph(adj: dict[int, list[int]]) -&gt; dict[int, list[int]]:
+    rev = {v: [] for v in adj}
+    for u in adj:
+        for v in adj[u]:
+            rev[v].append(u)   # 边方向 u→v 变为 v→u
+    return rev</code></pre>
+<p>时间复杂度为 $O(|V| + |E|)$，与原图规模同阶——因为每条边只需被访问一次即可完成方向翻转。</p>
+<p><strong>问题求解应用：拓扑排序的另一种实现。</strong> 标准拓扑排序常用"计算入度、反复移除入度为 0 的顶点"的 Kahn 算法。但另一种等价且常见于教材和面试的方法是：在反向图 $G^R$ 上做 DFS，并按照<strong>递归返回的顺序</strong>（即顶点完成搜索的顺序）把顶点加入结果列表，最后不需要反转结果——因为在反向图上访问顺序天然对应原图的拓扑序。这依赖一个关键性质：DAG 的拓扑序等价于其反向图上按完成时间从早到晚排列顶点。这一技巧在求解"任务调度""课程先修关系""编译依赖解析"等问题时非常实用：只需构造 $G^R$，跑一遍 DFS，即可直接得到合法的执行顺序，而无需显式维护入度表。</p>
+<pre class="mermaid">graph LR
+    subgraph 原图 G
+    A1[任务A] --> B1[任务B]
+    B1 --> C1[任务C]
+    A1 --> C1
+    end
+    subgraph 反向图 G的R次方
+    A2[任务A] --- B2[任务B]
+    B2 --> A2
+    C2[任务C] --> B2
+    C2 --> A2
+    end</pre>
+<p><em>图示：原图中边 A→B、B→C、A→C 表示任务依赖关系；反转后所有箭头方向互换，DFS 在反向图上的完成顺序即对应原图的拓扑序。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

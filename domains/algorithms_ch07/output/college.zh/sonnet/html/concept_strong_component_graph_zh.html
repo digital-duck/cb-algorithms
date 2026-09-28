@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong Component Graph | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="strong-component-graph">Strong Component Graph</h2>
+<p><strong>定义</strong></p>
+<p>给定有向图 $G = (V, E)$，其强连通分量（Strongly Connected Component，SCC）将 $V$ 划分为若干个等价类 $C_1, C_2, \ldots, C_k$：同一分量内任意两点互相可达，不同分量间不必然互达。<strong>强连通分量图</strong>（记作 $G^{SCC}$）是这样构造的图：每个 $C_i$ 收缩为一个顶点 $v_i$；若原图中存在边 $(u, w) \in E$，且 $u \in C_i$，$w \in C_j$，$i \neq j$，则在 $G^{SCC}$ 中加入边 $(v_i, v_j)$；若多条原边落在同一对 $(v_i, v_j)$ 上，则合并为一条边（去除平行边），自环（$i=j$）一律丢弃。</p>
+<p><strong>定理</strong>：对任意有向图 $G$，其强连通分量图 $G^{SCC}$ 是一个有向无环图（DAG）。</p>
+<p><strong>证明</strong>：反证法。假设 $G^{SCC}$ 中存在环 $v_{i_1} \to v_{i_2} \to \cdots \to v_{i_m} \to v_{i_1}$。由构造规则，每条边 $v_{i_t} \to v_{i_{t+1}}$ 对应原图中一条从 $C_{i_t}$ 到 $C_{i_{t+1}}$ 的路径。将这些路径首尾相连，再利用同一分量内部的强连通性补全"跳转点"之间的路径，就得到了一条从 $C_{i_1}$ 出发、经过所有这些分量、最终回到 $C_{i_1}$ 的闭合路径。这意味着 $C_{i_1}, \ldots, C_{i_m}$ 中任意两点互相可达，因此它们本应属于同一个强连通分量，与 $C_{i_1}, \ldots, C_{i_m}$ 是不同分量的假设矛盾。故 $G^{SCC}$ 无环。$\blacksquare$</p>
+<p><strong>求解应用</strong></p>
+<p>这个定理是许多图算法的基石。例如 Kosaraju 算法和 Tarjan 算法的第二步，正是利用 $G^{SCC}$ 必为 DAG 这一性质，对分量图做拓扑排序，从而确定分量之间的处理顺序（如依赖分析、编译器中的模块加载顺序、社交网络中"影响力传播"的层级划分）。具体做法：先用 DFS 求出所有 SCC 并给每个分量编号，再按照上述规则构造 $G^{SCC}$（用哈希集合去重以避免平行边），最后对这个 DAG 跑标准拓扑排序算法，时间复杂度整体仍为 $O(V + E)$。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

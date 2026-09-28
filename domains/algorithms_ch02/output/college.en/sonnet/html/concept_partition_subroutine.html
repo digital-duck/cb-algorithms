@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Partition Subroutine | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="partition-subroutine">Partition Subroutine</h2>
+<p><strong>Definition.</strong> The partition subroutine is the engine inside quicksort. Given an array segment $A[\text{lo}\,..\,\text{hi}]$, it selects one element as the <strong>pivot</strong>, then rearranges the segment so that every element less than the pivot sits to its left and every element greater sits to its right. Equal elements may fall on either side, depending on the implementation. The subroutine returns the pivot's final index $p$, at which point $A[p]$ is guaranteed to be in the exact position it would occupy in the fully sorted array — a property called being "locally sorted."</p>
+<p><strong>Worked example (Lomuto scheme).</strong> Choose the last element as pivot. Maintain an index $i$ marking the boundary of elements known to be less than the pivot. Scan $j$ from lo to hi $-1$: whenever $A[j] < \text{pivot}$, increment $i$ and swap $A[i]$ with $A[j]$. After the scan, swap the pivot into position $i+1$.</p>
+<p>Take $A = [8, 3, 7, 4, 9, 2]$, pivot $= 2$ (last element). Since nothing is smaller than $2$, $i$ never advances; the final swap places $2$ at index $0$. Result: $[2, 8, 3, 7, 4, 9]$, with partition index $p = 0$ — correctly, since $2$ is the minimum.</p>
+<p>A more instructive case: $A = [5, 1, 6, 2, 4, 3]$, pivot $= 3$. Walking through: $1 < 3$ (swap into position), $2 < 3$ (swap into position), $6$ and $4$ are skipped. Final swap places $3$ after the last "small" element. Result: $[1, 2, 3, 6, 4, 5]$ (order among unswapped elements varies by trace), with $3$ correctly seated at index $2$.</p>
+<p><strong>Problem-solving application.</strong> Partitioning runs in $\Theta(n)$ time for a segment of size $n$, using only constant extra space — this efficiency is why quicksort is attractive despite its $O(n^2)$ worst case. The subroutine's output index $p$ splits the problem: quicksort recursively partitions $A[\text{lo}\,..\,p-1]$ and $A[p+1\,..\,\text{hi}]$. Beyond sorting, the same logic solves the <strong>Dutch National Flag problem</strong> (partitioning into three groups) and underlies the <strong>quickselect</strong> algorithm, which finds the $k$-th smallest element by partitioning and recursing into only one side, achieving expected $O(n)$ time. When practicing, trace partition by hand on arrays with duplicates and already-sorted input — these expose why pivot choice (first, last, median-of-three, random) matters for avoiding the $O(n^2)$ worst case.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

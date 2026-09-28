@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Reversal | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="graph-reversal">Graph Reversal</h2>
+<p>Given a directed graph $G = (V, E)$, the <strong>reverse graph</strong> (also called the transpose) $G^R = (V, E^R)$ has the same vertex set but every edge direction flipped: $(u, v) \in E \iff (v, u) \in E^R$. Reversal is a purely structural transformation — it changes no vertex, adds no new connectivity information, and can be computed in $O(V + E)$ time by scanning the adjacency list once and inserting each edge into the opposite direction's list.</p>
+<p>Reversal matters because certain properties of a DAG are easier to compute in one direction than the other. A canonical use case: suppose you want to process the DAG in forward topological order using a DFS-based postorder trick. A plain DFS postorder gives you a valid order for <em>reverse</em> topological processing (finish times decrease from sinks to sources). To get the forward order directly via DFS traversal semantics, you instead run DFS on $G^R$ and read off finishing order — because "last to finish in $G^R$" corresponds to "first in topological order of $G$."</p>
+<p>Worked example: let $G$ have edges $A \to B$, $A \to C$, $B \to D$, $C \to D$. Then $G^R$ has edges $B \to A$, $C \to A$, $D \to B$, $D \to C$. In $G$, $A$ is a source and $D$ is a sink; in $G^R$, those roles swap — $D$ becomes the source and $A$ the sink. This role-swap is the entire content of reversal: sources become sinks, sinks become sources, and every path $u \rightsquigarrow v$ in $G$ becomes a path $v \rightsquigarrow u$ in $G^R$.</p>
+<p>The most important algorithmic payoff appears in <strong>Kosaraju's algorithm</strong> for finding strongly connected components. It runs DFS on $G$ to compute finishing times, reverses the graph, then runs DFS on $G^R$ processing vertices in decreasing order of finish time. Each DFS tree produced in this second pass is exactly one strongly connected component. The correctness argument hinges on a key lemma: if $C_1$ and $C_2$ are distinct SCCs with an edge from $C_1$ to $C_2$ in $G$, then the vertex with the latest finish time overall must lie in $C_1$ — a fact that reverses cleanly to guarantee the second DFS never "leaks" across components. When implementing this, a common bug is forgetting that adjacency-list reversal must preserve edge weights or metadata if the algorithm downstream (e.g., computing shortest paths on $G^R$) depends on them.</p>
+<pre class="mermaid">graph LR
+  subgraph G [Original Graph]
+    A1[A] --> B1[B]
+    A1 --> C1[C]
+    B1 --> D1[D]
+    C1 --> D1
+  end
+  subgraph GR [Reversed Graph]
+    B2[B] --> A2[A]
+    C2[C] --> A2
+    D2[D] --> B2
+    D2 --> C2
+  end</pre>
+<p><em>Reversing every edge in $G$ turns source $A$ into a sink and sink $D$ into a source in $G^R$.</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

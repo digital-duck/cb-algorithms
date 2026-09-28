@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moores Algorithm | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="moore-s-algorithm">Moore's Algorithm</h2>
+<h3 id="definition">Definition</h3>
+<p>A <strong>deterministic finite automaton (DFA)</strong> $M = (Q, \Sigma, \delta, q_0, F)$ may contain redundant states: distinct states $p, q \in Q$ such that for every string $w \in \Sigma^<em>$, $\delta^</em>(p, w) \in F \iff \delta^*(q, w) \in F$. Such states are called <strong>equivalent</strong> (written $p \sim q$), and their merger yields a smaller automaton recognising the same language. <strong>Moore's algorithm</strong> (Edward F. Moore, 1956) computes the coarsest congruence on $Q$ consistent with $\delta$ and $F$, producing the unique minimal DFA up to isomorphism.</p>
+<p>The algorithm maintains a partition $\Pi$ of $Q$ and refines it iteratively. Formally, two states $p, q$ are <strong>$k$-equivalent</strong> if they agree on all strings of length at most $k$:</p>
+$$p \sim_0 q \iff (p \in F \iff q \in F),$$
+$$p \sim_{k+1} q \iff p \sim_k q \;\land\; \forall a \in \Sigma,\; \delta(p,a) \sim_k \delta(q,a).$$
+<p>The sequence $\Pi_0, \Pi_1, \ldots$ of induced partitions is monotonically refining. Because $Q$ is finite, it stabilises at some step $n \leq |Q|-1$, yielding the equivalence ${\sim} = {\sim_n}$.</p>
+<h3 id="worked-example">Worked Example</h3>
+<p>Consider the DFA over $\Sigma = \{0, 1\}$ with states $Q = \{A, B, C, D\}$, $q_0 = A$, $F = \{C, D\}$, and transitions:</p>
+<p>| State | 0 | 1 | |-------|---|---| | $A$   | $B$ | $C$ | | $B$   | $A$ | $D$ | | $C$   | $D$ | $C$ | | $D$   | $C$ | $D$ |</p>
+<p><strong>Step 0.</strong> $\Pi_0 = \{\{A,B\},\{C,D\}\}$ (non-accepting vs. accepting).</p>
+<p><strong>Step 1.</strong> Check $A \sim_1 B$: on input $0$, $\delta(A,0)=B \in \{A,B\}$ and $\delta(B,0)=A \in \{A,B\}$; on input $1$, $\delta(A,1)=C \in \{C,D\}$ but $\delta(B,1)=D \in \{C,D\}$. Both transitions stay in the same block, so $A \sim_1 B$. Similarly $C \sim_1 D$. Thus $\Pi_1 = \Pi_0$ — the partition has stabilised. The minimal DFA has two states.</p>
+<h3 id="key-theorem">Key Theorem</h3>
+<p><strong>Theorem (Myhill–Nerode / Moore minimisation).</strong> The DFA produced by Moore's algorithm is isomorphic to the Myhill–Nerode minimal automaton of the language. If $|Q| = n$, the algorithm terminates in at most $n-1$ refinement steps with time complexity $O(n^2 |\Sigma|)$.</p>
+<p><em>Proof sketch.</em> Each refinement that strictly splits a block reduces the number of blocks by at least one; with at most $n$ blocks possible, convergence in $n-1$ steps is guaranteed. Correctness follows because $\sim$ is the largest right-congruence on $Q$ compatible with $F$.</p>
+<h3 id="lab-cell">Lab Cell</h3>
+<pre><code>from sympy import symbols, Function, Eq, simplify
+
+# Encode the example DFA as transition tables and verify block stability
+Q = ['A', 'B', 'C', 'D']
+F = {'C', 'D'}
+delta = {('A','0'):'B', ('A','1'):'C',
+         ('B','0'):'A', ('B','1'):'D',
+         ('C','0'):'D', ('C','1'):'C',
+         ('D','0'):'C', ('D','1'):'D'}
+
+def refine(partition, delta, alphabet='01'):
+    block_of = {s: i for i, blk in enumerate(partition) for s in blk}
+    new_partition = []
+    for blk in partition:
+        groups = {}
+        for s in blk:
+            key = tuple(block_of[delta[(s, a)]] for a in alphabet)
+            groups.setdefault(key, []).append(s)
+        new_partition.extend(groups.values())
+    return [sorted(b) for b in new_partition]
+
+partition = [sorted(set(Q) - F), sorted(F)]
+while True:
+    next_p = refine(partition, delta)
+    if next_p == partition:
+        break
+    partition = next_p
+
+print("Minimal DFA blocks:", partition)
+# Output: [['A', 'B'], ['C', 'D']]</code></pre>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>

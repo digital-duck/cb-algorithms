@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quicksort | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="quicksort">Quicksort</h2>
+<p>Quicksort is a divide-and-conquer algorithm that sorts an array by partitioning it around a chosen element, the <em>pivot</em>, into two groups: elements smaller than the pivot and elements larger than it. The pivot itself lands in its final sorted position. The two subarrays are then sorted recursively, and because partitioning places the pivot correctly, no merging step is needed afterward — unlike mergesort.</p>
+<p><strong>Partitioning.</strong> Given array $A[lo..hi]$, pick a pivot value $p$ (commonly $A[hi]$). Scan the array, moving all elements $\le p$ to the left side and all elements $> p$ to the right, then place $p$ between them. This takes $\Theta(n)$ time for a subarray of size $n$, using only constant extra space (in-place).</p>
+<p><strong>Worked example.</strong> Sort $[7, 2, 9, 4, 1]$ using the last element as pivot:</p>
+<li>Pivot $= 1$. Nothing is smaller, so $1$ stays at index 0: $[1, 7, 2, 9, 4]$.</li>
+<li>Recurse on $[7, 2, 9, 4]$, pivot $=4$: elements $\le 4$ are $\{2\}$, so partition gives $[2, 4, 7, 9]$... continuing recursively on $[7,9]$ eventually yields the sorted array $[1, 2, 4, 7, 9]$.</li>
+<p>Each partition step fixes one element's final position, and the recursion tree shrinks the problem size until subarrays of length $\le 1$ are trivially sorted.</p>
+<p><strong>Complexity analysis.</strong> If the pivot always splits the array evenly, the recurrence is</p>
+$$T(n) = 2T(n/2) + \Theta(n),$$
+<p>which solves by the Master Theorem to $T(n) = \Theta(n \log n)$. But if the array is already sorted and the pivot is always the last element, every partition splits off just one element, giving</p>
+$$T(n) = T(n-1) + \Theta(n) = \Theta(n^2).$$
+<p>This worst case is why practical implementations choose the pivot carefully — via random selection, or the "median-of-three" heuristic (comparing first, middle, and last elements) — which makes the $O(n^2)$ case statistically improbable rather than eliminating it.</p>
+<p><strong>Problem-solving application.</strong> Quicksort's average-case efficiency and in-place memory footprint make it the default choice in most language standard libraries for general sorting (though many, like Java's, switch to insertion sort for small subarrays and use dual-pivot variants for further speedup). When solving algorithm-design problems, recognize quicksort's partition step itself as a reusable subroutine — it underlies the classic $O(n)$ "median/k-th smallest element" selection algorithm (quickselect), since you only need to recurse into the side of the partition containing the target rank.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

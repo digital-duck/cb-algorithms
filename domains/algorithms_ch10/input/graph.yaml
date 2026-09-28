@@ -1,0 +1,118 @@
+domain: Algorithms_JeffE
+primitives:
+  single_source_shortest_path:
+    defines: An algorithm (BFS, DAG relaxation, Dijkstra, or Bellman-Ford) that computes shortest-path
+      distances and predecessors from one source vertex to all others.
+    tier: 0
+  shortest_path_distance:
+    defines: The value dist(u,v), infinity if unreachable, negative infinity if reachable through a negative
+      cycle, and 0 for dist(u,u).
+    tier: 0
+  negative_cycle:
+    defines: A cycle whose total edge weight is negative, making shortest-path distances through it undefined
+      or arbitrarily small.
+    tier: 0
+  dijkstras_algorithm:
+    defines: A single-source shortest path algorithm for non-negative edge weights, running in O(VE log
+      V) with a binary heap.
+    tier: 0
+  bellman_ford_algorithm:
+    defines: A single-source shortest path algorithm tolerating negative edge weights (no negative cycles
+      reachable from source), running in O(VE).
+    tier: 0
+  tense_edge:
+    defines: An edge uv where dist(s,u) + w(uv) < dist(s,v); shortest-path algorithms work by eliminating
+      all tense edges.
+    tier: 0
+  fast_matrix_multiplication:
+    defines: Divide-and-conquer algorithms (e.g., Strassen's) that multiply matrices faster than naive
+      O(n^3), relying on subtraction.
+    tier: 0
+concepts:
+  all_pairs_shortest_paths:
+    defines: The problem of computing shortest-path distances and predecessors between every pair of vertices,
+      represented as VxV arrays.
+    composed_of:
+    - single_source_shortest_path
+    - shortest_path_distance
+    tier: 1
+  obvious_apsp:
+    defines: Solving all-pairs shortest paths by running a single-source shortest-path algorithm once
+      from every vertex.
+    composed_of:
+    - all_pairs_shortest_paths
+    - single_source_shortest_path
+    tier: 2
+  vertex_reweighting:
+    defines: Assigning a price to each vertex and redefining edge weights to preserve the relative order
+      of shortest paths between fixed pairs.
+    composed_of:
+    - tense_edge
+    - shortest_path_distance
+    tier: 1
+  johnsons_algorithm:
+    defines: An APSP algorithm running Bellman-Ford once to compute prices, reweighting edges non-negative,
+      then Dijkstra from every vertex, in O(VE log V).
+    composed_of:
+    - vertex_reweighting
+    - bellman_ford_algorithm
+    - dijkstras_algorithm
+    - all_pairs_shortest_paths
+    tier: 2
+  bounded_edge_dp_recurrence:
+    defines: The recurrence dist(u,v,l), the shortest-path length from u to v using at most l edges, avoiding
+      infinite loops from cycles.
+    composed_of:
+    - shortest_path_distance
+    - negative_cycle
+    tier: 1
+  shimbel_apsp:
+    defines: A DP APSP algorithm building dist(u,v,l) by relaxing edges over V-1 rounds, equivalent to
+      interleaving V runs of Bellman-Ford, in O(V^2 E).
+    composed_of:
+    - bounded_edge_dp_recurrence
+    - bellman_ford_algorithm
+    - all_pairs_shortest_paths
+    tier: 2
+  divide_and_conquer_apsp:
+    defines: A DP approach splitting a shortest path at its middle vertex, doubling the length bound at
+      each of O(log V) stages, in O(V^3 log V).
+    composed_of:
+    - shortest_path_distance
+    - all_pairs_shortest_paths
+    tier: 2
+  min_plus_matrix_multiplication:
+    defines: A matrix product using addition in place of multiplication and minimization in place of addition,
+      connecting shortest paths to matrix powering.
+    composed_of:
+    - shortest_path_distance
+    - fast_matrix_multiplication
+    tier: 1
+  restricted_intermediate_path:
+    defines: The shortest path from u to v passing only through intermediate vertices numbered at most
+      r, the key recursive structure of Floyd-Warshall.
+    composed_of:
+    - shortest_path_distance
+    tier: 1
+  floyd_warshall_algorithm:
+    defines: An APSP DP algorithm restricting intermediate vertices to those numbered at most r, computed
+      with a triple-nested loop in O(V^3).
+    composed_of:
+    - restricted_intermediate_path
+    - all_pairs_shortest_paths
+    tier: 2
+applications:
+  arbitrage_detection:
+    defines: Using negative-cycle detection in a currency exchange-rate graph (via log-transformed weights)
+      to find profitable trading cycles.
+    needs:
+    - negative_cycle
+    - bellman_ford_algorithm
+    tier: 1
+  transitive_closure:
+    defines: Computing which vertex pairs have any directed path between them, reducible to boolean matrix
+      multiplication and fast matrix multiplication.
+    needs:
+    - fast_matrix_multiplication
+    - min_plus_matrix_multiplication
+    tier: 2

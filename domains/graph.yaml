@@ -1,0 +1,1808 @@
+# Book-level super-graph — AUTO-GENERATED, do not edit by hand.
+# Run:  python scripts/build_super_graph.py
+#
+# Merges all chapter graphs; each node carries source_domain (canonical
+# definition) and optionally also_in (other chapters that reuse it).
+# Cross-domain primitives (concepts in an earlier chapter re-declared as
+# primitives in a later one) appear here with their full composed_of chain.
+# This file is never used for SPL generation — it exists for validation
+# and future book-level graph visualisation.
+domain: algorithms
+chapters:
+- algorithms_ch02
+- algorithms_ch03
+- algorithms_ch04
+- algorithms_ch05
+- algorithms_ch06
+- algorithms_ch07
+- algorithms_ch08
+- algorithms_ch09
+- algorithms_ch10
+- algorithms_ch11
+- algorithms_ch12
+- algorithms_ch13
+primitives:
+  base_case:
+    defines: An elementary instance of a recursive problem that can be solved directly
+      without further reduction, ensuring recursive reductions terminate rather than
+      looping forever.
+    tier: 0
+    source_domain: algorithms_ch02
+  induction_proof:
+    defines: A proof technique, identified with the Recursion Fairy/Induction Hypothesis,
+      used to establish the correctness of a recursive algorithm.
+    tier: 0
+    source_domain: algorithms_ch02
+  recurrence_relation:
+    defines: An equation expressing the running time of a recursive algorithm on an
+      input of size n in terms of the running times on smaller subproblems.
+    tier: 0
+    source_domain: algorithms_ch02
+    also_in:
+    - algorithms_ch04
+  merge_subroutine:
+    defines: A subroutine that combines two already-sorted subarrays into a single
+      sorted array by repeatedly taking the smaller of the two fronts.
+    tier: 0
+    source_domain: algorithms_ch02
+  partition_subroutine:
+    defines: A subroutine that rearranges an array around a chosen pivot element so
+      that smaller elements precede it and larger elements follow it, returning the
+      pivot's final index.
+    tier: 0
+    source_domain: algorithms_ch02
+  subsequence:
+    defines: A sequence obtained from another sequence by deleting zero or more elements
+      without changing the order of the remaining elements.
+    tier: 0
+    source_domain: algorithms_ch03
+  binary_search_tree:
+    defines: A tree data structure storing sorted keys such that search cost is proportional
+      to a node's number of ancestors, assumed as prior knowledge in this chapter.
+    tier: 0
+    source_domain: algorithms_ch03
+  greedy_algorithm:
+    defines: An algorithm that constructs a solution through a sequence of locally
+      optimal decisions made directly, without solving recursive subproblems.
+    tier: 0
+    source_domain: algorithms_ch04
+    also_in:
+    - algorithms_ch05
+  exchange_argument:
+    defines: A proof technique for showing a greedy algorithm is optimal by showing
+      any optimal solution can be transformed into the greedy solution without making
+      it worse.
+    tier: 0
+    source_domain: algorithms_ch05
+  prefix_free_code:
+    defines: A binary code assigning strings of 0s and 1s to characters such that
+      no character's code is a prefix of another's, representable as a binary tree
+      with characters at the leaves.
+    tier: 0
+    source_domain: algorithms_ch05
+  matching:
+    defines: A pairing between two sets of participants (e.g., doctors and hospitals)
+      in which each participant is paired with at most one participant from the other
+      set.
+    tier: 0
+    source_domain: algorithms_ch05
+    also_in:
+    - algorithms_ch12
+  preference_list:
+    defines: A ranking submitted by each participant in a matching problem indicating
+      their preferred order among possible partners.
+    tier: 0
+    source_domain: algorithms_ch05
+  graph:
+    defines: A pair of sets (V, E), where V is a finite set of vertices and E is a
+      set of pairs of vertices called edges.
+    tier: 0
+    source_domain: algorithms_ch06
+  undirected_edge:
+    defines: An edge represented as an unordered pair (or set of size two) of vertices.
+    tier: 0
+    source_domain: algorithms_ch06
+  directed_edge:
+    defines: An edge represented as an ordered pair of vertices, distinguished into
+      a tail and a head.
+    tier: 0
+    source_domain: algorithms_ch06
+  weighted_graph:
+    defines: A connected, undirected graph G = (V, E) together with a function w that
+      assigns a real-valued weight to each edge.
+    tier: 0
+    source_domain: algorithms_ch08
+  intermediate_spanning_forest:
+    defines: An acyclic subgraph F of G maintained during MST construction, always
+      a subgraph of the minimum spanning tree, that evolves by adding edges until
+      it becomes the full MST.
+    tier: 0
+    source_domain: algorithms_ch08
+  fibonacci_heap:
+    defines: A priority queue data structure supporting Insert and DecreaseKey in
+      constant amortized time and ExtractMin in O(log n) amortized time, used to speed
+      up Jarník's algorithm to O(E + V log V).
+    tier: 0
+    source_domain: algorithms_ch08
+  disjoint_set_data_structure:
+    defines: A data structure supporting MakeSet, Find, and Union operations to maintain
+      a partition of vertices into components, used by Kruskal's algorithm to test
+      whether an edge is safe.
+    tier: 0
+    source_domain: algorithms_ch08
+  edge_weight:
+    defines: A numeric value assigned to each edge of a graph, representing distance,
+      cost, time, or another quantity to be summed along a path.
+    tier: 0
+    source_domain: algorithms_ch09
+  negative_edge_weight:
+    defines: An edge weight less than zero, representing a transition with negative
+      cost or a profit rather than a cost.
+    tier: 0
+    source_domain: algorithms_ch09
+  shortest_path:
+    defines: A path between two vertices whose total edge weight is minimum among
+      all paths connecting them.
+    tier: 0
+    source_domain: algorithms_ch09
+  dist_pred_labels:
+    defines: Per-vertex variables that record a tentative shortest-path distance from
+      the source and the predecessor vertex on that tentative path.
+    tier: 0
+    source_domain: algorithms_ch09
+  fifo_queue:
+    defines: A first-in-first-out data structure used to order vertices for processing
+      during traversal-based algorithms.
+    tier: 0
+    source_domain: algorithms_ch09
+  directed_acyclic_graph:
+    defines: A directed graph containing no cycles, allowing recursive shortest-path
+      recurrences to be evaluated without infinite loops.
+    tier: 0
+    source_domain: algorithms_ch09
+    also_in:
+    - algorithms_ch12
+  topological_order:
+    defines: An ordering of a DAG's vertices such that every edge points from an earlier
+      vertex to a later one.
+    tier: 0
+    source_domain: algorithms_ch09
+  priority_queue:
+    defines: A data structure supporting Insert, ExtractMin, and DecreaseKey operations,
+      used to repeatedly select the vertex with smallest tentative distance.
+    tier: 0
+    source_domain: algorithms_ch09
+  single_source_shortest_path:
+    defines: An algorithm (BFS, DAG relaxation, Dijkstra, or Bellman-Ford) that computes
+      shortest-path distances and predecessors from one source vertex to all others.
+    tier: 0
+    source_domain: algorithms_ch10
+  shortest_path_distance:
+    defines: The value dist(u,v), infinity if unreachable, negative infinity if reachable
+      through a negative cycle, and 0 for dist(u,u).
+    tier: 0
+    source_domain: algorithms_ch10
+  bellman_ford_algorithm:
+    defines: A single-source shortest path algorithm tolerating negative edge weights
+      (no negative cycles reachable from source), running in O(VE).
+    tier: 0
+    source_domain: algorithms_ch10
+  fast_matrix_multiplication:
+    defines: Divide-and-conquer algorithms (e.g., Strassen's) that multiply matrices
+      faster than naive O(n^3), relying on subtraction.
+    tier: 0
+    source_domain: algorithms_ch10
+  directed_graph:
+    defines: A graph G = (V, E) consisting of vertices and directed edges, used as
+      the underlying structure for flow networks.
+    tier: 0
+    source_domain: algorithms_ch11
+  flow_network:
+    defines: A directed graph with two special vertices, a source s and target t,
+      together with a non-negative capacity function on edges.
+    tier: 0
+    source_domain: algorithms_ch11
+  capacity_function:
+    defines: A function assigning a non-negative capacity to each edge, bounding how
+      much flow that edge can carry.
+    tier: 0
+    source_domain: algorithms_ch11
+  maximum_flow:
+    defines: A flow of largest possible value from source s to target t in a capacitated
+      network, computable via algorithms like Ford-Fulkerson or Orlin's algorithm.
+    tier: 0
+    source_domain: algorithms_ch12
+  minimum_cut:
+    defines: A partition of the vertices into sets containing s and t, respectively,
+      with the smallest total capacity of edges crossing from the s-side to the t-side.
+    tier: 0
+    source_domain: algorithms_ch12
+  boolean_circuit:
+    defines: A collection of AND, OR, and NOT gates connected by wires, with input
+      wires for switches and an output wire for a result.
+    tier: 0
+    source_domain: algorithms_ch13
+  polynomial_time:
+    defines: An algorithm's running time bounded by a polynomial function O(n^c) of
+      the input size, taken as the minimal requirement for "efficiency".
+    tier: 0
+    source_domain: algorithms_ch13
+  decision_problem:
+    defines: A problem whose output is a single boolean value, Yes or No.
+    tier: 0
+    source_domain: algorithms_ch13
+  turing_machine:
+    defines: A restrictive formal model of computation (finite-state machine with
+      an unbounded memory tape) used to formally define P, NP, and co-NP via languages.
+    tier: 0
+    source_domain: algorithms_ch13
+  boolean_formula:
+    defines: An expression built from boolean variables and And/Or/Not operators,
+      evaluated to True or False under a variable assignment.
+    tier: 0
+    source_domain: algorithms_ch13
+concepts:
+  recursion:
+    defines: A special case of reduction in which a problem is solved by reducing
+      it to one or more simpler instances of the same problem, delegated to an imagined
+      "Recursion Fairy."
+    composed_of:
+    - reduction
+    - base_case
+    - induction_proof
+    tier: 1
+    source_domain: algorithms_ch02
+    also_in:
+    - algorithms_ch03
+    - algorithms_ch04
+  recursion_tree:
+    defines: A pictorial method for solving divide-and-conquer recurrences by summing,
+      level by level, the non-recursive work performed at every node of a tree of
+      recursive subproblems.
+    composed_of:
+    - recurrence_relation
+    tier: 1
+    source_domain: algorithms_ch02
+    also_in:
+    - algorithms_ch03
+  domain_transformation:
+    defines: A technique for removing floors, ceilings, and lower-order terms from
+      a recurrence by defining a shifted function that satisfies a simpler recurrence.
+    composed_of:
+    - recurrence_relation
+    tier: 1
+    source_domain: algorithms_ch02
+  divide_and_conquer:
+    defines: A three-step recursive pattern of dividing a problem into independent
+      smaller instances, delegating them recursively, and combining their solutions
+      into the final answer.
+    composed_of:
+    - recursion
+    tier: 2
+    source_domain: algorithms_ch02
+  quickselect:
+    defines: A recursive algorithm that finds the kth smallest element of an array
+      by partitioning around a pivot and recursing into only the one subarray known
+      to contain the target rank.
+    composed_of:
+    - recursion
+    - partition_subroutine
+    tier: 2
+    source_domain: algorithms_ch02
+  split_multiply:
+    defines: A divide-and-conquer multiplication algorithm that splits each n-digit
+      number into two halves and recursively computes four half-size sub-products,
+      still yielding quadratic time.
+    composed_of:
+    - divide_and_conquer
+    tier: 3
+    source_domain: algorithms_ch02
+  backtracking:
+    defines: A recursive strategy that incrementally builds a solution one component
+      at a time, trying every alternative at each decision point and recursively exploring
+      each before choosing.
+    composed_of:
+    - recursion
+    tier: 1
+    source_domain: algorithms_ch03
+    also_in:
+    - algorithms_ch04
+  state_summary_minimization:
+    defines: The design principle that each recursive call should carry only the smallest
+      sufficient summary of past decisions needed to make future ones, rather than
+      the full decision history.
+    composed_of:
+    - recursion
+    tier: 1
+    source_domain: algorithms_ch03
+  index_formulation:
+    defines: Reformulating a recursive algorithm to operate on array indices into
+      a global input array rather than passing copied subarrays, to avoid costly copying
+      overhead.
+    composed_of:
+    - recursion
+    tier: 1
+    source_domain: algorithms_ch03
+  subtraction_recurrence_trick:
+    defines: A method for solving summation-form recurrences by subtracting the recurrence
+      for T(n-1) from T(n) to eliminate the summation and obtain a simple linear recurrence.
+    composed_of:
+    - recursion
+    tier: 1
+    source_domain: algorithms_ch03
+  game_tree:
+    defines: A tree of game states connected by legal moves, used to represent all
+      possible plays of a finite two-player game with no hidden information or randomness.
+    composed_of:
+    - recursion_tree
+    tier: 1
+    source_domain: algorithms_ch03
+  brute_force_enumeration:
+    defines: The practice of trying every possible choice at each decision point rather
+      than attempting to cleverly prune "obviously" bad options, deferring optimization
+      until correctness is established.
+    composed_of:
+    - backtracking
+    tier: 2
+    source_domain: algorithms_ch03
+  exponential_running_time:
+    defines: The observation that most backtracking algorithms explore an exponential
+      number of partial solutions in the worst case, since they enumerate large sets
+      of possibilities.
+    composed_of:
+    - backtracking
+    tier: 2
+    source_domain: algorithms_ch03
+  include_exclude_recursion:
+    defines: A recursive pattern that decides, for each input element in turn, whether
+      to include or exclude it from the solution, then recurses on the remaining elements.
+    composed_of:
+    - backtracking
+    tier: 2
+    source_domain: algorithms_ch03
+  divide_and_conquer_root_choice:
+    defines: A recursive strategy that tries every possible choice of root/split point,
+      partitioning the remaining problem into independent left and right subproblems
+      solved by recursion.
+    composed_of:
+    - backtracking
+    tier: 2
+    source_domain: algorithms_ch03
+  good_bad_state:
+    defines: A recursive classification of game states, where a state is good if the
+      current player can move to a bad state for the opponent, and bad if every move
+      leads to a good state for the opponent.
+    composed_of:
+    - game_tree
+    tier: 2
+    source_domain: algorithms_ch03
+  memoization:
+    defines: An optimization of recursive algorithms that stores ("remembers") the
+      results of previously computed subproblems and reuses them instead of recomputing.
+    composed_of:
+    - recursion
+    - recurrence_relation
+    - backtracking
+    tier: 1
+    source_domain: algorithms_ch04
+  dynamic_programming:
+    defines: A method of solving problems by formulating a correct recurrence and
+      then filling in solutions to subproblems from the bottom up in a deliberate
+      order, avoiding the repeated computation of backtracking.
+    composed_of:
+    - recurrence_relation
+    - backtracking
+    tier: 1
+    source_domain: algorithms_ch04
+  matrix_exponentiation_recurrence:
+    defines: A technique that reformulates a linear recurrence as matrix multiplication
+      so repeated squaring can evaluate it in logarithmic time.
+    composed_of:
+    - recurrence_relation
+    tier: 1
+    source_domain: algorithms_ch04
+  subproblem_evaluation_order:
+    defines: The identification of which subproblems a given subproblem depends on,
+      and the ordering of computation (e.g., bottom-up, by rows/columns/diagonals)
+      so dependencies are always resolved before use.
+    composed_of:
+    - dynamic_programming
+    tier: 2
+    source_domain: algorithms_ch04
+  tree_dynamic_programming:
+    defines: A form of dynamic programming where subproblems are associated with nodes
+      of a tree rather than array indices, and results are memoized directly in tree
+      nodes using post-order traversal.
+    composed_of:
+    - dynamic_programming
+    - recursion
+    tier: 2
+    source_domain: algorithms_ch04
+  optimal_tape_storage:
+    defines: The problem of ordering files on tape to minimize expected or total access
+      cost, solved by sorting files by increasing length (or by the ratio of length
+      to frequency) and proved optimal via an exchange argument.
+    composed_of:
+    - greedy_algorithm
+    - exchange_argument
+    tier: 1
+    source_domain: algorithms_ch05
+  interval_scheduling:
+    defines: The problem of selecting the maximum number of non-overlapping intervals
+      from a set, solved by greedily choosing the interval that finishes earliest
+      and recursing on the rest.
+    composed_of:
+    - greedy_algorithm
+    - exchange_argument
+    tier: 1
+    source_domain: algorithms_ch05
+  huffman_coding:
+    defines: A greedy algorithm that builds an optimal prefix-free binary code by
+      repeatedly merging the two least frequent symbols into a new combined symbol,
+      minimizing total encoded message length.
+    composed_of:
+    - prefix_free_code
+    - greedy_algorithm
+    - exchange_argument
+    tier: 1
+    source_domain: algorithms_ch05
+  stable_matching_problem:
+    defines: The problem of finding a matching between two equal-sized sets of ranked
+      participants such that no unmatched pair would both prefer each other over their
+      current partners (an unstable pair).
+    composed_of:
+    - matching
+    - preference_list
+    tier: 1
+    source_domain: algorithms_ch05
+  greedy_exchange_proof_pattern:
+    defines: The recurring proof structure for greedy algorithms — assume a differing
+      optimal solution exists, find the first difference, and show it can be exchanged
+      for the greedy choice without loss, implying by induction that the greedy solution
+      is optimal.
+    composed_of:
+    - exchange_argument
+    - optimal_tape_storage
+    - interval_scheduling
+    tier: 2
+    source_domain: algorithms_ch05
+  gale_shapley_algorithm:
+    defines: A round-based algorithm in which unmatched hospitals make offers to their
+      most-preferred remaining doctor and doctors tentatively accept their best offer
+      so far, provably terminating in a stable matching that is optimal for the offering
+      side.
+    composed_of:
+    - stable_matching_problem
+    tier: 2
+    source_domain: algorithms_ch05
+  degree:
+    defines: The number of neighbors of a vertex (undirected), or in-degree/out-degree
+      (directed).
+    composed_of:
+    - graph
+    - undirected_edge
+    - directed_edge
+    tier: 1
+    source_domain: algorithms_ch06
+  subgraph:
+    defines: A graph G' = (V', E') is a subgraph of G if V' is a subset of V and E'
+      is a subset of E.
+    composed_of:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  walk_path:
+    defines: A walk is a sequence of pairwise-adjacent vertices; a walk visiting each
+      vertex at most once is a path.
+    composed_of:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  planarity:
+    defines: A graph is planar if it has a drawing (embedding) where no two edges
+      cross.
+    composed_of:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  adjacency_list:
+    defines: An array of lists, each containing the neighbors of one vertex, requiring
+      O(V + E) space.
+    composed_of:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  adjacency_matrix:
+    defines: A V x V matrix of 0s and 1s indicating which pairs of vertices are joined
+      by an edge.
+    composed_of:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  reachability:
+    defines: A vertex v is reachable from u if the graph contains a walk (and therefore
+      a path) between u and v.
+    composed_of:
+    - walk_path
+    tier: 2
+    source_domain: algorithms_ch06
+    also_in:
+    - algorithms_ch07
+  cycle_acyclic:
+    defines: A cycle is a closed walk that enters and leaves each vertex at most once;
+      a graph with no such subgraph is acyclic.
+    composed_of:
+    - walk_path
+    tier: 2
+    source_domain: algorithms_ch06
+  connectivity:
+    defines: An undirected graph is connected if every vertex is reachable from every
+      other; maximal connected subgraphs are components.
+    composed_of:
+    - reachability
+    tier: 3
+    source_domain: algorithms_ch06
+  reduction:
+    defines: Solving a new problem by transforming its input into the input of an
+      existing algorithm and reusing that algorithm as a black-box subroutine.
+    composed_of:
+    - reachability
+    tier: 3
+    source_domain: algorithms_ch06
+    also_in:
+    - algorithms_ch02
+  tree:
+    defines: A connected acyclic graph, equivalently one component of a forest.
+    composed_of:
+    - connectivity
+    - cycle_acyclic
+    tier: 4
+    source_domain: algorithms_ch06
+  directed_graph_concepts:
+    defines: Directed analogues of walks, paths, and cycles; strongly connected if
+      every vertex is reachable from every other; acyclic if no directed cycle (a
+      dag).
+    composed_of:
+    - directed_edge
+    - walk_path
+    - cycle_acyclic
+    - connectivity
+    tier: 4
+    source_domain: algorithms_ch06
+  spanning_tree:
+    defines: A subgraph that is a tree and contains every vertex of a connected graph
+      G; a spanning forest collects one per component.
+    composed_of:
+    - tree
+    - graph
+    tier: 5
+    source_domain: algorithms_ch06
+    also_in:
+    - algorithms_ch08
+  whatever_first_search:
+    defines: A generic traversal algorithm that repeatedly pulls a vertex from a 'bag',
+      marks it, and adds its neighbors, marking exactly the vertices reachable from
+      the start and producing a spanning tree.
+    composed_of:
+    - graph
+    - reachability
+    - spanning_tree
+    tier: 6
+    source_domain: algorithms_ch06
+  depth_first_search:
+    defines: Whatever-first search implemented with a stack, producing a depth-first
+      spanning tree in O(V + E) time.
+    composed_of:
+    - whatever_first_search
+    tier: 7
+    source_domain: algorithms_ch06
+    also_in:
+    - algorithms_ch07
+  breadth_first_search:
+    defines: Whatever-first search implemented with a queue, producing a breadth-first
+      spanning tree with shortest paths in O(V + E) time.
+    composed_of:
+    - whatever_first_search
+    tier: 7
+    source_domain: algorithms_ch06
+    also_in:
+    - algorithms_ch09
+  best_first_search:
+    defines: Whatever-first search implemented with a priority queue, yielding minimum
+      spanning tree, shortest-path, and widest-path variants.
+    composed_of:
+    - whatever_first_search
+    tier: 7
+    source_domain: algorithms_ch06
+  wfs_all_disconnected:
+    defines: A wrapper that runs whatever-first search from each unmarked vertex to
+      visit every vertex of a possibly disconnected graph.
+    composed_of:
+    - whatever_first_search
+    - connectivity
+    tier: 7
+    source_domain: algorithms_ch06
+  dfs_wrapper:
+    defines: A wrapper that repeatedly invokes depth-first search from each unvisited
+      vertex so that every vertex in the graph is visited.
+    composed_of:
+    - depth_first_search
+    tier: 1
+    source_domain: algorithms_ch07
+  preorder_postorder:
+    defines: Numbering of vertices assigned by a clock during DFS — pre when pushed
+      onto the recursion stack, post when popped off.
+    composed_of:
+    - depth_first_search
+    tier: 1
+    source_domain: algorithms_ch07
+  vertex_states:
+    defines: The three states a vertex passes through during DFSAll, determined by
+      comparing the current clock to its pre and post times.
+    composed_of:
+    - preorder_postorder
+    tier: 2
+    source_domain: algorithms_ch07
+  active_interval:
+    defines: The interval [v.pre, v.post] during which a vertex is on the recursion
+      stack, used to characterize ancestor/descendant relationships.
+    composed_of:
+    - preorder_postorder
+    tier: 2
+    source_domain: algorithms_ch07
+  edge_classification:
+    defines: A categorization of graph edges based on how the active intervals of
+      their endpoints intersect during a depth-first traversal.
+    composed_of:
+    - active_interval
+    tier: 3
+    source_domain: algorithms_ch07
+  dag:
+    defines: A directed graph containing no directed cycles, characterized by having
+      sources, sinks, and a valid topological ordering.
+    composed_of:
+    - reachability
+    tier: 1
+    source_domain: algorithms_ch07
+  graph_reversal:
+    defines: The operation of constructing rev(G) by reversing the direction of every
+      edge, used to process a dag in forward topological order via DFS.
+    composed_of:
+    - dag
+    tier: 2
+    source_domain: algorithms_ch07
+  dependency_graph:
+    defines: A graph with a vertex per subproblem and an edge between subproblems
+      that depend on each other, which must be acyclic for a recurrence to terminate.
+    composed_of:
+    - dag
+    tier: 2
+    source_domain: algorithms_ch07
+  strong_connectivity:
+    defines: An equivalence relation between vertices u and v where u can reach v
+      and v can reach u, partitioning the graph into strongly connected components.
+    composed_of:
+    - reachability
+    tier: 1
+    source_domain: algorithms_ch07
+  strong_component_graph:
+    defines: The dag obtained by contracting each strongly connected component of
+      G into a single vertex and collapsing parallel edges.
+    composed_of:
+    - strong_connectivity
+    - dag
+    tier: 2
+    source_domain: algorithms_ch07
+  sink_source_component:
+    defines: Strongly connected components that correspond to sinks or sources in
+      the strong component graph, used as the basis for linear-time SCC algorithms.
+    composed_of:
+    - strong_component_graph
+    tier: 3
+    source_domain: algorithms_ch07
+  tarjan_low_function:
+    defines: For a vertex v, the smallest starting time reachable via tree edges followed
+      by at most one non-tree edge, used to identify roots of sink components.
+    composed_of:
+    - preorder_postorder
+    - active_interval
+    tier: 3
+    source_domain: algorithms_ch07
+  minimum_spanning_tree:
+    defines: The spanning tree T of a weighted graph G that minimizes the total weight
+      w(T) = sum of edge weights in T.
+    composed_of:
+    - weighted_graph
+    - spanning_tree
+    tier: 1
+    source_domain: algorithms_ch08
+  useless_edge:
+    defines: An edge not in F whose endpoints already lie in the same component of
+      F, and which is therefore excluded from the MST.
+    composed_of:
+    - intermediate_spanning_forest
+    tier: 1
+    source_domain: algorithms_ch08
+  edge_contraction:
+    defines: An operation that merges the two endpoints of an edge into a single node,
+      redirecting incident edges and removing redundant parallel edges, used to reformulate
+      the three classical MST algorithms.
+    composed_of:
+    - weighted_graph
+    tier: 1
+    source_domain: algorithms_ch08
+  mst_uniqueness:
+    defines: If all edge weights in a connected graph are distinct, the graph has
+      a unique minimum spanning tree, proved by a greedy exchange argument.
+    composed_of:
+    - minimum_spanning_tree
+    tier: 2
+    source_domain: algorithms_ch08
+  safe_edge:
+    defines: The minimum-weight edge with exactly one endpoint in some component of
+      F; every safe edge must belong to the minimum spanning tree.
+    composed_of:
+    - intermediate_spanning_forest
+    - minimum_spanning_tree
+    tier: 2
+    source_domain: algorithms_ch08
+  tie_breaking_rule:
+    defines: A consistent comparison procedure (ShorterEdge) for breaking ties between
+      equal-weight edges so that algorithms can assume distinct weights without loss
+      of generality.
+    composed_of:
+    - mst_uniqueness
+    tier: 3
+    source_domain: algorithms_ch08
+  generic_mst_algorithm:
+    defines: The strategy, common to all classical MST algorithms, of repeatedly adding
+      safe edges to the intermediate spanning forest F until it becomes a single spanning
+      tree.
+    composed_of:
+    - safe_edge
+    - useless_edge
+    tier: 3
+    source_domain: algorithms_ch08
+  negative_cycle:
+    defines: A directed cycle whose total edge weight is negative, which implies no
+      shortest path exists for any path that touches it.
+    composed_of:
+    - negative_edge_weight
+    - shortest_path
+    tier: 1
+    source_domain: algorithms_ch09
+    also_in:
+    - algorithms_ch10
+  sssp_problem:
+    defines: The problem of finding shortest paths from one fixed source vertex to
+      every other vertex in a graph.
+    composed_of:
+    - shortest_path
+    tier: 1
+    source_domain: algorithms_ch09
+  shortest_path_tree:
+    defines: A rooted, directed tree formed by choosing one shortest path from the
+      source to each reachable vertex, whose union forms a tree structure.
+    composed_of:
+    - shortest_path
+    - sssp_problem
+    tier: 2
+    source_domain: algorithms_ch09
+  tense_edge:
+    defines: An edge uv where dist(u) + w(uv) < dist(v), indicating the current tentative
+      distance to v is not yet optimal.
+    composed_of:
+    - dist_pred_labels
+    - edge_weight
+    tier: 1
+    source_domain: algorithms_ch09
+    also_in:
+    - algorithms_ch10
+  edge_relaxation:
+    defines: The operation of updating dist(v) and pred(v) using a tense edge uv to
+      improve the tentative shortest path to v.
+    composed_of:
+    - tense_edge
+    - dist_pred_labels
+    tier: 2
+    source_domain: algorithms_ch09
+  fords_generic_algorithm:
+    defines: A general SSSP strategy that repeatedly relaxes any tense edge until
+      none remain, of which all practical shortest-path algorithms are special cases.
+    composed_of:
+    - edge_relaxation
+    - tense_edge
+    - sssp_problem
+    tier: 3
+    source_domain: algorithms_ch09
+  bfs_phase_analysis:
+    defines: A proof technique that partitions BFS execution into phases using an
+      imaginary token, showing distance labels are assigned in non-decreasing order.
+    composed_of:
+    - breadth_first_search
+    tier: 5
+    source_domain: algorithms_ch09
+  dag_shortest_paths:
+    defines: A dynamic-programming algorithm that computes shortest paths in a DAG
+      in O(V+E) time by relaxing edges in topological order.
+    composed_of:
+    - directed_acyclic_graph
+    - topological_order
+    - edge_relaxation
+    - sssp_problem
+    tier: 3
+    source_domain: algorithms_ch09
+  dijkstras_algorithm:
+    defines: An instantiation of Ford's algorithm using a priority queue keyed by
+      tentative distance, correctly computing shortest paths when the graph has no
+      negative-weight edges.
+    composed_of:
+    - fords_generic_algorithm
+    - priority_queue
+    - edge_relaxation
+    tier: 4
+    source_domain: algorithms_ch09
+    also_in:
+    - algorithms_ch10
+  bellman_ford:
+    defines: An O(VE)-time instantiation of Ford's algorithm that relaxes all edges
+      in V-1 rounds, correctly handling negative edges and detecting negative cycles.
+    composed_of:
+    - fords_generic_algorithm
+    - edge_relaxation
+    - negative_edge_weight
+    - negative_cycle
+    tier: 4
+    source_domain: algorithms_ch09
+  bellman_ford_dp_recurrence:
+    defines: A recurrence defining the shortest walk from s to v using at most i edges,
+      forming the dynamic-programming basis for Bellman-Ford.
+    composed_of:
+    - shortest_path
+    - edge_weight
+    tier: 1
+    source_domain: algorithms_ch09
+  all_pairs_shortest_paths:
+    defines: The problem of computing shortest-path distances and predecessors between
+      every pair of vertices, represented as VxV arrays.
+    composed_of:
+    - single_source_shortest_path
+    - shortest_path_distance
+    tier: 1
+    source_domain: algorithms_ch10
+  obvious_apsp:
+    defines: Solving all-pairs shortest paths by running a single-source shortest-path
+      algorithm once from every vertex.
+    composed_of:
+    - all_pairs_shortest_paths
+    - single_source_shortest_path
+    tier: 2
+    source_domain: algorithms_ch10
+  vertex_reweighting:
+    defines: Assigning a price to each vertex and redefining edge weights to preserve
+      the relative order of shortest paths between fixed pairs.
+    composed_of:
+    - tense_edge
+    - shortest_path_distance
+    tier: 1
+    source_domain: algorithms_ch10
+  johnsons_algorithm:
+    defines: An APSP algorithm running Bellman-Ford once to compute prices, reweighting
+      edges non-negative, then Dijkstra from every vertex, in O(VE log V).
+    composed_of:
+    - vertex_reweighting
+    - bellman_ford_algorithm
+    - dijkstras_algorithm
+    - all_pairs_shortest_paths
+    tier: 2
+    source_domain: algorithms_ch10
+  bounded_edge_dp_recurrence:
+    defines: The recurrence dist(u,v,l), the shortest-path length from u to v using
+      at most l edges, avoiding infinite loops from cycles.
+    composed_of:
+    - shortest_path_distance
+    - negative_cycle
+    tier: 1
+    source_domain: algorithms_ch10
+  shimbel_apsp:
+    defines: A DP APSP algorithm building dist(u,v,l) by relaxing edges over V-1 rounds,
+      equivalent to interleaving V runs of Bellman-Ford, in O(V^2 E).
+    composed_of:
+    - bounded_edge_dp_recurrence
+    - bellman_ford_algorithm
+    - all_pairs_shortest_paths
+    tier: 2
+    source_domain: algorithms_ch10
+  divide_and_conquer_apsp:
+    defines: A DP approach splitting a shortest path at its middle vertex, doubling
+      the length bound at each of O(log V) stages, in O(V^3 log V).
+    composed_of:
+    - shortest_path_distance
+    - all_pairs_shortest_paths
+    tier: 2
+    source_domain: algorithms_ch10
+  min_plus_matrix_multiplication:
+    defines: A matrix product using addition in place of multiplication and minimization
+      in place of addition, connecting shortest paths to matrix powering.
+    composed_of:
+    - shortest_path_distance
+    - fast_matrix_multiplication
+    tier: 1
+    source_domain: algorithms_ch10
+  restricted_intermediate_path:
+    defines: The shortest path from u to v passing only through intermediate vertices
+      numbered at most r, the key recursive structure of Floyd-Warshall.
+    composed_of:
+    - shortest_path_distance
+    tier: 1
+    source_domain: algorithms_ch10
+  floyd_warshall_algorithm:
+    defines: An APSP DP algorithm restricting intermediate vertices to those numbered
+      at most r, computed with a triple-nested loop in O(V^3).
+    composed_of:
+    - restricted_intermediate_path
+    - all_pairs_shortest_paths
+    tier: 2
+    source_domain: algorithms_ch10
+  flow:
+    defines: A function f on the edges of a graph satisfying a conservation constraint
+      at every vertex except s and t.
+    composed_of:
+    - flow_network
+    tier: 1
+    source_domain: algorithms_ch11
+  cut:
+    defines: A partition of the vertices into disjoint subsets S and T with s in S
+      and t in T.
+    composed_of:
+    - flow_network
+    tier: 1
+    source_domain: algorithms_ch11
+  flow_value:
+    defines: The total net flow out of the source vertex s, denoted |f|, which equals
+      the total net flow into t.
+    composed_of:
+    - flow
+    tier: 2
+    source_domain: algorithms_ch11
+  feasible_flow:
+    defines: A flow f is feasible with respect to a capacity function c if 0 <= f(e)
+      <= c(e) for every edge e.
+    composed_of:
+    - flow
+    - capacity_function
+    tier: 2
+    source_domain: algorithms_ch11
+  path_flow:
+    defines: The unit (s,t)-flow of value 1 corresponding to a directed path P.
+    composed_of:
+    - flow
+    tier: 2
+    source_domain: algorithms_ch11
+  cycle_flow:
+    defines: The (s,t)-flow of value 0 corresponding to a directed cycle C.
+    composed_of:
+    - flow
+    tier: 2
+    source_domain: algorithms_ch11
+  circulation:
+    defines: A flow with value 0 in which flow is conserved at every vertex, including
+      s and t.
+    composed_of:
+    - flow
+    tier: 2
+    source_domain: algorithms_ch11
+  cut_capacity:
+    defines: The sum of the capacities of edges that start in S and end in T for a
+      given (s,t)-cut.
+    composed_of:
+    - cut
+    - capacity_function
+    tier: 2
+    source_domain: algorithms_ch11
+  weak_duality_flows_cuts:
+    defines: For any feasible flow and any cut, the value of the flow is at most the
+      capacity of the cut, with equality under saturation conditions.
+    composed_of:
+    - feasible_flow
+    - cut_capacity
+    - flow_value
+    tier: 3
+    source_domain: algorithms_ch11
+  residual_capacity:
+    defines: A derived capacity on vertex pairs indicating how much additional flow
+      can be pushed or reversed given a current flow.
+    composed_of:
+    - feasible_flow
+    - capacity_function
+    tier: 3
+    source_domain: algorithms_ch11
+  flow_decomposition_theorem:
+    defines: Every non-negative (s,t)-flow can be written as a positive linear combination
+      of directed paths and cycles.
+    composed_of:
+    - path_flow
+    - cycle_flow
+    - flow
+    tier: 3
+    source_domain: algorithms_ch11
+    also_in:
+    - algorithms_ch12
+  maxflow_mincut_theorem:
+    defines: In every flow network, the value of the maximum flow equals the capacity
+      of the minimum cut.
+    composed_of:
+    - weak_duality_flows_cuts
+    - maximum_flow_problem
+    - minimum_cut_problem
+    tier: 4
+    source_domain: algorithms_ch11
+    also_in:
+    - algorithms_ch12
+  residual_graph:
+    defines: The graph Gf consisting of all edges with positive residual capacity
+      with respect to a current flow f.
+    composed_of:
+    - residual_capacity
+    tier: 4
+    source_domain: algorithms_ch11
+  acyclic_flow:
+    defines: An (s,t)-flow whose positive-flow subgraph contains no directed cycle.
+    composed_of:
+    - flow_decomposition_theorem
+    tier: 4
+    source_domain: algorithms_ch11
+  flow_decomposition_lower_bound:
+    defines: Any path/cycle-based maximum-flow algorithm must take Omega(VE) time
+      in the worst case.
+    composed_of:
+    - flow_decomposition_theorem
+    tier: 4
+    source_domain: algorithms_ch11
+  augmenting_path:
+    defines: A directed path from s to t in the residual graph along which additional
+      flow can be pushed.
+    composed_of:
+    - residual_graph
+    tier: 5
+    source_domain: algorithms_ch11
+  bfs_level_graph:
+    defines: The unweighted shortest-path distance from s to a vertex v in the current
+      residual graph.
+    composed_of:
+    - residual_graph
+    tier: 5
+    source_domain: algorithms_ch11
+  fattest_augmenting_path:
+    defines: Edmonds and Karp's rule of always choosing the augmenting path with the
+      largest bottleneck capacity.
+    composed_of:
+    - augmenting_path
+    - residual_capacity
+    tier: 6
+    source_domain: algorithms_ch11
+  shortest_augmenting_path:
+    defines: Edmonds and Karp's rule of always choosing the augmenting path with the
+      fewest edges.
+    composed_of:
+    - augmenting_path
+    tier: 6
+    source_domain: algorithms_ch11
+  integrality_theorem:
+    defines: If all capacities are integers, there is a maximum flow such that the
+      flow through every edge is an integer.
+    composed_of:
+    - ford_fulkerson_algorithm
+    tier: 7
+    source_domain: algorithms_ch11
+  ford_fulkerson_running_time:
+    defines: With integer capacities, Ford-Fulkerson halts after at most |f*| iterations
+      and runs in O(E|f*|) time.
+    composed_of:
+    - ford_fulkerson_algorithm
+    tier: 7
+    source_domain: algorithms_ch11
+  edmonds_karp_polynomial_bounds:
+    defines: The fattest-path and shortest-path augmenting rules yield polynomial-time
+      maximum-flow algorithms.
+    composed_of:
+    - fattest_augmenting_path
+    - shortest_augmenting_path
+    - bfs_level_graph
+    tier: 7
+    source_domain: algorithms_ch11
+  edge_disjoint_paths:
+    defines: The maximum number of paths from s to t that share no common edge, computed
+      by assigning unit capacity to every edge and finding a maximum flow whose value
+      equals the number of such paths.
+    composed_of:
+    - maximum_flow
+    tier: 1
+    source_domain: algorithms_ch12
+  vertex_capacities:
+    defines: A constraint limiting the total flow passing through a vertex, handled
+      by splitting each vertex into an 'in' and 'out' copy joined by an edge whose
+      capacity equals the vertex capacity.
+    composed_of:
+    - maximum_flow
+    tier: 1
+    source_domain: algorithms_ch12
+  vertex_disjoint_paths:
+    defines: The maximum number of paths from s to t that share no common vertex (other
+      than s and t), found by assigning unit capacity to every vertex and computing
+      a maximum flow.
+    composed_of:
+    - vertex_capacities
+    tier: 2
+    source_domain: algorithms_ch12
+  bipartite_matching:
+    defines: The problem of finding a maximum matching in a bipartite graph, solved
+      by reducing it to a maximum flow problem where each edge, plus new source and
+      target edges, has unit capacity.
+    composed_of:
+    - maximum_flow
+    - matching
+    tier: 1
+    source_domain: algorithms_ch12
+  alternating_path:
+    defines: A path from an unmatched left vertex to an unmatched right vertex that
+      alternates between edges in the current matching and edges not in it, used by
+      augmenting-path algorithms to grow a matching.
+    composed_of:
+    - bipartite_matching
+    tier: 2
+    source_domain: algorithms_ch12
+  tuple_selection:
+    defines: The general problem of selecting the largest possible set of d-tuples
+      drawn from d ordered resource sets subject to per-element and adjacent-pair
+      capacity constraints, solved by reduction to maximum flow.
+    composed_of:
+    - maximum_flow
+    tier: 1
+    source_domain: algorithms_ch12
+  disjoint_path_cover:
+    defines: A minimum-size set of vertex-disjoint directed paths that together cover
+      every vertex of a DAG, computed by reducing to maximum bipartite matching between
+      'flat' and 'sharp' copies of each vertex.
+    composed_of:
+    - bipartite_matching
+    - directed_acyclic_graph
+    tier: 2
+    source_domain: algorithms_ch12
+  circuit_satisfiability:
+    defines: The problem of deciding, given a boolean circuit, whether some setting
+      of its inputs makes the output True.
+    composed_of:
+    - boolean_circuit
+    tier: 1
+    source_domain: algorithms_ch13
+  p_class:
+    defines: The set of decision problems that can be solved in polynomial time.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+    source_domain: algorithms_ch13
+  np_class:
+    defines: The set of decision problems where a Yes answer has a proof that can
+      be checked in polynomial time.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+    source_domain: algorithms_ch13
+  co_np_class:
+    defines: The set of decision problems where a No answer has a proof that can be
+      checked in polynomial time.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+    source_domain: algorithms_ch13
+  turing_reduction:
+    defines: A polynomial-time reduction where a Turing machine solves one problem
+      using another problem's solver as a black-box subroutine.
+    composed_of:
+    - turing_machine
+    - polynomial_time
+    tier: 1
+    source_domain: algorithms_ch13
+  karp_reduction:
+    defines: A polynomial-time computable function f mapping instances of one language
+      to another such that x is a Yes-instance iff f(x) is a Yes-instance.
+    composed_of:
+    - polynomial_time
+    - decision_problem
+    tier: 1
+    source_domain: algorithms_ch13
+  sat:
+    defines: The problem of deciding whether a given boolean formula has an assignment
+      of values to its variables that makes it evaluate to True.
+    composed_of:
+    - boolean_formula
+    tier: 1
+    source_domain: algorithms_ch13
+  conjunctive_normal_form:
+    defines: A boolean formula expressed as a conjunction (And) of clauses, each of
+      which is a disjunction (Or) of literals.
+    composed_of:
+    - boolean_formula
+    tier: 1
+    source_domain: algorithms_ch13
+  pspace:
+    defines: The set of decision problems solvable using an amount of memory bounded
+      by a polynomial function of the input size.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+    source_domain: algorithms_ch13
+  exp_class:
+    defines: The set of decision problems solvable in exponential time, i.e., at most
+      2^(n^c) steps for some constant c.
+    composed_of:
+    - decision_problem
+    - polynomial_time
+    tier: 1
+    source_domain: algorithms_ch13
+  np_hard:
+    defines: A problem Π such that a polynomial-time algorithm for Π would imply a
+      polynomial-time algorithm for every problem in NP.
+    composed_of:
+    - np_class
+    tier: 2
+    source_domain: algorithms_ch13
+  3sat:
+    defines: The restriction of Sat to 3CNF formulas, where every clause has exactly
+      three literals.
+    composed_of:
+    - conjunctive_normal_form
+    - sat
+    tier: 2
+    source_domain: algorithms_ch13
+  pspace_hard:
+    defines: A problem to which every problem solvable in polynomial space can be
+      reduced in polynomial time.
+    composed_of:
+    - pspace
+    - polynomial_time
+    tier: 2
+    source_domain: algorithms_ch13
+  complexity_class_hierarchy:
+    defines: The extended chain of complexity classes (NEXP, EXPSPACE, doubly/triply
+      exponential classes, and ELEMENTARY) ordered by inclusion above P, NP, PSPACE,
+      and EXP.
+    composed_of:
+    - pspace
+    - exp_class
+    - np_class
+    tier: 2
+    source_domain: algorithms_ch13
+  np_complete:
+    defines: A problem that is both NP-hard and a member of NP; informally, the hardest
+      problems in NP.
+    composed_of:
+    - np_hard
+    - np_class
+    tier: 3
+    source_domain: algorithms_ch13
+  cook_levin_theorem:
+    defines: The theorem, proved by Cook (1971) and independently Levin (1973), that
+      circuit satisfiability is NP-hard.
+    composed_of:
+    - circuit_satisfiability
+    - np_hard
+    tier: 3
+    source_domain: algorithms_ch13
+  reduction_proof_technique:
+    defines: To prove problem A is NP-hard, describe a polynomial-time transformation
+      from a problem already known to be NP-hard into A.
+    composed_of:
+    - karp_reduction
+    - np_hard
+    tier: 3
+    source_domain: algorithms_ch13
+  qbf:
+    defines: The canonical PSPACE-hard problem of deciding whether a fully-quantified
+      boolean formula (using existential and universal quantifiers) is equivalent
+      to True.
+    composed_of:
+    - pspace_hard
+    - boolean_formula
+    tier: 3
+    source_domain: algorithms_ch13
+  max_independent_set:
+    defines: The problem of finding the size of the largest subset of a graph's vertices
+      with no edges between them.
+    composed_of:
+    - 3sat
+    - reduction_proof_technique
+    tier: 4
+    source_domain: algorithms_ch13
+  reduction_general_pattern:
+    defines: 'The standard three-step recipe for a polynomial-time reduction from
+      X to Y: transform instances, and prove "good" instances map both ways, often
+      via certificate transformations.'
+    composed_of:
+    - reduction_proof_technique
+    - karp_reduction
+    tier: 4
+    source_domain: algorithms_ch13
+  max_clique:
+    defines: The problem of finding the number of vertices in the largest complete
+      subgraph of a given graph.
+    composed_of:
+    - 3sat
+    - reduction_general_pattern
+    tier: 5
+    source_domain: algorithms_ch13
+  min_vertex_cover:
+    defines: The problem of finding the smallest set of vertices that touches every
+      edge in a given graph.
+    composed_of:
+    - 3sat
+    - reduction_general_pattern
+    tier: 5
+    source_domain: algorithms_ch13
+  graph_coloring:
+    defines: The problem of assigning colors to vertices so adjacent vertices differ,
+      here specialized to deciding 3-colorability via gadget reductions from 3Sat.
+    composed_of:
+    - 3sat
+    - reduction_general_pattern
+    tier: 5
+    source_domain: algorithms_ch13
+  choosing_reduction_source:
+    defines: Heuristics for selecting which known NP-hard problem to reduce from,
+      based on structural similarity to the target problem.
+    composed_of:
+    - reduction_general_pattern
+    - canonical_np_hard_problems
+    tier: 6
+    source_domain: algorithms_ch13
+  hamiltonian_cycle:
+    defines: A cycle in a graph that visits every vertex exactly once; deciding its
+      existence (directed case) is shown NP-hard via reductions from vertex cover
+      and 3Sat.
+    composed_of:
+    - min_vertex_cover
+    - 3sat
+    tier: 6
+    source_domain: algorithms_ch13
+  subset_sum:
+    defines: Given a set of positive integers and a target T, decide whether some
+      subset sums exactly to T.
+    composed_of:
+    - min_vertex_cover
+    tier: 6
+    source_domain: algorithms_ch13
+  pseudo_polynomial_hardness:
+    defines: A distinction between algorithms polynomial in numeric input values (pseudo-polynomial)
+      versus in input bit-length, giving rise to weakly vs. strongly NP-hard problems.
+    composed_of:
+    - subset_sum
+    - polynomial_time
+    tier: 7
+    source_domain: algorithms_ch13
+applications:
+  tower_of_hanoi:
+    defines: A puzzle solved by recursively moving n-1 disks to a spare peg, moving
+      the largest disk directly, then moving the n-1 disks onto it, reducing an n-disk
+      instance to two (n-1)-disk instances.
+    needs:
+    - recursion
+    tier: 2
+    source_domain: algorithms_ch02
+  fast_exponentiation:
+    defines: A recursive "repeated squaring" method for computing a^n using only O(log
+      n) multiplications by halving the exponent at each step.
+    needs:
+    - recursion
+    tier: 2
+    source_domain: algorithms_ch02
+  mergesort:
+    defines: A divide-and-conquer sorting algorithm that recursively sorts the two
+      halves of an array and then merges the sorted halves into a single sorted array.
+    needs:
+    - divide_and_conquer
+    - merge_subroutine
+    - recurrence_relation
+    tier: 3
+    source_domain: algorithms_ch02
+  quicksort:
+    defines: A divide-and-conquer sorting algorithm that partitions an array around
+      a chosen pivot into smaller/pivot/larger subarrays and recursively sorts the
+      outer two.
+    needs:
+    - divide_and_conquer
+    - partition_subroutine
+    tier: 3
+    source_domain: algorithms_ch02
+  median_of_medians:
+    defines: A linear-time selection algorithm that guarantees a good quickselect
+      pivot by recursively computing the median of medians of small fixed-size blocks
+      of the array.
+    needs:
+    - quickselect
+    tier: 3
+    source_domain: algorithms_ch02
+  karatsuba_multiplication:
+    defines: A divide-and-conquer multiplication algorithm that reduces the four sub-products
+      needed to multiply two n-digit numbers to three recursive multiplications, yielding
+      subquadratic time.
+    needs:
+    - split_multiply
+    tier: 4
+    source_domain: algorithms_ch02
+  n_queens:
+    defines: The problem of placing n queens on an n×n chessboard so that no two queens
+      share a row, column, or diagonal, solved by backtracking one row at a time.
+    needs:
+    - backtracking
+    - recursion_tree
+    tier: 2
+    source_domain: algorithms_ch03
+  game_tree_search:
+    defines: A backtracking algorithm (depth-first search of the game tree) that determines
+      whether a given game state is good or bad and finds winning moves.
+    needs:
+    - game_tree
+    - good_bad_state
+    tier: 3
+    source_domain: algorithms_ch03
+  subset_sum:
+    defines: The problem of determining whether some subset of a given set of integers
+      sums to a target value T, solved by recursively including or excluding each
+      element.
+    needs:
+    - include_exclude_recursion
+    - exponential_running_time
+    tier: 3
+    source_domain: algorithms_ch03
+    also_in:
+    - algorithms_ch04
+  text_segmentation:
+    defines: The problem of splitting an unpunctuated string of characters into a
+      sequence of valid words using a given IsWord test, solved by recursively choosing
+      the next word boundary.
+    needs:
+    - brute_force_enumeration
+    - index_formulation
+    - subtraction_recurrence_trick
+    - exponential_running_time
+    tier: 3
+    source_domain: algorithms_ch03
+    also_in:
+    - algorithms_ch04
+  longest_increasing_subsequence:
+    defines: The problem of finding the longest subsequence of an integer array whose
+      elements appear in increasing order, solved by two alternative backtracking
+      formulations (deciding per input element, or extending from the last chosen
+      element).
+    needs:
+    - include_exclude_recursion
+    - subsequence
+    - state_summary_minimization
+    - index_formulation
+    - exponential_running_time
+    tier: 3
+    source_domain: algorithms_ch03
+    also_in:
+    - algorithms_ch04
+  optimal_binary_search_tree:
+    defines: The problem of building a binary search tree over keys with given access
+      frequencies that minimizes total weighted search cost, solved by recursively
+      choosing the root and recursing on left/right key ranges.
+    needs:
+    - binary_search_tree
+    - divide_and_conquer_root_choice
+    - subtraction_recurrence_trick
+    - exponential_running_time
+    tier: 3
+    source_domain: algorithms_ch03
+  fibonacci_numbers:
+    defines: The sequence defined by the recurrence F(n) = F(n-1) + F(n-2), used as
+      the introductory example for recursion, memoization, and dynamic programming.
+    needs:
+    - recursion
+    - memoization
+    - dynamic_programming
+    - matrix_exponentiation_recurrence
+    tier: 2
+    source_domain: algorithms_ch04
+  edit_distance:
+    defines: The minimum number of insertions, deletions, and substitutions needed
+      to transform one string into another.
+    needs:
+    - dynamic_programming
+    - subproblem_evaluation_order
+    tier: 3
+    source_domain: algorithms_ch04
+  optimal_binary_search_trees:
+    defines: The problem of building a binary search tree over a sorted set of keys
+      with given search frequencies that minimizes total expected search cost.
+    needs:
+    - dynamic_programming
+    - subproblem_evaluation_order
+    tier: 3
+    source_domain: algorithms_ch04
+  maximum_independent_set_in_trees:
+    defines: The problem of finding the largest set of vertices in a tree such that
+      no two are connected by an edge, solvable in linear time via tree dynamic programming.
+    needs:
+    - tree_dynamic_programming
+    tier: 3
+    source_domain: algorithms_ch04
+  national_resident_matching_program:
+    defines: The real-world clearinghouse that uses a variant of the Gale-Shapley
+      algorithm to assign medical school graduates to hospital internships based on
+      submitted preference lists.
+    needs:
+    - gale_shapley_algorithm
+    - stable_matching_problem
+    tier: 3
+    source_domain: algorithms_ch05
+  intersection_graph:
+    defines: A graph with a vertex for every object in a collection and an edge for
+      every intersecting pair of objects.
+    needs:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  configuration_graph:
+    defines: A graph whose vertices are valid configurations of a puzzle or mechanism
+      and whose edges connect configurations reachable by a single move.
+    needs:
+    - graph
+    tier: 1
+    source_domain: algorithms_ch06
+  finite_state_automaton_graph:
+    defines: A DFA modeled as a labeled directed graph whose vertices are states and
+      edges are transitions, phrasing language questions as reachability.
+    needs:
+    - graph
+    - directed_edge
+    - reachability
+    tier: 3
+    source_domain: algorithms_ch06
+  dependency_graph:
+    defines: A dag whose vertices are recursive subproblems and whose edges point
+      from a subproblem to another that depends on it.
+    needs:
+    - graph
+    - directed_graph_concepts
+    - cycle_acyclic
+    tier: 5
+    source_domain: algorithms_ch06
+  subset_construction:
+    defines: A construction that implicitly represents a larger graph G' = (2^V, E')
+      from a directed graph G, used to convert NFAs into DFAs.
+    needs:
+    - finite_state_automaton_graph
+    - directed_graph_concepts
+    tier: 5
+    source_domain: algorithms_ch06
+  flood_fill:
+    defines: Recoloring every pixel in a connected region of a pixel map, solved by
+      reducing to reachability in a graph of same-colored adjacent pixels.
+    needs:
+    - reachability
+    - whatever_first_search
+    - reduction
+    tier: 7
+    source_domain: algorithms_ch06
+  cycle_detection:
+    defines: An algorithm that determines whether a directed graph is acyclic by checking,
+      during DFS, whether any edge leads to an active vertex.
+    needs:
+    - depth_first_search
+    - edge_classification
+    tier: 4
+    source_domain: algorithms_ch07
+  topological_sort:
+    defines: An ordering of the vertices of a dag such that every edge points from
+      an earlier to a later vertex, obtained as the reverse of a postordering.
+    needs:
+    - dag
+    - preorder_postorder
+    tier: 2
+    source_domain: algorithms_ch07
+  memoization:
+    defines: A technique equivalent to depth-first search of a recurrence's dependency
+      graph, where each subproblem's value is computed and cached once.
+    needs:
+    - dependency_graph
+    - depth_first_search
+    tier: 3
+    source_domain: algorithms_ch07
+  dynamic_programming:
+    defines: An algorithmic technique equivalent to evaluating a recurrence's dependency
+      graph in postorder, so each subproblem is solved after its dependencies.
+    needs:
+    - dependency_graph
+    - topological_sort
+    tier: 3
+    source_domain: algorithms_ch07
+  longest_path_in_dag:
+    defines: The problem of finding the maximum-weight path between two vertices in
+      a dag, solvable in linear time via memoized DFS or postorder evaluation.
+    needs:
+    - memoization
+    - dynamic_programming
+    tier: 4
+    source_domain: algorithms_ch07
+  kosaraju_sharir_algorithm:
+    defines: A linear-time algorithm that computes all strongly connected components
+      by performing DFS on the reversed graph to obtain a postorder, then DFS on the
+      original graph in that order.
+    needs:
+    - dfs_wrapper
+    - graph_reversal
+    - sink_source_component
+    tier: 4
+    source_domain: algorithms_ch07
+  tarjan_algorithm:
+    defines: A single-pass linear-time depth-first search algorithm that computes
+      all strongly connected components using an auxiliary stack and the low-link
+      function.
+    needs:
+    - tarjan_low_function
+    - sink_source_component
+    - dfs_wrapper
+    tier: 4
+    source_domain: algorithms_ch07
+  boruvkas_algorithm:
+    defines: An MST algorithm that repeatedly identifies and adds all safe edges (one
+      per component of F) in each round, running in O(E log V) time.
+    needs:
+    - generic_mst_algorithm
+    tier: 4
+    source_domain: algorithms_ch08
+  jarniks_algorithm:
+    defines: An MST algorithm that grows a single tree T from an arbitrary start vertex
+      by repeatedly adding T's safe edge, implemented with a priority queue in O(E
+      log V) time.
+    needs:
+    - generic_mst_algorithm
+    - fibonacci_heap
+    tier: 4
+    source_domain: algorithms_ch08
+  kruskals_algorithm:
+    defines: An MST algorithm that scans all edges in increasing order of weight and
+      adds each edge to F if it is safe, running in O(E log V) time dominated by sorting.
+    needs:
+    - generic_mst_algorithm
+    - disjoint_set_data_structure
+    tier: 4
+    source_domain: algorithms_ch08
+  moores_algorithm:
+    defines: A queue-based refinement of Bellman-Ford that only rescans edges leaving
+      vertices whose distance changed in the previous phase, often faster in practice.
+    needs:
+    - bellman_ford
+    - fifo_queue
+    tier: 5
+    source_domain: algorithms_ch09
+  arbitrage_detection:
+    defines: Using negative-cycle detection in a currency exchange-rate graph (via
+      log-transformed weights) to find profitable trading cycles.
+    needs:
+    - negative_cycle
+    - bellman_ford_algorithm
+    tier: 1
+    source_domain: algorithms_ch10
+  transitive_closure:
+    defines: Computing which vertex pairs have any directed path between them, reducible
+      to boolean matrix multiplication and fast matrix multiplication.
+    needs:
+    - fast_matrix_multiplication
+    - min_plus_matrix_multiplication
+    tier: 2
+    source_domain: algorithms_ch10
+  maximum_flow_problem:
+    defines: The problem of computing a feasible (s,t)-flow of maximum value.
+    needs:
+    - feasible_flow
+    - flow_value
+    tier: 3
+    source_domain: algorithms_ch11
+  minimum_cut_problem:
+    defines: The problem of computing an (s,t)-cut whose capacity is as small as possible.
+    needs:
+    - cut_capacity
+    tier: 3
+    source_domain: algorithms_ch11
+  ford_fulkerson_algorithm:
+    defines: An algorithm that starts with the zero flow and repeatedly augments along
+      paths in the residual graph until none exist.
+    needs:
+    - augmenting_path
+    - maximum_flow_problem
+    tier: 6
+    source_domain: algorithms_ch11
+  irrational_capacities_nontermination:
+    defines: With irrational edge capacities, Ford-Fulkerson can fail to terminate
+      or converge to the maximum flow.
+    needs:
+    - ford_fulkerson_algorithm
+    tier: 7
+    source_domain: algorithms_ch11
+  advanced_maxflow_algorithms:
+    defines: More sophisticated techniques improving on Edmonds-Karp's running times,
+      culminating in Orlin's O(VE)-time algorithm.
+    needs:
+    - edmonds_karp_polynomial_bounds
+    tier: 8
+    source_domain: algorithms_ch11
+  unit_capacity_network_algorithms:
+    defines: Specialized faster maximum-flow algorithms for networks where every edge
+      has capacity 1.
+    needs:
+    - edmonds_karp_polynomial_bounds
+    tier: 8
+    source_domain: algorithms_ch11
+  exam_scheduling:
+    defines: A real-world tuple-selection application that assigns each final exam
+      a class, room, time slot, and proctor by finding a maximum flow in a network
+      built from these four resource types.
+    needs:
+    - tuple_selection
+    tier: 2
+    source_domain: algorithms_ch12
+  minimal_faculty_hiring:
+    defines: A real-world scheduling application that finds the fewest professors
+      needed to teach all classes by reducing the problem to a minimum disjoint-path
+      cover of a class-compatibility DAG.
+    needs:
+    - disjoint_path_cover
+    tier: 3
+    source_domain: algorithms_ch12
+  baseball_elimination:
+    defines: The problem of determining whether a team can still finish in first place
+      given remaining games, decided by checking whether a maximum flow in a constructed
+      game/team network saturates all edges leaving the source.
+    needs:
+    - maxflow_mincut_theorem
+    tier: 1
+    source_domain: algorithms_ch12
+  project_selection:
+    defines: The problem of choosing a profit-maximizing subset of dependent projects,
+      solved by finding a minimum cut in a network where profitable projects connect
+      to the source, costly projects connect to the sink, and dependency edges have
+      infinite capacity.
+    needs:
+    - minimum_cut
+    tier: 1
+    source_domain: algorithms_ch12
+  canonical_np_hard_problems:
+    defines: A reference list of widely-used NP-hard problems (PlanarCircuitSat, 1-in-3Sat,
+      X3M, Partition, SetCover, Max2Sat, MaxCut, etc.) useful as reduction sources.
+    needs:
+    - np_hard
+    - reduction_general_pattern
+    tier: 5
+    source_domain: algorithms_ch13
+  np_hard_games_and_puzzles:
+    defines: The observation that most interesting real-world puzzles and games (Minesweeper,
+      Sudoku, Tetris, Super Mario Bros., etc.) are NP-hard or have NP-hard generalizations.
+    needs:
+    - np_hard
+    - canonical_np_hard_problems
+    tier: 6
+    source_domain: algorithms_ch13
+  traveling_salesman:
+    defines: The problem of finding the shortest Hamiltonian cycle or path in a graph
+      with weighted edges.
+    needs:
+    - hamiltonian_cycle
+    tier: 7
+    source_domain: algorithms_ch13
+  draughts_move_hardness:
+    defines: A real-world example showing that finding a legal maximum-capture move
+      in generalized international draughts is NP-hard, via reduction from directed
+      Hamiltonian cycle.
+    needs:
+    - hamiltonian_cycle
+    - choosing_reduction_source
+    tier: 7
+    source_domain: algorithms_ch13

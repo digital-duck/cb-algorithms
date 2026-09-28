@@ -1,0 +1,77 @@
+domain: Algorithms_JeffE
+primitives:
+  greedy_algorithm:
+    defines: An algorithmic strategy that makes the locally best choice at each step, with no backtracking
+      or lookahead, and blindly proceeds.
+    tier: 0
+  exchange_argument:
+    defines: A proof technique for showing a greedy algorithm is optimal by showing any optimal solution
+      can be transformed into the greedy solution without making it worse.
+    tier: 0
+  prefix_free_code:
+    defines: A binary code assigning strings of 0s and 1s to characters such that no character's code
+      is a prefix of another's, representable as a binary tree with characters at the leaves.
+    tier: 0
+  matching:
+    defines: A pairing between two sets of participants (e.g., doctors and hospitals) in which each participant
+      is paired with at most one participant from the other set.
+    tier: 0
+  preference_list:
+    defines: A ranking submitted by each participant in a matching problem indicating their preferred
+      order among possible partners.
+    tier: 0
+concepts:
+  optimal_tape_storage:
+    defines: The problem of ordering files on tape to minimize expected or total access cost, solved by
+      sorting files by increasing length (or by the ratio of length to frequency) and proved optimal via
+      an exchange argument.
+    composed_of:
+    - greedy_algorithm
+    - exchange_argument
+    tier: 1
+  interval_scheduling:
+    defines: The problem of selecting the maximum number of non-overlapping intervals from a set, solved
+      by greedily choosing the interval that finishes earliest and recursing on the rest.
+    composed_of:
+    - greedy_algorithm
+    - exchange_argument
+    tier: 1
+  huffman_coding:
+    defines: A greedy algorithm that builds an optimal prefix-free binary code by repeatedly merging the
+      two least frequent symbols into a new combined symbol, minimizing total encoded message length.
+    composed_of:
+    - prefix_free_code
+    - greedy_algorithm
+    - exchange_argument
+    tier: 1
+  stable_matching_problem:
+    defines: The problem of finding a matching between two equal-sized sets of ranked participants such
+      that no unmatched pair would both prefer each other over their current partners (an unstable pair).
+    composed_of:
+    - matching
+    - preference_list
+    tier: 1
+  greedy_exchange_proof_pattern:
+    defines: The recurring proof structure for greedy algorithms — assume a differing optimal solution
+      exists, find the first difference, and show it can be exchanged for the greedy choice without loss,
+      implying by induction that the greedy solution is optimal.
+    composed_of:
+    - exchange_argument
+    - optimal_tape_storage
+    - interval_scheduling
+    tier: 2
+  gale_shapley_algorithm:
+    defines: A round-based algorithm in which unmatched hospitals make offers to their most-preferred
+      remaining doctor and doctors tentatively accept their best offer so far, provably terminating in
+      a stable matching that is optimal for the offering side.
+    composed_of:
+    - stable_matching_problem
+    tier: 2
+applications:
+  national_resident_matching_program:
+    defines: The real-world clearinghouse that uses a variant of the Gale-Shapley algorithm to assign
+      medical school graduates to hospital internships based on submitted preference lists.
+    needs:
+    - gale_shapley_algorithm
+    - stable_matching_problem
+    tier: 3

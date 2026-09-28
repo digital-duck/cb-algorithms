@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gale Shapley Algorithm | Algorithms Ch05</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="gale-shapley-algorithm">Gale Shapley Algorithm</h2>
+<p><strong>Definition.</strong> Let $A = \{a_1, \dots, a_n\}$ and $B = \{b_1, \dots, b_n\}$ be two disjoint sets of $n$ agents, each agent holding a strict total preference ordering over all members of the opposite set. A <em>matching</em> $\mu : A \to B$ is a bijection. The matching is <em>stable</em> if no unmatched pair $(a_i, b_j)$ with $\mu(a_i) \neq b_j$ satisfies both: $a_i$ prefers $b_j$ over $\mu(a_i)$, and $b_j$ prefers $a_i$ over $\mu^{-1}(b_j)$. Such a pair is called a <em>blocking pair</em>; its existence would give both agents a mutual incentive to defect from the matching.</p>
+<p>The <strong>Gale–Shapley algorithm</strong> (1962) produces a stable matching in $O(n^2)$ time via iterated proposals. In the $A$-proposing variant:</p>
+<li>Each unmatched $a_i$ proposes to the most preferred $b_j$ on their list not yet proposed to.</li>
+<li>$b_j$ <em>tentatively accepts</em> the best proposal received so far and <em>rejects</em> the rest.</li>
+<li>Rejected proposers advance to their next candidate. Repeat until no proposals remain.</li>
+<p><strong>Worked Example.</strong> Take $A = \{a_1, a_2\}$ and $B = \{b_1, b_2\}$ with preferences:</p>
+$$a_1 : b_1 \succ b_2, \quad a_2 : b_1 \succ b_2, \quad b_1 : a_2 \succ a_1, \quad b_2 : a_1 \succ a_2.$$
+<p><em>Round 1:</em> Both $a_1$ and $a_2$ propose to $b_1$. Since $b_1$ prefers $a_2$, she tentatively accepts $a_2$ and rejects $a_1$. <em>Round 2:</em> $a_1$ now proposes to $b_2$, who accepts (only offer). Final matching: $\mu(a_1) = b_2,\ \mu(a_2) = b_1$. Verify stability: the only candidate blocking pair $(a_2, b_2)$ fails because $b_2$ prefers $a_1$ over $a_2$. No blocking pair exists; the matching is stable.</p>
+<p><strong>Theorem (Gale–Shapley, 1962).</strong> <em>For any instance with $n$ agents on each side, the algorithm terminates after at most $n^2$ proposals and returns a stable matching. Moreover, the $A$-proposing variant is $A$-optimal: every $a_i$ is matched to the best partner they receive in any stable matching.</em></p>
+<p><em>Proof sketch.</em> Termination follows because each proposer advances monotonically down their list and never revisits a rejected candidate. Stability is proved by contradiction: if $(a_i, b_j)$ were a blocking pair, $a_i$ must have proposed to $b_j$ before their final match, meaning $b_j$ rejected $a_i$ for a weakly better partner — contradicting $b_j$'s preference for $a_i$.</p>
+<pre><code># Lab: Gale–Shapley in SymPy-friendly Python
+from sympy import symbols
+
+def gale_shapley(a_prefs, b_prefs):
+    n = len(a_prefs)
+    next_prop = [0] * n          # next index each a_i proposes to
+    match_a   = [None] * n
+    match_b   = [None] * n
+    rank_b    = [{a: r for r, a in enumerate(b_prefs[b])} for b in range(n)]
+    free_a    = list(range(n))
+    while free_a:
+        a = free_a.pop(0)
+        b = a_prefs[a][next_prop[a]]
+        next_prop[a] += 1
+        if match_b[b] is None:
+            match_a[a], match_b[b] = b, a
+        elif rank_b[b][a] &lt; rank_b[b][match_b[b]]:
+            free_a.append(match_b[b])
+            match_a[a], match_b[b] = b, a
+        else:
+            free_a.append(a)
+    return match_a
+
+a_prefs = [[0, 1], [0, 1]]
+b_prefs = [[1, 0], [0, 1]]
+print(gale_shapley(a_prefs, b_prefs))  # [1, 0]</code></pre>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>

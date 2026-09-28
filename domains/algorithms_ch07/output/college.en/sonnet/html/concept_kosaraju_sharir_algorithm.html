@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kosaraju Sharir Algorithm | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="kosaraju-sharir-algorithm">Kosaraju Sharir Algorithm</h2>
+<p>A strongly connected component (SCC) of a directed graph is a maximal set of vertices where every vertex can reach every other vertex along directed edges. Kosaraju's algorithm (independently discovered by Sharir) finds all SCCs in $O(V + E)$ time using two depth-first search (DFS) passes: one on the graph, one on its reverse.</p>
+<p>The key insight relies on <em>finishing times</em>. If DFS is run on the whole graph and finishing times recorded, then processed in decreasing order of finishing time on the <strong>reversed</strong> graph $G^R$ (all edges flipped), each DFS tree produced in $G^R$ corresponds exactly to one SCC. The proof rests on a lemma: if $C$ and $C'$ are distinct SCCs with an edge from $C$ to $C'$ in $G$, then the maximum finishing time in $C$ exceeds the maximum finishing time in $C'$. This ordering guarantees that starting DFS from the SCC with the latest finishing time in $G^R$ never "leaks" into a different component, because any edge leaving that component in $G^R$ points to a component already fully explored.</p>
+<p><strong>Algorithm steps:</strong></p>
+<li>Run DFS on $G$, pushing each vertex onto a stack when it finishes (postorder).</li>
+<li>Compute $G^R$ by reversing every edge.</li>
+<li>Pop vertices from the stack; for each unvisited vertex, run DFS on $G^R$. Each resulting DFS tree is one SCC.</li>
+<p><strong>Worked example:</strong> Consider $G$ with edges $A \to B$, $B \to C$, $C \to A$, $C \to D$, $D \to E$, $E \to D$. DFS on $G$ might finish in order $A, B, C, D, E$ (stack top = $A$ after reversing push order, i.e., last finished pushed last, so pop order is $E, D, C, B, A$ — the implementation detail is to push on finish and pop from the top). Reversing gives $B \to A$, $C \to B$, $A \to C$, $D \to C$, $E \to D$, $D \to E$. Popping in decreasing finish-time order and running DFS on $G^R$ recovers $\{A, B, C\}$ as one SCC and $\{D, E\}$ as another — matching the two visible cycles in the original graph.</p>
+<p><strong>Problem-solving application:</strong> SCC decomposition is the standard first step in analyzing dependency graphs, compiler control-flow graphs, and web-link structures. To check whether a directed graph is a single SCC (i.e., every vertex reachable from every other), run Kosaraju's algorithm once and confirm exactly one component of size $V$ — no need for $V^2$ pairwise reachability checks.</p>
+<pre class="mermaid">graph LR
+  A --> B --> C --> A
+  C --> D --> E --> D</pre>
+<p><em>A directed graph with two strongly connected components: {A, B, C} and {D, E}, linked by the edge C→D.</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

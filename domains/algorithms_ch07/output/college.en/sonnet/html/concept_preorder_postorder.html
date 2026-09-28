@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preorder Postorder | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="preorder-postorder">Preorder Postorder</h2>
+<p>When depth-first search (DFS) explores a graph, it does more than mark vertices as visited — it can also record <em>when</em> each vertex enters and leaves the recursion. Imagine a clock that ticks once every time DFS pushes a vertex onto the call stack and once every time it pops a vertex off. The tick recorded on the push is the vertex's <strong>preorder number</strong> (also called discovery time), and the tick recorded on the pop is its <strong>postorder number</strong> (finish time). Every vertex $v$ therefore gets an interval $[\text{pre}(v), \text{post}(v)]$ describing exactly when it was "open" during the search.</p>
+<p>These numbers are not arbitrary bookkeeping — they encode the entire nesting structure of the recursion. If $u$ is an ancestor of $v$ in the DFS tree, then $u$'s interval strictly contains $v$'s: $\text{pre}(u) < \text{pre}(v) < \text{post}(v) < \text{post}(u)$. If neither vertex is an ancestor of the other, their intervals are disjoint. This is the <strong>parenthesis theorem</strong>: DFS intervals behave exactly like a well-formed sequence of matched parentheses, where "(" is a preorder tick and ")" is a postorder tick.</p>
+<p><strong>Worked example.</strong> Run DFS from vertex $A$ on a graph with edges $A\!\to\!B$, $A\!\to\!C$, $B\!\to\!D$. Starting the clock at 1: push $A$ (pre=1), push $B$ (pre=2), push $D$ (pre=3), $D$ has no unvisited neighbors so pop $D$ (post=4), pop $B$ (post=5), push $C$ (pre=6), pop $C$ (post=7), pop $A$ (post=8). Notice $A=[1,8]$ contains $B=[2,5]$, which contains $D=[3,4]$, while $C=[6,7]$ sits entirely after $B$'s interval closes — consistent with $C$ not being a descendant of $B$.</p>
+<p><strong>Problem-solving application.</strong> Pre/post numbers let you answer ancestor queries in $O(1)$ time without walking the tree: $u$ is an ancestor of $v$ if and only if $\text{pre}(u) \le \text{pre}(v)$ and $\text{post}(v) \le \text{post}(u)$. They also classify every edge in one pass: a <em>back edge</em> (the signature of a cycle in a directed graph) is exactly an edge $(u,v)$ where $v$ is still open (pre started, post not yet reached) when $u$ examines it. This is precisely how cycle detection and topological-sort validity checks are implemented in $O(V+E)$ time.</p>
+<pre class="mermaid">graph TD
+    A["A: pre=1"] --> B["B: pre=2"]
+    A --> C["C: pre=6, post=7"]
+    B --> D["D: pre=3, post=4"]
+    B2["B: post=5"]
+    A2["A: post=8"]</pre>
+<p><em>DFS tree annotated with preorder (push) and postorder (pop) clock values; nested intervals reveal the ancestor-descendant structure.</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

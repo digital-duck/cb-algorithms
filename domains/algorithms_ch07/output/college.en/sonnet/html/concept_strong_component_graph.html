@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong Component Graph | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="strong-component-graph">Strong Component Graph</h2>
+<p><strong>Definition.</strong> Let $G = (V, E)$ be a directed graph, and let $C_1, C_2, \ldots, C_k$ be its strongly connected components (SCCs) — the maximal subsets of vertices where every vertex can reach every other vertex within the same subset. The <strong>strong component graph</strong> (also called the <em>condensation</em> of $G$, denoted $G^{SCC}$) is formed by contracting each $C_i$ into a single vertex $v_i$, and drawing an edge $v_i \to v_j$ whenever $G$ contains at least one edge from a vertex in $C_i$ to a vertex in $C_j$ (with $i \neq j$), collapsing any duplicate edges into one.</p>
+<p><strong>Theorem.</strong> For any directed graph $G$, the condensation $G^{SCC}$ is a directed acyclic graph (DAG).</p>
+<p><strong>Proof sketch.</strong> Suppose $G^{SCC}$ contained a cycle $v_1 \to v_2 \to \cdots \to v_m \to v_1$. Each edge $v_i \to v_{i+1}$ corresponds to a path in $G$ from some vertex in $C_i$ to some vertex in $C_{i+1}$. Since each $C_i$ is internally strongly connected, we can walk from any vertex of $C_i$ to any other vertex of $C_i$. Chaining these paths together produces a closed walk visiting every vertex in $C_1, \ldots, C_m$, meaning any vertex in $C_1$ can reach any vertex in $C_2$ and vice versa. This makes $C_1 \cup C_2 \cup \cdots \cup C_m$ mutually reachable — a single strongly connected set — contradicting the maximality of each $C_i$ as a <em>separate</em> SCC. Hence no cycle can exist. $\blacksquare$</p>
+<p><strong>Worked example.</strong> Consider $G$ with vertices $\{a, b, c, d, e\}$ and edges $a\to b$, $b \to c$, $c \to a$, $c \to d$, $d \to e$, $e \to d$. Running Tarjan's or Kosaraju's algorithm identifies $C_1 = \{a, b, c\}$ and $C_2 = \{d, e\}$. The condensation has two vertices, $v_1$ (for $C_1$) and $v_2$ (for $C_2$), with a single edge $v_1 \to v_2$ (from the original edge $c \to d$), collapsing what would have been one edge into the DAG.</p>
+<p><strong>Problem-solving application.</strong> The DAG-ness of $G^{SCC}$ is what makes it computationally powerful: once you condense a graph, you can run any DAG algorithm — topological sort, longest path, dynamic programming — on the condensation instead of the original graph. This is the key step in solving problems like "find the minimum number of edges to add so that $G$ becomes strongly connected" (count source and sink components in $G^{SCC}$) or "determine reachability queries efficiently" (compute reachability once on the smaller DAG rather than on $G$).</p>
+<pre class="mermaid">graph LR
+    C1["C1 = {a, b, c}"] --> C2["C2 = {d, e}"]</pre>
+<p><em>The condensation collapses each strongly connected component into a single node, producing an acyclic graph.</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

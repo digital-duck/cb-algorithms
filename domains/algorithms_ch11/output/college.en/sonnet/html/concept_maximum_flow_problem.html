@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maximum Flow Problem | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="maximum-flow-problem">Maximum Flow Problem</h2>
+<p><strong>Definition.</strong> Let $G = (V, E)$ be a directed graph with a distinguished <em>source</em> $s \in V$ and <em>sink</em> $t \in V$. Each edge $(u, v) \in E$ carries a non-negative <em>capacity</em> $c(u, v) \geq 0$. A <em>flow</em> is a function $f : E \to \mathbb{R}_{\geq 0}$ satisfying two conditions:</p>
+<li><strong>Capacity constraint:</strong> $0 \leq f(u,v) \leq c(u,v)$ for every $(u,v) \in E$.</li>
+<li><strong>Flow conservation:</strong> For every $v \in V \setminus \{s, t\}$,</li>
+$$\sum_{u:(u,v)\in E} f(u,v) \;=\; \sum_{w:(v,w)\in E} f(v,w).$$
+<p>The <em>value</em> of a flow is $|f| = \sum_{w:(s,w)\in E} f(s,w)$, the total flow leaving the source. The <strong>maximum flow problem</strong> asks for a flow $f^*$ that maximises $|f|$ subject to the constraints above.</p>
+<p><strong>Worked Example.</strong> Consider the network with $V = \{s, a, b, t\}$ and edges with capacities $c(s,a)=3$, $c(s,b)=2$, $c(a,t)=2$, $c(b,t)=3$, and $c(a,b)=1$. One feasible flow sets $f(s,a)=2$, $f(s,b)=2$, $f(a,t)=2$, $f(b,t)=2$, $f(a,b)=0$, yielding $|f|=4$. Can we do better? Sending one additional unit along $s \to a \to b \to t$ (each edge has residual capacity 1) raises the value to $|f^*|=5$. No further augmentation is possible, so $5$ is optimal.</p>
+<p><strong>Key Theorem (Max-Flow Min-Cut).</strong> The maximum value of any $s$–$t$ flow equals the minimum <em>capacity</em> of any $s$–$t$ cut. An $s$–$t$ cut is a partition $(S, T)$ of $V$ with $s \in S$ and $t \in T$; its capacity is $\sum_{u \in S,\, v \in T} c(u,v)$. In the example above, the cut $(\{s,a,b\}, \{t\})$ has capacity $c(a,t)+c(b,t)=5$, confirming optimality.</p>
+<p><em>Proof sketch.</em> Every flow value is bounded above by every cut capacity (weak duality). The Ford–Fulkerson algorithm terminates only when no augmenting path exists in the residual graph, at which point the reachable set from $s$ defines a cut whose capacity exactly equals the current flow value (strong duality). $\square$</p>
+<p><strong>Lab Cell.</strong></p>
+<pre><code>from sympy import symbols, Integer
+
+# Represent capacities as a dictionary and run BFS-based augmentation
+capacity = {('s','a'):3, ('s','b'):2, ('a','t'):2,
+            ('b','t'):3, ('a','b'):1}
+
+def bfs_path(cap, flow, source, sink):
+    from collections import deque
+    parent = {source: None}
+    queue = deque([source])
+    nodes = set(u for e in cap for u in e)
+    while queue:
+        u = queue.popleft()
+        for (x,y), c in cap.items():
+            if x == u and y not in parent:
+                if c - flow.get((x,y),0) &gt; 0:
+                    parent[y] = (x,y); queue.append(y)
+            if y == u and x not in parent:
+                if flow.get((x,y),0) &gt; 0:
+                    parent[x] = (y,x); queue.append(x)
+    return parent if sink in parent else None
+
+flow = {}
+while (p := bfs_path(capacity, flow, 's', 't')):
+    edge = ('s','t')
+    path, node = [], 't'
+    while p[node]: path.append(p[node]); node = p[node][0]
+    aug = min(capacity.get(e,0) - flow.get(e,0)
+              if e in capacity else flow.get((e[1],e[0]),0)
+              for e in path)
+    for e in path: flow[e] = flow.get(e,0) + aug
+
+print("Maximum flow:", sum(flow.get(('s',v),0) for v in ['a','b']))</code></pre>
+<p>Running this cell prints <code>Maximum flow: 5</code>, confirming the theoretical result.</p>
+  </main>
+  <footer class="spl-credit">Generated by SPL &middot; Powered by SPL.py</footer>
+</div>
+</body>
+</html>

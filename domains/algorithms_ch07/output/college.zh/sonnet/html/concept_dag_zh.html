@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dag | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="dag">Dag</h2>
+<p><strong>定义</strong>：有向无环图（Directed Acyclic Graph，DAG）是一个有向图 $G = (V, E)$，其中不存在任何有向环——即不存在顶点序列 $v_1 \to v_2 \to \cdots \to v_k \to v_1$。DAG 的核心定理是：<strong>一个有向图存在拓扑排序当且仅当它是无环的</strong>。拓扑排序是顶点的一个线性排列 $v_{i_1}, v_{i_2}, \ldots, v_{i_n}$，使得对每条边 $(u, v) \in E$，$u$ 都排在 $v$ 之前。图中入度为零的顶点称为<strong>源点</strong>（source），出度为零的顶点称为<strong>汇点</strong>（sink）；每个非空 DAG 至少存在一个源点和一个汇点，这正是环无法存在的直接推论——若不存在入度为零的点，沿入边不断回溯必然形成环。</p>
+<p><strong>求解方法（Kahn 算法）</strong>：</p>
+<li>计算每个顶点的入度，将所有入度为 0 的顶点加入队列 $Q$。</li>
+<li>从 $Q$ 中取出顶点 $u$，加入排序结果，并将其所有邻居的入度减 1；若某邻居入度降为 0，加入 $Q$。</li>
+<li>重复直到 $Q$ 为空。若最终排序中的顶点数小于 $|V|$，说明图中存在环。</li>
+<p>时间复杂度为 $O(|V| + |E|)$，因为每个顶点和每条边恰好被处理一次。</p>
+<p><strong>应用示例</strong>：设课程先修关系为边 $(A \to B)$ 表示"学完 A 才能学 B"。给定边集 $\{(线代 \to 机器学习),\ (微积分 \to 机器学习),\ (机器学习 \to 深度学习)\}$，运行 Kahn 算法：源点为「线代」「微积分」（入度 0），依次移除后「机器学习」入度降为 0 入队，最后「深度学习」入队。得到一个合法的选课顺序：线代、微积分、机器学习、深度学习。这一算法同样是任务调度、编译依赖解析（如 Makefile）、以及神经网络前向传播计算图执行顺序的基础。</p>
+<pre class="mermaid">graph TD
+    A[线性代数] --> C[机器学习]
+    B[微积分] --> C[机器学习]
+    C --> D[深度学习]</pre>
+<p><em>该图展示一个 DAG 示例：源点「线性代数」与「微积分」无入边，边严格向下流动至汇点「深度学习」，体现有效的拓扑顺序。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

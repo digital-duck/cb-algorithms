@@ -1,0 +1,94 @@
+domain: Algorithms_JeffE
+sources:
+  recursion:
+    label: Recursion
+    sections:
+    - id: ch04_m_tr_v_tta
+      title: Mātrāvṛtta
+  recurrence_relation:
+    label: Recurrence Relation
+    sections:
+    - id: ch04_m_tr_v_tta
+      title: Mātrāvṛtta
+  backtracking:
+    label: Backtracking (Naive Recursive Algorithm)
+    sections:
+    - id: ch04_m_tr_v_tta
+      title: Mātrāvṛtta
+    - id: ch04_the_pattern_smart_recursion
+      title: 'The Pattern: Smart Recursion'
+  greedy_algorithm:
+    label: Greedy Algorithm
+    sections:
+    - id: ch04_warning_greed_is_stupid
+      title: 'Warning: Greed is Stupid'
+  memoization:
+    label: Memoization
+    sections:
+    - id: ch04_m_tr_v_tta
+      title: Mātrāvṛtta
+  dynamic_programming:
+    label: Dynamic Programming
+    sections:
+    - id: ch04_m_tr_v_tta
+      title: Mātrāvṛtta
+    - id: ch04_the_pattern_smart_recursion
+      title: 'The Pattern: Smart Recursion'
+  subproblem_evaluation_order:
+    label: Subproblem Dependencies and Evaluation Order
+    sections:
+    - id: ch04_the_pattern_smart_recursion
+      title: 'The Pattern: Smart Recursion'
+    - id: ch04_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+    - id: ch04_edit_distance
+      title: Edit Distance
+    - id: ch04_optimal_binary_search_trees
+      title: Optimal Binary Search Trees
+  matrix_exponentiation_recurrence:
+    label: Matrix Exponentiation for Linear Recurrences
+    sections:
+    - id: ch04_aside_even_faster_fibonacci_numbers
+      title: '♥Aside: Even Faster Fibonacci Numbers'
+  tree_dynamic_programming:
+    label: Dynamic Programming on Trees
+    sections:
+    - id: ch04_dynamic_programming_on_trees
+      title: Dynamic Programming on Trees
+  fibonacci_numbers:
+    label: Fibonacci Numbers
+    sections:
+    - id: ch04_m_tr_v_tta
+      title: Mātrāvṛtta
+    - id: ch04_aside_even_faster_fibonacci_numbers
+      title: '♥Aside: Even Faster Fibonacci Numbers'
+  text_segmentation:
+    label: Text Segmentation (Interpunctio Verborum)
+    sections:
+    - id: ch04_the_pattern_smart_recursion
+      title: 'The Pattern: Smart Recursion'
+  longest_increasing_subsequence:
+    label: Longest Increasing Subsequence
+    sections:
+    - id: ch04_longest_increasing_subsequence
+      title: Longest Increasing Subsequence
+  edit_distance:
+    label: Edit Distance
+    sections:
+    - id: ch04_edit_distance
+      title: Edit Distance
+  subset_sum:
+    label: Subset Sum
+    sections:
+    - id: ch04_subset_sum
+      title: Subset Sum
+  optimal_binary_search_trees:
+    label: Optimal Binary Search Trees
+    sections:
+    - id: ch04_optimal_binary_search_trees
+      title: Optimal Binary Search Trees
+  maximum_independent_set_in_trees:
+    label: Maximum Independent Set in Trees
+    sections:
+    - id: ch04_dynamic_programming_on_trees
+      title: Dynamic Programming on Trees

@@ -1,0 +1,58 @@
+domain: Algorithms_JeffE
+sources:
+  greedy_algorithm:
+    label: Greedy Algorithm
+    sections: []
+  exchange_argument:
+    label: Exchange Argument
+    sections: []
+  prefix_free_code:
+    label: Prefix-Free Binary Code
+    sections:
+    - id: ch05_huffman_codes
+      title: Huffman Codes
+  matching:
+    label: Matching
+    sections:
+    - id: ch05_stable_matching
+      title: Stable Matching
+  preference_list:
+    label: Preference List
+    sections:
+    - id: ch05_stable_matching
+      title: Stable Matching
+  optimal_tape_storage:
+    label: Optimal Tape Storage Order
+    sections:
+    - id: ch05_storing_files_on_tape
+      title: Storing Files on Tape
+  interval_scheduling:
+    label: Interval (Class) Scheduling
+    sections:
+    - id: ch05_scheduling_classes
+      title: Scheduling Classes
+  greedy_exchange_proof_pattern:
+    label: General Greedy Exchange-Argument Pattern
+    sections:
+    - id: ch05_general_pattern
+      title: General Pattern
+  huffman_coding:
+    label: Huffman Coding
+    sections:
+    - id: ch05_huffman_codes
+      title: Huffman Codes
+  stable_matching_problem:
+    label: Stable Matching Problem
+    sections:
+    - id: ch05_stable_matching
+      title: Stable Matching
+  gale_shapley_algorithm:
+    label: Gale-Shapley Algorithm
+    sections:
+    - id: ch05_stable_matching
+      title: Stable Matching
+  national_resident_matching_program:
+    label: National Resident Matching Program
+    sections:
+    - id: ch05_stable_matching
+      title: Stable Matching

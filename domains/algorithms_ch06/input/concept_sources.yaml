@@ -1,0 +1,141 @@
+domain: Algorithms_JeffE
+sources:
+  graph:
+    label: Graph
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  undirected_edge:
+    label: Undirected Edge
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  directed_edge:
+    label: Directed Edge
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  degree:
+    label: Degree / In-degree / Out-degree
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  subgraph:
+    label: Subgraph
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  walk_path:
+    label: Walk and Path
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  reachability:
+    label: Reachability
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+    - id: ch06_whatever_first_search
+      title: Whatever-First Search
+  connectivity:
+    label: Connected Graph and Components
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  cycle_acyclic:
+    label: Cycle and Acyclic Graph
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  tree:
+    label: Tree
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+  spanning_tree:
+    label: Spanning Tree / Spanning Forest
+    sections:
+    - id: ch06_basic_definitions
+      title: Basic Definitions
+    - id: ch06_whatever_first_search
+      title: Whatever-First Search
+  directed_graph_concepts:
+    label: Directed Walks, Paths, Cycles, and Strong Connectivity
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  planarity:
+    label: Planar Graph and Embedding
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  intersection_graph:
+    label: Intersection Graph
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  dependency_graph:
+    label: Dependency Graph
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  configuration_graph:
+    label: Configuration Graph
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  finite_state_automaton_graph:
+    label: Finite-State Automaton as a Graph
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  subset_construction:
+    label: Subset Construction
+    sections:
+    - id: ch06_representations_and_examples
+      title: Representations and Examples
+  adjacency_list:
+    label: Adjacency List
+    sections:
+    - id: ch06_data_structures
+      title: Data Structures
+  adjacency_matrix:
+    label: Adjacency Matrix
+    sections:
+    - id: ch06_data_structures
+      title: Data Structures
+  whatever_first_search:
+    label: Whatever-First Search
+    sections:
+    - id: ch06_whatever_first_search
+      title: Whatever-First Search
+  depth_first_search:
+    label: Depth-First Search
+    sections:
+    - id: ch06_important_variants
+      title: Important Variants
+  breadth_first_search:
+    label: Breadth-First Search
+    sections:
+    - id: ch06_important_variants
+      title: Important Variants
+  best_first_search:
+    label: Best-First Search
+    sections:
+    - id: ch06_important_variants
+      title: Important Variants
+  wfs_all_disconnected:
+    label: Traversing Disconnected Graphs (WFSAll)
+    sections:
+    - id: ch06_important_variants
+      title: Important Variants
+  flood_fill:
+    label: Flood Fill
+    sections:
+    - id: ch06_graph_reductions_flood_fill
+      title: 'Graph Reductions: Flood Fill'
+  reduction:
+    label: Algorithmic Reduction
+    sections:
+    - id: ch06_graph_reductions_flood_fill
+      title: 'Graph Reductions: Flood Fill'

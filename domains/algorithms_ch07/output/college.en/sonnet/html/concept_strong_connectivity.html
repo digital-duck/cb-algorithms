@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong Connectivity | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="strong-connectivity">Strong Connectivity</h2>
+<p>In a directed graph, an edge from $u$ to $v$ does not guarantee an edge (or even a path) back from $v$ to $u$. <strong>Strong connectivity</strong> captures when two-way reachability holds. Vertices $u$ and $v$ are strongly connected if there exists a directed path from $u$ to $v$ <em>and</em> a directed path from $v$ to $u$. This relation — call it $u \sim v$ — is an equivalence relation: it is reflexive (a vertex trivially reaches itself), symmetric by definition, and transitive (if $u$ reaches $v$ and $v$ reaches $w$, concatenating paths shows $u$ reaches $w$, and similarly in reverse). Because $\sim$ is an equivalence relation, it partitions the vertex set into disjoint equivalence classes called <strong>strongly connected components (SCCs)</strong>. Within one SCC, every vertex can reach every other vertex; between two different SCCs, at best only one direction of reachability can hold.</p>
+<p><strong>Worked example.</strong> Consider a directed graph with edges $A \to B$, $B \to C$, $C \to A$, and $C \to D$. Vertices $A$, $B$, $C$ form a cycle, so each can reach the other two — they form one SCC, $\{A, B, C\}$. Vertex $D$ has no outgoing edge back into the cycle, so it cannot reach $A$, $B$, or $C$; it forms its own singleton SCC, $\{D\}$. Notice the edge $C \to D$ crosses between components in only one direction — this is the "bridge" that links two SCCs without merging them.</p>
+<p><strong>Problem-solving application.</strong> If you collapse each SCC into a single "super-vertex," the resulting graph — called the <strong>condensation</strong> — is guaranteed to be a directed acyclic graph (DAG). This is a powerful algorithmic move: many problems on directed graphs with cycles (e.g., finding the minimum edges to make a graph strongly connected, or scheduling tasks with circular dependencies) become tractable once reduced to a DAG. Algorithms like Tarjan's or Kosaraju's compute all SCCs in linear time, $O(V + E)$, making this decomposition practical even for large graphs.</p>
+<pre class="mermaid">graph TD
+  subgraph SCC1[SCC 1]
+    A --> B
+    B --> C
+    C --> A
+  end
+  subgraph SCC2[SCC 2]
+    D --> E
+    E --> D
+  end
+  C --> D</pre>
+<p><em>Two strongly connected components, each a dense mutually-reachable cluster, linked by a single one-way bridge edge from SCC 1 to SCC 2.</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

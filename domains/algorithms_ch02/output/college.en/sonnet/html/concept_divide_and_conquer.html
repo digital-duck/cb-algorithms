@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divide And Conquer | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="divide-and-conquer">Divide And Conquer</h2>
+<p>Divide-and-conquer is a recursive strategy for solving a problem by breaking it into smaller, independent subproblems of the same type, solving each subproblem recursively, and combining their solutions to produce the answer to the original problem. Formally, an algorithm is divide-and-conquer if it consists of three steps: <strong>divide</strong> the input of size $n$ into $a$ subproblems each of size $n/b$; <strong>conquer</strong> each subproblem recursively (with a base case for small $n$); and <strong>combine</strong> the subsolutions, at cost $f(n)$, into a solution for the full input.</p>
+<p><strong>Worked example.</strong> Merge sort applies this pattern to sorting. Divide an array of $n$ elements into two halves. Conquer by recursively sorting each half. Combine by merging the two sorted halves into one sorted array in $O(n)$ time. The base case is an array of length 0 or 1, which is trivially sorted.</p>
+<p><strong>Analysis via the recurrence.</strong> The running time of a divide-and-conquer algorithm satisfies a recurrence of the form</p>
+$$
+T(n) = a\,T\!\left(\frac{n}{b}\right) + f(n),
+$$
+<p>where $a$ is the number of subproblems, $n/b$ is their size, and $f(n)$ is the cost of dividing and combining. For merge sort, $a = 2$, $b = 2$, and $f(n) = O(n)$, giving $T(n) = 2T(n/2) + O(n)$. The <strong>Master Theorem</strong> solves recurrences of this form by comparing $f(n)$ to $n^{\log_b a}$:</p>
+<li>If $f(n) = O(n^{\log_b a - \epsilon})$ for some $\epsilon > 0$, then $T(n) = \Theta(n^{\log_b a})$.</li>
+<li>If $f(n) = \Theta(n^{\log_b a})$, then $T(n) = \Theta(n^{\log_b a}\log n)$.</li>
+<li>If $f(n) = \Omega(n^{\log_b a + \epsilon})$ and $a f(n/b) \le c f(n)$ for some $c<1$, then $T(n) = \Theta(f(n))$.</li>
+<p>For merge sort, $\log_b a = \log_2 2 = 1$, so $f(n) = \Theta(n^1)$ matches the second case, giving $T(n) = \Theta(n\log n)$ — the classic bound that beats the $\Theta(n^2)$ cost of insertion sort.</p>
+<p><strong>Problem-solving application.</strong> When designing a new algorithm, check whether a problem exhibits <em>optimal substructure</em>: can it be split into smaller, independent instances whose solutions combine cheaply into the full solution? If so, write the recurrence, apply the Master Theorem, and compare the resulting complexity against simpler iterative approaches — as with binary search ($T(n) = T(n/2) + O(1)$, giving $O(\log n)$) or Strassen's matrix multiplication, which reduces the divide step's subproblem count to beat the naive $O(n^3)$ bound.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

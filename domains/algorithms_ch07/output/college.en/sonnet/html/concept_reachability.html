@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reachability | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="reachability">Reachability</h2>
+<p>A vertex $v$ is <strong>reachable</strong> from vertex $u$ in a directed graph $G = (V, E)$ if there exists a directed path — a sequence of edges $u \to v_1 \to v_2 \to \cdots \to v$ — following edge directions consistently. The <strong>reachability set</strong> of $u$, written $\text{reach}(u)$, is the set of all vertices reachable from $u$, including $u$ itself by convention (via the empty path). Formally, $\text{reach}(u)$ is the closure of $\{u\}$ under the edge relation $E$.</p>
+<p>Reachability is not symmetric: $v \in \text{reach}(u)$ does not imply $u \in \text{reach}(v)$, since edges have direction. This distinguishes directed reachability from connectivity in undirected graphs, where a single traversal determines mutual reachability for an entire component.</p>
+<p><strong>Worked example.</strong> Consider a graph with edges $A \to B$, $B \to C$, $A \to D$, $C \to D$. Starting from $A$: we can reach $B$ directly, then $C$ from $B$, then $D$ from $C$ or directly from $A$. So $\text{reach}(A) = \{A, B, C, D\}$. But $\text{reach}(D) = \{D\}$, since $D$ has no outgoing edges — nothing is reachable from $D$ except itself.</p>
+<p><strong>Computing reachability.</strong> $\text{reach}(u)$ is computed by graph traversal — breadth-first search (BFS) or depth-first search (DFS) starting at $u$ — marking each visited vertex. Both run in $O(V + E)$ time, since each vertex is visited once and each edge examined once. This is the key algorithmic fact: reachability from a single source is linear in graph size, not exponential, even though the <em>number</em> of possible paths can be exponential. The traversal never needs to enumerate paths — it only needs to track visited status.</p>
+<p>For problem-solving, reachability underlies many practical questions: Can data flow from module $X$ to module $Y$ in a dependency graph? Is there a route from city $A$ to city $B$ in a one-way road network? Is a state reachable in a finite-state machine (relevant to verifying whether a bug state can ever occur)? Each reduces to a BFS/DFS from the source vertex, checking whether the target lies in the resulting reachability set.</p>
+<pre class="mermaid">graph TD
+    A --> B
+    B --> C
+    A --> D
+    C --> D</pre>
+<p><em>Directed graph illustrating reach(A) = {A, B, C, D}, while reach(D) = {D} since D has no outgoing edges.</em></p>
+<p>When reachability must be queried repeatedly across many source-target pairs, precomputing the full <strong>transitive closure</strong> — a $|V| \times |V|$ matrix where entry $(i,j)$ is true if $j \in \text{reach}(i)$ — trades $O(V^3)$ preprocessing (via Floyd–Warshall) for $O(1)$ per query, a classic space-time tradeoff in algorithm design.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

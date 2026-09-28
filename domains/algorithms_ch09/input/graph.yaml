@@ -1,0 +1,132 @@
+domain: Algorithms_JeffE
+primitives:
+  edge_weight:
+    defines: A numeric value assigned to each edge of a graph, representing distance, cost, time, or another
+      quantity to be summed along a path.
+    tier: 0
+  negative_edge_weight:
+    defines: An edge weight less than zero, representing a transition with negative cost or a profit rather
+      than a cost.
+    tier: 0
+  shortest_path:
+    defines: A path between two vertices whose total edge weight is minimum among all paths connecting
+      them.
+    tier: 0
+  dist_pred_labels:
+    defines: Per-vertex variables that record a tentative shortest-path distance from the source and the
+      predecessor vertex on that tentative path.
+    tier: 0
+  fifo_queue:
+    defines: A first-in-first-out data structure used to order vertices for processing during traversal-based
+      algorithms.
+    tier: 0
+  directed_acyclic_graph:
+    defines: A directed graph containing no cycles, allowing recursive shortest-path recurrences to be
+      evaluated without infinite loops.
+    tier: 0
+  topological_order:
+    defines: An ordering of a DAG's vertices such that every edge points from an earlier vertex to a later
+      one.
+    tier: 0
+  priority_queue:
+    defines: A data structure supporting Insert, ExtractMin, and DecreaseKey operations, used to repeatedly
+      select the vertex with smallest tentative distance.
+    tier: 0
+concepts:
+  negative_cycle:
+    defines: A directed cycle whose total edge weight is negative, which implies no shortest path exists
+      for any path that touches it.
+    composed_of:
+    - negative_edge_weight
+    - shortest_path
+    tier: 1
+  sssp_problem:
+    defines: The problem of finding shortest paths from one fixed source vertex to every other vertex
+      in a graph.
+    composed_of:
+    - shortest_path
+    tier: 1
+  shortest_path_tree:
+    defines: A rooted, directed tree formed by choosing one shortest path from the source to each reachable
+      vertex, whose union forms a tree structure.
+    composed_of:
+    - shortest_path
+    - sssp_problem
+    tier: 2
+  tense_edge:
+    defines: An edge uv where dist(u) + w(uv) < dist(v), indicating the current tentative distance to
+      v is not yet optimal.
+    composed_of:
+    - dist_pred_labels
+    - edge_weight
+    tier: 1
+  edge_relaxation:
+    defines: The operation of updating dist(v) and pred(v) using a tense edge uv to improve the tentative
+      shortest path to v.
+    composed_of:
+    - tense_edge
+    - dist_pred_labels
+    tier: 2
+  fords_generic_algorithm:
+    defines: A general SSSP strategy that repeatedly relaxes any tense edge until none remain, of which
+      all practical shortest-path algorithms are special cases.
+    composed_of:
+    - edge_relaxation
+    - tense_edge
+    - sssp_problem
+    tier: 3
+  breadth_first_search:
+    defines: An instantiation of Ford's algorithm for unweighted graphs that relaxes outgoing edges of
+      vertices pulled from a FIFO queue, computing shortest paths by number of edges.
+    composed_of:
+    - fords_generic_algorithm
+    - fifo_queue
+    - edge_relaxation
+    tier: 4
+  bfs_phase_analysis:
+    defines: A proof technique that partitions BFS execution into phases using an imaginary token, showing
+      distance labels are assigned in non-decreasing order.
+    composed_of:
+    - breadth_first_search
+    tier: 5
+  dag_shortest_paths:
+    defines: A dynamic-programming algorithm that computes shortest paths in a DAG in O(V+E) time by relaxing
+      edges in topological order.
+    composed_of:
+    - directed_acyclic_graph
+    - topological_order
+    - edge_relaxation
+    - sssp_problem
+    tier: 3
+  dijkstras_algorithm:
+    defines: An instantiation of Ford's algorithm using a priority queue keyed by tentative distance,
+      correctly computing shortest paths when the graph has no negative-weight edges.
+    composed_of:
+    - fords_generic_algorithm
+    - priority_queue
+    - edge_relaxation
+    tier: 4
+  bellman_ford:
+    defines: An O(VE)-time instantiation of Ford's algorithm that relaxes all edges in V-1 rounds, correctly
+      handling negative edges and detecting negative cycles.
+    composed_of:
+    - fords_generic_algorithm
+    - edge_relaxation
+    - negative_edge_weight
+    - negative_cycle
+    tier: 4
+  bellman_ford_dp_recurrence:
+    defines: A recurrence defining the shortest walk from s to v using at most i edges, forming the dynamic-programming
+      basis for Bellman-Ford.
+    composed_of:
+    - shortest_path
+    - edge_weight
+    tier: 1
+applications:
+  moores_algorithm:
+    defines: A queue-based refinement of Bellman-Ford that only rescans edges leaving vertices whose distance
+      changed in the previous phase, often faster in practice.
+    needs:
+    - bellman_ford
+    - fifo_queue
+    tier: 5

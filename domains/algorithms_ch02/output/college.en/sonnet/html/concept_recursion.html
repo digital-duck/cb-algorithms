@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recursion | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="recursion">Recursion</h2>
+<p>Recursion is a special case of reduction in which a problem is solved by reducing it to one or more smaller instances of <em>itself</em>, until the instances become trivial to solve directly. The trick to designing a recursive solution is to imagine a "Recursion Fairy" — an oracle that will correctly solve any smaller instance of your problem for you. Your only job is to (1) define a <strong>base case</strong> simple enough to solve without help, and (2) show how to combine the fairy's answer(s) on smaller inputs into a correct answer for your input.</p>
+<p><strong>Worked example: factorial.</strong> Define $n! = n \cdot (n-1)!$ for $n > 0$, with base case $0! = 1$. If the fairy hands you $(n-1)!$, you multiply by $n$ and you're done. In code:</p>
+<pre><code>def factorial(n):
+    if n == 0:
+        return 1                 # base case
+    return n * factorial(n - 1)  # trust the fairy on n-1</code></pre>
+<p><strong>Why this works — the formal justification.</strong> Trusting the fairy is not hand-waving; it is mathematical induction in disguise. The base case is the induction basis. The recursive step assumes the fairy's answer is correct for all smaller inputs (the induction hypothesis) and shows the combining step preserves correctness (the inductive step). Since every recursive call strictly decreases $n$ toward the base case, the recursion terminates, and induction guarantees the result is correct for every $n$.</p>
+<p><strong>Problem-solving application: Fibonacci and efficiency.</strong> Define $F(n) = F(n-1) + F(n-2)$, $F(0)=0, F(1)=1$. A direct translation of this recurrence into code is correct but wasteful: it recomputes $F(k)$ exponentially many times, giving time complexity $T(n) = T(n-1) + T(n-2) + O(1)$, which solves to $O(\phi^n)$ where $\phi \approx 1.618$. Recognizing this inefficiency is itself a problem-solving skill: by having the fairy remember answers she's already computed (memoization) or by building answers bottom-up (dynamic programming), the same recursive structure runs in $O(n)$ time. This pattern — trust the fairy, verify by induction, then analyze and optimize the resulting recurrence — is the core discipline for applying recursion to real algorithmic problems, from tree traversal to divide-and-conquer sorting.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

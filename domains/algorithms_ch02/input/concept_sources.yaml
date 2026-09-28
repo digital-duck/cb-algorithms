@@ -1,0 +1,92 @@
+domain: Algorithms_JeffE
+sources:
+  reduction:
+    label: Reduction
+    sections:
+    - id: ch02_reductions
+      title: Reductions
+  recursion:
+    label: Recursion
+    sections:
+    - id: ch02_simplify_and_delegate
+      title: Simplify and Delegate
+  base_case:
+    label: Base Case
+    sections:
+    - id: ch02_simplify_and_delegate
+      title: Simplify and Delegate
+  induction_proof:
+    label: Proof by Induction
+    sections:
+    - id: ch02_simplify_and_delegate
+      title: Simplify and Delegate
+  tower_of_hanoi:
+    label: Tower of Hanoi
+    sections:
+    - id: ch02_tower_of_hanoi
+      title: Tower of Hanoi
+  divide_and_conquer:
+    label: Divide and Conquer
+    sections:
+    - id: ch02_recursion_trees
+      title: Recursion Trees
+  mergesort:
+    label: Mergesort
+    sections:
+    - id: ch02_mergesort
+      title: Mergesort
+  merge_subroutine:
+    label: Merge
+    sections:
+    - id: ch02_mergesort
+      title: Mergesort
+  quicksort:
+    label: Quicksort
+    sections:
+    - id: ch02_quicksort
+      title: Quicksort
+  partition_subroutine:
+    label: Partition
+    sections:
+    - id: ch02_quicksort
+      title: Quicksort
+  recurrence_relation:
+    label: Recurrence Relation
+    sections:
+    - id: ch02_mergesort
+      title: Mergesort
+  recursion_tree:
+    label: Recursion Tree
+    sections:
+    - id: ch02_recursion_trees
+      title: Recursion Trees
+  domain_transformation:
+    label: Domain Transformation
+    sections:
+    - id: ch02_recursion_trees
+      title: Recursion Trees
+  quickselect:
+    label: Quickselect
+    sections:
+    - id: ch02_linear_time_selection
+      title: ♥Linear-Time Selection
+  median_of_medians:
+    label: Median-of-Medians Selection
+    sections:
+    - id: ch02_linear_time_selection
+      title: ♥Linear-Time Selection
+  split_multiply:
+    label: Split Multiplication
+    sections:
+    - id: ch02_fast_multiplication
+      title: Fast Multiplication
+  karatsuba_multiplication:
+    label: Karatsuba's Algorithm
+    sections:
+    - id: ch02_fast_multiplication
+      title: Fast Multiplication
+  fast_exponentiation:
+    label: Fast Exponentiation
+    sections:
+    - id: ch02_exponentiation
+      title: Exponentiation
