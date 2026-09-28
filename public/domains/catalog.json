@@ -907,6 +907,18 @@
         "file": "output/college.en/sonnet/html/book_tarjan_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "topological_sort",
+        "file": "output/college.zh/sonnet/html/book_topological_sort_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "kosaraju_sharir_algorithm",
+        "file": "output/college.zh/sonnet/html/book_kosaraju_sharir_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -932,6 +944,13 @@
         "language": "en"
       },
       {
+        "name": "dag",
+        "label": "Dag",
+        "file": "output/college.zh/sonnet/html/concept_dag_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "dependency_graph",
         "label": "Dependency Graph",
         "file": "output/college.en/sonnet/html/concept_dependency_graph.html",
@@ -946,11 +965,25 @@
         "language": "en"
       },
       {
+        "name": "depth_first_search",
+        "label": "Depth First Search",
+        "file": "output/college.zh/sonnet/html/concept_depth_first_search_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "dfs_wrapper",
         "label": "Dfs Wrapper",
         "file": "output/college.en/sonnet/html/concept_dfs_wrapper.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "dfs_wrapper",
+        "label": "Dfs Wrapper",
+        "file": "output/college.zh/sonnet/html/concept_dfs_wrapper_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "dynamic_programming",
@@ -974,11 +1007,25 @@
         "language": "en"
       },
       {
+        "name": "graph_reversal",
+        "label": "Graph Reversal",
+        "file": "output/college.zh/sonnet/html/concept_graph_reversal_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "kosaraju_sharir_algorithm",
         "label": "Kosaraju Sharir Algorithm",
         "file": "output/college.en/sonnet/html/concept_kosaraju_sharir_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "kosaraju_sharir_algorithm",
+        "label": "Kosaraju Sharir Algorithm",
+        "file": "output/college.zh/sonnet/html/concept_kosaraju_sharir_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "longest_path_in_dag",
@@ -1002,11 +1049,25 @@
         "language": "en"
       },
       {
+        "name": "preorder_postorder",
+        "label": "Preorder Postorder",
+        "file": "output/college.zh/sonnet/html/concept_preorder_postorder_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "reachability",
         "label": "Reachability",
         "file": "output/college.en/sonnet/html/concept_reachability.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "reachability",
+        "label": "Reachability",
+        "file": "output/college.zh/sonnet/html/concept_reachability_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "sink_source_component",
@@ -1016,6 +1077,13 @@
         "language": "en"
       },
       {
+        "name": "sink_source_component",
+        "label": "Sink Source Component",
+        "file": "output/college.zh/sonnet/html/concept_sink_source_component_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "strong_component_graph",
         "label": "Strong Component Graph",
         "file": "output/college.en/sonnet/html/concept_strong_component_graph.html",
@@ -1023,11 +1091,25 @@
         "language": "en"
       },
       {
+        "name": "strong_component_graph",
+        "label": "Strong Component Graph",
+        "file": "output/college.zh/sonnet/html/concept_strong_component_graph_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "strong_connectivity",
         "label": "Strong Connectivity",
         "file": "output/college.en/sonnet/html/concept_strong_connectivity.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "strong_connectivity",
+        "label": "Strong Connectivity",
+        "file": "output/college.zh/sonnet/html/concept_strong_connectivity_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "tarjan_algorithm",
@@ -1049,6 +1131,13 @@
         "file": "output/college.en/sonnet/html/concept_topological_sort.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "topological_sort",
+        "label": "Topological Sort",
+        "file": "output/college.zh/sonnet/html/concept_topological_sort_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [

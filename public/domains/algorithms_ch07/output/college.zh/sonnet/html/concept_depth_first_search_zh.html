@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Depth First Search | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="depth-first-search">Depth First Search</h2>
+<p>深度优先搜索（Depth First Search，DFS）是一种图遍历算法：从起始节点出发，沿着某一条分支尽可能深入地探索，直到无法继续前进（所有邻居都已访问）为止，再回溯到上一个节点，尝试其他未探索的分支。这种"先深入、后回溯"的策略天然地用递归实现——每次递归调用对应向前探索一步，递归返回则对应回溯一步。算法维护一个 <code>visited</code> 集合以避免重复访问同一节点（否则在有环图中会陷入无限递归）。</p>
+<p>伪代码如下：</p>
+$$
+\text{DFS}(v):\quad \text{mark } v \text{ as visited}; \quad \text{for each neighbor } u \text{ of } v: \quad \text{if } u \text{ not visited, call DFS}(u)
+$$
+<p><strong>递归调用栈的本质</strong>：DFS 并不显式维护一个栈数据结构（除非用迭代版本实现），而是借助程序运行时自身的调用栈——每次递归调用会把当前节点的"未探索邻居列表"压入调用栈，直到某一层的邻居全部访问完毕，该层才从栈中弹出，控制权交还给上一层调用者。这正是"递归 = 隐式栈"这一编程范式的典型体现。</p>
+<p><strong>复杂度分析</strong>：设图有 $V$ 个顶点、$E$ 条边。每个顶点恰好被访问一次（标记为 visited），每条边最多被检查两次（有向图为一次）。因此时间复杂度为 $O(V + E)$，空间复杂度（递归调用栈深度）在最坏情况下为 $O(V)$（例如一条链状图）。</p>
+<p><strong>问题求解应用</strong>：假设要判断一个无向图是否连通，可以从任意一个顶点开始执行 DFS，遍历结束后检查 <code>visited</code> 集合是否覆盖了所有顶点——若是，则图连通。DFS 还是拓扑排序、检测环、寻找连通分量、求解迷宫路径等问题的核心工具：例如在迷宫求解中，节点是格子，边是相邻可通行的格子，DFS 沿一条路径深入，撞墙则回溯，直到找到出口或穷尽所有路径。</p>
+<pre class="mermaid">flowchart TD
+    A["访问节点 v"] --> B["标记 v 为已访问"]
+    B --> C["取 v 的下一个邻居 u"]
+    C --> D{"u 已访问?"}
+    D -- 否 --> E["递归调用 DFS(u)"]
+    E --> F["嵌套调用栈：DFS(v) 内部包含 DFS(u)"]
+    F --> C
+    D -- 是 --> G{"v 还有未探索邻居?"}
+    G -- 是 --> C
+    G -- 否 --> H["回溯：弹出调用栈，返回上一层"]</pre>
+<p><em>该流程图展示了 DFS 的访问-标记-递归-回溯循环，以及递归调用如何形成嵌套的调用栈结构。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Topological Sort | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="topological-sort">Topological Sort</h2>
+<p><strong>定义</strong>　设 $G = (V, E)$ 为一个有向无环图（DAG，directed acyclic graph）。$G$ 的一个<strong>拓扑排序</strong>是顶点集合 $V$ 的一个线性排列，使得对每一条边 $(u, v) \in E$，$u$ 都排在 $v$ 之前。直观地说，如果边表示"依赖"或"必须先于"关系，拓扑排序给出一种不违反任何依赖关系的执行顺序。拓扑排序存在的充要条件是图中不含环——这也是"DAG"这个前提不可或缺的原因：只要图中有一个环，环上的顶点就无法被线性排序，因为环意味着某个顶点间接依赖于自己。</p>
+<p>拓扑排序的标准算法基于<strong>深度优先搜索（DFS）的后序遍历</strong>：对图做一次 DFS，当一个顶点的所有邻居都已被访问完毕、即将从递归栈中退出时，把该顶点记录下来（后序，postorder）。把得到的后序序列<strong>反转</strong>，就是一个合法的拓扑排序。</p>
+<p><strong>为什么反转后序有效</strong>：考虑边 $(u, v)$。DFS 访问到 $u$ 时，如果 $v$ 还没被访问过，递归会先完全处理完 $v$（包括它所有的后代），$v$ 才会先于 $u$ 被记录进后序；如果 $v$ 已经访问过，由于图无环，$v$ 不可能仍在当前的递归栈中（否则会形成环），所以 $v$ 必然已经结束访问，也已被记录在 $u$ 之前。因此在后序序列中，$v$ 总是出现在 $u$ 之前。反转整个序列后，$u$ 就出现在 $v$ 之前，满足"边从早到晚"的要求。</p>
+<p><strong>复杂度</strong>：DFS 遍历每个顶点和每条边各一次，时间复杂度为 $O(|V| + |E|)$，与图的规模呈线性关系。</p>
+<p><strong>求解应用</strong>：拓扑排序的典型场景是任务调度——例如课程的先修关系、软件包的依赖安装顺序、编译过程中的模块依赖。给定"任务 A 必须在任务 B 之前完成"这样的一组约束，把它们建模成 DAG 后，拓扑排序直接给出一个可行的执行顺序。若算法在 DFS 过程中检测到"回边"（指向当前递归栈中顶点的边），则说明图中存在环，拓扑排序不存在——这本身也是一种实用的<strong>环检测</strong>手段。</p>
+<pre class="mermaid">graph TD
+    A[穿鞋: 内衬] --> B[穿鞋: 鞋]
+    C[穿袜子] --> B
+    B --> D[出门]
+    E[穿裤子] --> B
+    E --> D</pre>
+<p><em>示例依赖图：穿衣顺序的 DAG，边表示"必须先于"关系；对该图做 DFS 后序遍历再反转，即可得到一个合法的穿衣顺序（如：穿裤子 → 穿袜子 → 穿鞋 → 出门）。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>
