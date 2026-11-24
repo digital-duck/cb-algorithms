@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disjoint Path Cover | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="不相交路径覆盖">不相交路径覆盖</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 为有向无环图(DAG)。<strong>路径覆盖</strong>是一组有向路径,使每个顶点恰好属于其中一条路径(路径之间顶点不相交)。<strong>最小不相交路径覆盖</strong>要求路径条数最少。单个顶点也算一条长度为 0 的路径。</p>
+<p><strong>归约到二分图匹配。</strong> 将每个顶点 $v$ 拆成两个副本:"平点" $v^{\flat}$(作为边的<strong>起点</strong>)和"尖点" $v^{\sharp}$(作为边的<strong>终点</strong>)。对每条边 $(u,v)\in E$,在二分图中连边 $u^{\flat}-v^{\sharp}$。</p>
+<p>匹配中的一条边 $u^{\flat}-v^{\sharp}$ 表示"路径从 $u$ 直接走到 $v$"。由于每个平点、尖点至多被匹配一次,每个顶点至多有一条出边和一条入边被选中,所以被选中的边恰好拼成不相交的路径(DAG 无环,不会形成圈)。</p>
+<p><strong>定理。</strong> 最小路径覆盖数</p>
+$$
+k_{\min}=|V|-M,
+$$
+<p>其中 $M$ 是该二分图的最大匹配大小。</p>
+<p><strong>证明思路。</strong> 初始时每个顶点单独成一条路径,共 $|V|$ 条。每选入一条匹配边,就把两条路径接成一条,路径数减 1。任何合法覆盖都对应一个匹配,其边数为 $|V|-(\text{路径数})$。因此路径数最少等价于匹配最大。$\blacksquare$</p>
+<p><strong>例题。</strong> 设 DAG 有顶点 $1,2,3,4,5$,边为 $1\to2,\ 1\to3,\ 3\to4,\ 2\to4,\ 4\to5$。</p>
+<p>构造二分图,边为 $1^{\flat}-2^{\sharp}$,$1^{\flat}-3^{\sharp}$,$3^{\flat}-4^{\sharp}$,$2^{\flat}-4^{\sharp}$,$4^{\flat}-5^{\sharp}$。</p>
+<p>求最大匹配:取 $1^{\flat}-2^{\sharp}$、$2^{\flat}-4^{\sharp}$、$4^{\flat}-5^{\sharp}$。再看 $3^{\flat}$,它唯一的邻点 $4^{\sharp}$ 已被占用;$1^{\flat}$ 也无法改选 $3^{\sharp}$ 而增加匹配数(因为 $2^{\sharp}$ 无其他来源)。可以验证 $M=3$ 是最大的,因为尖点 $4^{\sharp}$ 只能被一条边使用,而 $2^{\sharp},3^{\sharp}$ 只能来自 $1^{\flat}$,因此至多再匹配 1 个,总数不超过 3。</p>
+<p>于是 $k_{\min}=5-3=2$。还原路径:$1\to2\to4\to5$ 与单点路径 $3$。</p>
+<p><strong>问题求解应用。</strong> 典型题目是"用最少的机器人/任务链覆盖所有任务节点,每个节点只被经过一次"。解题步骤:</p>
+<li>检查图是否为 DAG,并确认路径不得共享顶点。</li>
+<li>拆点建二分图,每条边 $(u,v)$ 对应 $u^{\flat}-v^{\sharp}$。</li>
+<li>用匈牙利算法或 Hopcroft–Karp 求最大匹配 $M$,时间复杂度为 $O(E\sqrt{V})$。</li>
+<li>答案为 $|V|-M$;沿匹配边从没有入边被选中的顶点出发,即可输出具体路径。</li>
+<p><strong>常见误区。</strong> 若允许路径<strong>相交</strong>(顶点可重复经过),应先对图求传递闭包再做同样的匹配,否则结果会偏大。本节的归约只适用于顶点不相交的情形。</p>
+<pre class="mermaid">graph LR
+    subgraph 平点
+    A1[1平]
+    A2[2平]
+    A3[3平]
+    A4[4平]
+    end
+    subgraph 尖点
+    B2[2尖]
+    B3[3尖]
+    B4[4尖]
+    B5[5尖]
+    end
+    A1 --> B2
+    A1 --> B3
+    A2 --> B4
+    A3 --> B4
+    A4 --> B5</pre>
+<p><em>图:例题的拆点二分图。左侧为平点(出边端),右侧为尖点(入边端);最大匹配大小为 3。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

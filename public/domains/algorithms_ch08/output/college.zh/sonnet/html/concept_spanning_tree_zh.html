@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spanning Tree | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="生成树">生成树</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 是连通无向图。$G$ 的<strong>生成树</strong>是满足下列条件的子图 $T=(V,E')$,其中 $E'\subseteq E$:</p>
+<li>$T$ 包含 $G$ 的全部顶点 $V$;</li>
+<li>$T$ 连通且不含回路(即 $T$ 是树)。</li>
+<p>生成树有一条核心性质:若 $|V|=n$,则每棵生成树恰有 $n-1$ 条边。原因是树恰有 $n-1$ 条边。少一条边,图就不连通。多一条边,就会形成回路。</p>
+<p>连通图一定存在生成树。做法是:只要图中还有回路,就从回路上删去一条边。删边不会破坏连通性,直到无回路为止。</p>
+<p><strong>例题。</strong> 设 $G$ 的顶点为 $\{A,B,C,D\}$,边为 $AB,\ AC,\ BC,\ CD$,边权依次为 $1,\,4,\,2,\,3$。</p>
+<p>$n=4$,所以生成树需要 $3$ 条边。$G$ 有回路 $A\!-\!B\!-\!C\!-\!A$,必须去掉其中一条边。</p>
+<li>去掉 $AC$:保留 $\{AB,BC,CD\}$,总权重 $1+2+3=6$。</li>
+<li>去掉 $BC$:保留 $\{AB,AC,CD\}$,总权重 $1+4+3=8$。</li>
+<li>去掉 $AB$:保留 $\{AC,BC,CD\}$,总权重 $4+2+3=9$。</li>
+<p>所以 $G$ 共有 $3$ 棵生成树。其中权重最小的是第一棵,总权重为 $6$。边 $CD$ 是桥,所有生成树都必须包含它。</p>
+<pre class="mermaid">graph LR
+    A((A)) ---|1| B((B))
+    B ---|2| C((C))
+    C ---|3| D((D))
+    A -.-|4 已删除| C</pre>
+<p><em>图中实线是权重最小的生成树 $\{AB,BC,CD\}$,虚线是被删去的边 $AC$。</em></p>
+<p><strong>问题求解应用。</strong> 在实际问题里,生成树对应"用最少的连接把所有节点连通"。例如:要用光缆连接 $n$ 个城市,每条可铺设线路都有造价,求总造价最小的方案。这就是<strong>最小生成树</strong>(MST)问题。</p>
+<p><strong>Kruskal 算法</strong>的步骤如下:</p>
+<li>把所有边按权重从小到大排序。</li>
+<li>依次考察每条边。若加入它不会与已选边形成回路,就选中它。</li>
+<li>选满 $n-1$ 条边后停止。</li>
+<p>对上面的例子,排序后依次是 $AB(1),BC(2),CD(3),AC(4)$。前三条边都不成环,被选中。选满 $3$ 条边后停止,总权重为 $6$,与枚举的结果一致。</p>
+<p>这个算法正确,依据的是<strong>割性质</strong>。把顶点分成两个非空集合,跨越这两个集合的所有边中,权重最小的那条边一定属于某棵最小生成树。若排序后每条边的权重互不相同,这棵最小生成树还是唯一的。</p>
+<p><strong>复杂度。</strong> 排序需要 $O(|E|\log|E|)$ 时间。用并查集判断是否成环,几乎是常数时间。因此总时间由排序主导,为 $O(|E|\log|E|)$。</p>
+<p><strong>检验自己。</strong> 一个有 $10$ 个顶点的连通图,其生成树有几条边?答案是 $9$ 条。若某个子图有 $9$ 条边却不连通,它能是生成树吗?不能。它必然含有回路,所以不是树。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

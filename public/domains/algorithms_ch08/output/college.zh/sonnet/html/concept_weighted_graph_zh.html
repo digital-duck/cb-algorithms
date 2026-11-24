@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weighted Graph | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="加权图">加权图</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 是连通的无向图。若再给定函数 $w:E\to\mathbb{R}$,为每条边 $e\in E$ 指定实数 $w(e)$(称为<strong>权重</strong>),则三元组 $(V,E,w)$ 称为<strong>加权图</strong>。权重可表示距离、费用、时间或容量等。路径 $P=(v_0,v_1,\dots,v_k)$ 的<strong>总权重</strong>为</p>
+$$
+w(P)=\sum_{i=1}^{k} w(\{v_{i-1},v_i\}).
+$$
+<p>子图 $H$ 的权重同理,为其所有边权之和。因为 $G$ 连通,任意两个顶点之间至少有一条路径,所以"最短路径"和"最小生成树"这类问题总是有意义的。</p>
+<p><strong>存储方式。</strong> 常用邻接表 $\text{adj}[u]=\{(v,w(u,v))\}$,空间为 $O(|V|+|E|)$;稠密图可用权重矩阵 $W_{uv}=w(\{u,v\})$,空间为 $O(|V|^2)$。无向图中 $W$ 是对称的。</p>
+<pre class="mermaid">graph LR
+    A((A)) ---|4| B((B))
+    A ---|1| C((C))
+    B ---|2| C
+    B ---|5| D((D))
+    C ---|8| D</pre>
+<p><em>示例加权图:顶点为 A、B、C、D,边上的数字是权重。</em></p>
+<p><strong>例题。</strong> 对上图,求 A 到 D 的最短路径。</p>
+<p>枚举从 A 到 D 的简单路径并计算总权重:</p>
+<li>$A\to B\to D$:$4+5=9$</li>
+<li>$A\to C\to D$:$1+8=9$</li>
+<li>$A\to C\to B\to D$:$1+2+5=8$</li>
+<p>最短路径是 $A\to C\to B\to D$,权重为 $8$。注意,经过边数最多的路径反而最短。<strong>可见在加权图中,"边数最少"与"权重最小"是不同的目标。</strong></p>
+<p><strong>问题求解应用。</strong> 同一个加权图可以回答两类不同的问题。</p>
+<li><em>最短路径</em>(如导航):求 $\min_P w(P)$。当所有权重非负时,可用 Dijkstra 算法,使用二叉堆时复杂度为 $O((|V|+|E|)\log|V|)$。</li>
+<li><em>最小生成树</em>(如铺设光缆):在 $G$ 的所有生成树 $T$ 中,求 $w(T)=\sum_{e\in T}w(e)$ 最小者。Kruskal 或 Prim 算法可在 $O(|E|\log|V|)$ 时间内解决。</li>
+<p>对上图求最小生成树:按权重升序考察边,依次取 $AC\,(1)$、$BC\,(2)$,再考察 $AB\,(4)$,它会与已选的边构成环,舍去;取 $BD\,(5)$,此时已有 $|V|-1=3$ 条边,停止。总权重为 $1+2+5=8$。</p>
+<p>两类问题的解不一定相同:此例中碰巧都是 8,但最短路径树和最小生成树一般并不一致。建模时应先问清目标:是"从一点到另一点代价最小",还是"以最小总代价连通所有点"?</p>
+<p><strong>小结。</strong> 加权图 $=$ 连通无向图 $+$ 边权函数 $w$。路径与子图的代价都由边权求和得到,不同的优化目标(最短路径、最小生成树)对应不同的算法。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cycle Detection | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="环路检测-cycle-detection">环路检测(Cycle Detection)</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$。若存在顶点序列 $v_0\to v_1\to\cdots\to v_k=v_0$($k\ge 1$),则称 $G$ 含有<strong>环</strong>;不含环的有向图称为<strong>有向无环图</strong>(DAG)。环路检测就是判定 $G$ 是否为 DAG。拓扑排序、任务调度、模块依赖解析都以此为前提:依赖若成环,就没有合法的执行顺序。</p>
+<p><strong>算法思想。</strong> 在深度优先搜索(DFS)中给每个顶点三种颜色:</p>
+<li>白色:尚未访问;</li>
+<li>灰色:已访问但仍"活跃",即位于当前递归栈上(其后代尚未处理完);</li>
+<li>黑色:自身及所有后代均已处理完毕。</li>
+<p><strong>判据:</strong> DFS 过程中,若某条边 $u\to v$ 的终点 $v$ 是灰色,则该边为<strong>回边</strong>,图中必有环;反之,若整个 DFS 都没有遇到指向灰色顶点的边,则图无环。</p>
+<p><strong>为什么正确。</strong> 若 $v$ 为灰色,则 $v$ 在递归栈上,说明存在 $v\leadsto u$ 的路径(栈中从 $v$ 到 $u$ 的部分)。再加上边 $u\to v$,就构成环。反过来,若图中有环 $C$,设其中第一个被发现的顶点为 $x$。此刻环上其他顶点都是白色,由白色路径定理,它们都会成为 $x$ 的后代。于是环上指向 $x$ 的那条边 $y\to x$ 被检查时,$x$ 仍是灰色,算法必能发现它。</p>
+<p><strong>伪代码。</strong></p>
+<pre><code>def has_cycle(graph):
+    WHITE, GRAY, BLACK = 0, 1, 2
+    color = {v: WHITE for v in graph}
+
+    def dfs(u):
+        color[u] = GRAY
+        for v in graph[u]:
+            if color[v] == GRAY:          # 指向活跃顶点:回边
+                return True
+            if color[v] == WHITE and dfs(v):
+                return True
+        color[u] = BLACK
+        return False
+
+    return any(color[v] == WHITE and dfs(v) for v in graph)</code></pre>
+<p><strong>例题。</strong> 图 $G$:$A\to B,\ B\to C,\ C\to D,\ B\to D,\ D\to B$。</p>
+<p>从 $A$ 出发:$A$ 变灰 → 访问 $B$(灰)→ 访问 $C$(灰)→ 访问 $D$(灰)。检查 $D$ 的出边 $D\to B$:$B$ 是灰色,发现回边,返回"有环"。环为 $B\to C\to D\to B$。</p>
+<p>注意<strong>黑色</strong>顶点不算:若把 $D\to B$ 换成 $A\to D$,当 $D$ 已变黑后再检查 $A\to D$,这只是前向边或横向边,不构成环。仅仅"访问过"并不等于"有环"。</p>
+<p><strong>应用:任务调度。</strong> 课程先修关系:$M\to P,\ P\to Q,\ Q\to M$(微积分→概率→统计→又要求先修微积分)。DFS 从 $M$ 开始,经 $P$、$Q$ 后遇到 $Q\to M$,而 $M$ 为灰色,所以先修关系自相矛盾,没有可行的修课顺序。在构建工作流或包依赖图时,可在加载阶段先跑一遍该检测,把"死锁式"配置提前拦截。若需要报告具体的环,可用 <code>parent</code> 数组或显式栈,在发现回边时从 $u$ 回溯到 $v$。</p>
+<p><strong>复杂度。</strong> 每个顶点和每条边各被处理一次,时间为 $O(|V|+|E|)$,空间为 $O(|V|)$(颜色数组加递归栈)。</p>
+<pre class="mermaid">graph TD
+    A["A(黑色)"] --> B["B(灰色)"]
+    B --> C["C(灰色)"]
+    C --> D["D(灰色)"]
+    B --> D
+    D -.->|"回边:指向灰色顶点"| B</pre>
+<p><em>图示:从 $A$ 出发的 DFS 到达 $D$ 时,边 $D\to B$ 指向仍在递归栈上的灰色顶点 $B$,这条虚线回边即为环 $B\to C\to D\to B$ 的证据。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

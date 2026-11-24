@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Segmentation | Algorithms Ch04</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="文本分词-text-segmentation">文本分词(Text Segmentation)</h2>
+<p><strong>定义。</strong> 给定字符串 $s = s_0 s_1 \cdots s_{n-1}$ 和词典 $D$(有限的合法单词集合),<strong>文本分词问题</strong>(又称 Word Break)询问:能否把 $s$ 切成若干连续片段 $w_1 w_2 \cdots w_k$,使得每个 $w_i \in D$。</p>
+<p>关键观察:若在位置 $i$ 切下第一个单词 $s[0{:}i]\in D$,则剩下的后缀 $s[i{:}]$ 必须自身可分词。这是一个<strong>与原问题同形的子问题</strong>,因此可用递推求解。</p>
+<p>令 $f(i)$ 表示后缀 $s[i{:}n]$ 是否可被分词(为真或为假)。则</p>
+$$
+f(n)=\text{真},\qquad f(i)=\bigvee_{\substack{i<j\le n\\ s[i:j]\in D}} f(j),\quad 0\le i<n.
+$$
+<p>边界 $f(n)$ 对应空后缀,空串可由零个单词构成。所求答案为 $f(0)$。</p>
+<p><strong>正确性。</strong> 对 $s[i{:}]$ 的任一合法分词,其第一个单词必为某个 $s[i{:}j]\in D$,其余部分是 $s[j{:}]$ 的合法分词,故该分词被递推式中 $j$ 对应的项所覆盖。反之,递推式中任一为真的项都能拼出合法分词。因此递推式既不漏解也不误判。</p>
+<p><strong>例题。</strong> 取 $D=\{\texttt{cat},\texttt{cats},\texttt{and},\texttt{sand},\texttt{dog}\}$,$s=\texttt{catsanddog}$($n=10$)。自右向左计算:</p>
+<li>$f(10)=\text{真}$。</li>
+<li>$f(7)$:$s[7{:}10]=\texttt{dog}\in D$,且 $f(10)$ 为真,故 $f(7)=\text{真}$。</li>
+<li>$f(4)$:$s[4{:}7]=\texttt{and}\in D$,$f(7)$ 为真,故 $f(4)=\text{真}$。</li>
+<li>$f(3)$:$s[3{:}7]=\texttt{sand}\in D$,$f(7)$ 为真,故 $f(3)=\text{真}$。</li>
+<li>$f(0)$:$\texttt{cat}\in D$ 且 $f(3)$ 为真,故 $f(0)=\text{真}$。(用 $\texttt{cats}$ 则对应 $f(4)$,同样为真。)</li>
+<p>因此 $\texttt{catsanddog}$ 可分词,例如 $\texttt{cat|sand|dog}$ 与 $\texttt{cats|and|dog}$。若令 $s=\texttt{catsandog}$,则 $f(0)$ 为假,因为没有任何切分能同时覆盖末尾的 $\texttt{og}$。</p>
+<p><strong>问题求解:实现与复杂度。</strong></p>
+<pre><code>def word_break(s, D):
+    n = len(s)
+    f = [False] * (n + 1)
+    f[n] = True
+    L = max(map(len, D))           # 最长单词长度
+    for i in range(n - 1, -1, -1):
+        for j in range(i + 1, min(n, i + L) + 1):
+            if s[i:j] in D and f[j]:
+                f[i] = True
+                break
+    return f[0]</code></pre>
+<p>若不做记忆化,递归会反复计算同一后缀,最坏情况下呈指数级(例如 $s=\texttt{aaaa}\cdots\texttt{b}$,$D=\{\texttt{a},\texttt{aa}\}$)。后缀只有 $n+1$ 种,每个 $f(i)$ 只需计算一次,每次枚举至多 $L$ 个候选终点,每次子串比较花费 $O(L)$,所以总时间为 $O(nL^2)$,空间为 $O(n)$。</p>
+<p><strong>延伸。</strong> 若要还原具体切分,只需记录使 $f(i)$ 为真的 $j$ 并回溯;若要统计切分方案数,把"或"改成求和:$g(i)=\sum_{s[i:j]\in D} g(j)$,$g(n)=1$。同样的后缀递推思想也出现在分词、拼写纠错与语音识别的解码中。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch4: Dynamic Programming (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

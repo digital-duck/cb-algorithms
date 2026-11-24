@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bipartite Matching | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="二分图匹配">二分图匹配</h2>
+<p><strong>定义。</strong> 二分图 $G=(L\cup R,\,E)$ 的顶点集分为两部分 $L$ 与 $R$,且每条边都连接 $L$ 中一个顶点和 $R$ 中一个顶点。<strong>匹配</strong> $M\subseteq E$ 是一组两两不共享端点的边。<strong>最大匹配</strong>是边数 $|M|$ 最大的匹配。典型场景是任务分配:$L$ 为工人,$R$ 为任务,边表示"此人能胜任该任务",每人至多做一项任务,每项任务至多由一人完成。</p>
+<p><strong>归约为最大流。</strong> 构造流网络 $G'$:</p>
+<li>新增源点 $s$ 与汇点 $t$;</li>
+<li>对每个 $u\in L$ 加边 $s\to u$,对每个 $v\in R$ 加边 $v\to t$;</li>
+<li>原图每条边 $(u,v)$ 定向为 $u\to v$;</li>
+<li><strong>所有边容量均为 $1$</strong>。</li>
+<p>容量为 1 保证每个顶点至多流入(或流出)一单位流量,这正是"不共享端点"的约束。</p>
+<p><strong>定理(匹配与流的对应)。</strong> $G$ 的最大匹配大小等于 $G'$ 的最大流值。</p>
+<p><em>证明要点。</em> 给定匹配 $M$,对每条 $(u,v)\in M$ 沿 $s\to u\to v\to t$ 送一单位流,得到值为 $|M|$ 的可行流。反之,由于容量均为整数,最大流存在整数解(整数流定理),每条边流量为 $0$ 或 $1$;由流守恒与单位容量,每个 $u\in L$ 至多有一条出边带流,每个 $v\in R$ 至多有一条入边带流,所以带流的中间边构成匹配,其大小等于流值。$\blacksquare$</p>
+<p><strong>例题。</strong> 设 $L=\{a,b,c\}$,$R=\{1,2,3\}$,边为 $a\!-\!1,\ a\!-\!2,\ b\!-\!1,\ c\!-\!2,\ c\!-\!3$。</p>
+<p>先沿 $s\to a\to 1\to t$ 增广,再沿 $s\to b$ 尝试:$b$ 只能到 $1$,但 $1\to t$ 已满。在残量图中走 $s\to b\to 1\to a\to 2\to t$(经过反向边 $1\to a$,即把 $a$ 改配 $2$),得到 $a\!-\!2,\ b\!-\!1$。再增广 $s\to c\to 3\to t$,得到匹配 $\{a\!-\!2,\ b\!-\!1,\ c\!-\!3\}$,最大流值为 $3$,即完美匹配。</p>
+<p><strong>复杂度。</strong> 每次增广使流值至少加 $1$,而流值不超过 $\min(|L|,|R|)\le |V|$,每次增广用 BFS/DFS 耗时 $O(|E|)$,因此 Ford–Fulkerson 总时间为 $O(|V||E|)$。Hopcroft–Karp 算法每轮同时找一批最短增广路,可降到 $O(\sqrt{|V|}\,|E|)$。</p>
+<p><strong>问题求解应用。</strong> 遇到"一对一分配"类问题时:</p>
+<li>识别两类对象与可行关系,建立二分图;</li>
+<li>加上 $s,t$ 与单位容量,求最大流;</li>
+<li>若最大流 $=|L|$,则所有 $L$ 中元素都能分配成功;否则由最大流最小割(König 定理给出 $|M|=$ 最小顶点覆盖)可指出"瓶颈"集合。</li>
+<p>练习:若上例中删去边 $a\!-\!2$ 与 $c\!-\!2$,最大匹配是多少?(提示:此时顶点 $2$ 孤立,而 $a$ 只剩 $1$,$b$ 也只能到 $1$,因此 $\{a,b\}$ 竞争同一个顶点,最大匹配大小为 $2$。)</p>
+<pre class="mermaid">flowchart LR
+    S[源点 s] --> A[工人 a]
+    S --> B[工人 b]
+    S --> C[工人 c]
+    A --> T1[任务 1]
+    A --> T2[任务 2]
+    B --> T1
+    C --> T2
+    C --> T3[任务 3]
+    T1 --> T[汇点 t]
+    T2 --> T
+    T3 --> T</pre>
+<p><em>例题对应的流网络:所有边容量均为 1,从 s 到 t 的最大流值即最大匹配的大小。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

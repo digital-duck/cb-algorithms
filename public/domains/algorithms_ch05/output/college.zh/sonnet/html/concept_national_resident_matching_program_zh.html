@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>National Resident Matching Program | Algorithms Ch05</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="全国住院医师匹配项目-nrmp">全国住院医师匹配项目(NRMP)</h2>
+<p><strong>定义。</strong> 全国住院医师匹配项目(National Resident Matching Program,NRMP)是美国医学毕业生与医院住院医师岗位之间的集中匹配机构。申请者和项目各自提交按偏好排序的名单,算法据此一次性算出分配结果。其核心是 Gale–Shapley 延迟接受算法的一个变体,目标是得到<strong>稳定匹配</strong>。</p>
+<p>设申请者集合为 $A$,项目集合为 $P$,项目 $p$ 的名额为 $q_p$。若存在一对 $(a,p)$ 满足以下两个条件,就称它为<strong>阻塞对</strong>:</p>
+<li>$a$ 更偏好 $p$,胜过自己当前的匹配;</li>
+<li>$p$ 有空位,或更偏好 $a$,胜过它当前录取的某位申请者。</li>
+<p>没有阻塞对的匹配就是稳定的。稳定性很重要:如果存在阻塞对,双方都有动机绕开系统私下达成协议,匹配就会失效。</p>
+<p><strong>算法(申请者提议版)。</strong></p>
+<li>每位未匹配的申请者向其名单中尚未尝试的最优先项目提出申请。</li>
+<li>每个项目暂时保留其最偏好的至多 $q_p$ 位申请者,拒绝其余申请者。</li>
+<li>被拒绝者转向下一个选择,重复前两步,直到无人可提议为止。</li>
+<p>该算法至多进行 $\sum_{a}|L_a|$ 轮提议($L_a$ 为申请者 $a$ 的名单),因此必定终止,并且总能给出稳定匹配。</p>
+<p><strong>例题。</strong> 申请者 $a_1,a_2,a_3$,项目 $X$(1 个名额)、$Y$(2 个名额)。偏好如下:</p>
+<li>$a_1$:$X \succ Y$;$a_2$:$X \succ Y$;$a_3$:$Y \succ X$</li>
+<li>$X$:$a_2 \succ a_1 \succ a_3$;$Y$:$a_1 \succ a_3 \succ a_2$</li>
+<p>第 1 轮:$a_1,a_2$ 申请 $X$,$a_3$ 申请 $Y$。$X$ 偏好 $a_2$,于是保留 $a_2$,拒绝 $a_1$。$Y$ 保留 $a_3$。 第 2 轮:$a_1$ 申请 $Y$。$Y$ 还有空位,因此接受。 结果:$\{a_2\to X,\ a_1\to Y,\ a_3\to Y\}$。</p>
+<p>检验:$a_1$ 更想去 $X$,但 $X$ 更偏好 $a_2$,所以 $(a_1,X)$ 不是阻塞对。$a_3$ 已得到第一志愿。因此匹配稳定。</p>
+<p><strong>问题求解应用。</strong> 这套机制有几个重要性质,可以用来分析实际问题:</p>
+<li><strong>申请者最优性。</strong> 申请者提议版得到的稳定匹配,对每位申请者而言都是所有稳定匹配中最好的。因此申请者如实填写偏好是最优策略(对申请者而言,如实报告是占优策略)。</li>
+<li><strong>项目端可能操纵。</strong> 项目虚报偏好有时能获益,但这只在特定结构下可行,所以真实偏好仍是合理的默认选择。</li>
+<li><strong>夫妻联合申请。</strong> 这是 NRMP 对原始算法最大的修改。夫妻需要联合排序成对的岗位组合,偏好不再是单个申请者的线性序。此时稳定匹配<strong>不一定存在</strong>,问题也变为 NP 完全问题。NRMP 因此采用启发式处理,并不保证得到稳定结果。</li>
+<p><strong>练习。</strong> 在上面的例题中,若 $X$ 改为 $a_1 \succ a_2 \succ a_3$,重新运行算法,写出结果并说明哪些申请者的结果发生了变化。(答案:$a_1\to X$,$a_2\to Y$,$a_3\to Y$;$a_1$ 与 $a_2$ 的结果改变。)</p>
+<pre class="mermaid">flowchart TD
+    A[申请者提交偏好名单] --> B[每人向最优先项目提议]
+    B --> C[项目暂时保留最偏好者]
+    C --> D[其余申请者被拒绝]
+    D --> E{仍有被拒者且有未尝试项目?}
+    E -- 是 --> B
+    E -- 否 --> F[暂时保留变为最终匹配]</pre>
+<p><em>图示:申请者提议的延迟接受流程。项目只做“暂时保留”,直到无人再被拒绝时才确定最终匹配。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch5: Greedy Algorithms (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

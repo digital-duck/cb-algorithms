@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Scheduling | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="考试安排">考试安排</h2>
+<h3 id="定义">定义</h3>
+<p><strong>考试安排</strong>问题要求为每场期末考试同时分配四种资源:班级(课程)、教室、时间段和监考老师。这是一个<strong>元组选择</strong>问题:我们要从所有可能的组合中选出一组互不冲突的四元组 $(c, r, t, p)$,使尽可能多的考试得到安排。</p>
+<p>约束条件是:每个班级只考一次;同一时间段内,一间教室只能容纳一场考试,一位监考老师也只能监考一场。</p>
+<h3 id="建模为最大流">建模为最大流</h3>
+<p>四类资源按"层"串联成一个网络:</p>
+$$
+s \to \text{班级} \to \text{教室} \to \text{时间段} \to \text{监考老师} \to t
+$$
+<li>每条边的容量为 $1$ 表示"可用"(不可用则不连边)。</li>
+<li>为保证每个资源最多使用一次,把每个中间节点拆成入点和出点,中间连一条容量为 $1$ 的边。</li>
+<li>从 $s$ 到 $t$ 的一条流量为 $1$ 的路径,对应一个合法的四元组。</li>
+<p><strong>整数流定理</strong>保证:当所有容量都是整数时,存在整数最大流。因此最大流值 $|f|$ 恰好等于能安排的考试场数,每条增广路径读出一个四元组。</p>
+<p>> 注意:严格来说,四层以上的"多维匹配"一般是 NP 难的。上述链式网络只刻画相邻两层之间的相容性,所以只有当"可行性只依赖相邻资源"时,它才给出精确解。否则,它给出的是一个松弛的上界。</p>
+<h3 id="例题">例题</h3>
+<p>有两个班级 $C_1, C_2$,一间教室 $R$,两个时间段 $T_1, T_2$,两位监考老师 $P_1, P_2$。</p>
+<p>可用关系如下:</p>
+<li>$C_1, C_2$ 都可使用 $R$;</li>
+<li>$R$ 在 $T_1, T_2$ 都可用;</li>
+<li>$P_1$ 只能在 $T_1$ 监考,$P_2$ 只能在 $T_2$ 监考。</li>
+<p>教室 $R$ 的容量为 $1$,而两场考试都要经过它,于是最大流不超过 $1$。但这里的教室应当按"教室–时间段"配对拆分:把 $(R,T_1)$ 与 $(R,T_2)$ 当作两个独立节点,各自容量为 $1$。这样流量路径为:</p>
+$$
+s \to C_1 \to (R,T_1) \to P_1 \to t,\qquad s \to C_2 \to (R,T_2) \to P_2 \to t
+$$
+<p>最大流 $|f| = 2$,两场考试都被安排:$C_1$ 在 $T_1$、$C_2$ 在 $T_2$,都在教室 $R$。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>求解步骤:</strong></p>
+<li>列出四类资源,以及相邻两类之间的相容关系。</li>
+<li>把"同一时刻只能用一次"的资源(教室、监考老师)建成"资源–时间段"复合节点,容量为 $1$。</li>
+<li>用 Ford–Fulkerson 或 Dinic 算法求最大流。</li>
+<li>沿每条增广路径读出一个四元组 $(c, r, t, p)$。</li>
+<li>若 $|f| <$ 班级总数,则用<strong>最小割</strong>找出瓶颈:割中饱和的边,就是最缺的资源。</li>
+<p><strong>检验自己:</strong> 若有 $5$ 个班级、$2$ 间教室、$3$ 个时间段,教室–时间段共 $6$ 个槽位,但只有 $4$ 位监考老师各在所有时间段可用,最大流是多少?(答案:$\min(5, 6, 4)=4$,瓶颈在监考老师。)</p>
+<p>这样,一个看似复杂的排课问题,就转化为经典的流量计算,并附带了"缺什么资源"的诊断信息。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

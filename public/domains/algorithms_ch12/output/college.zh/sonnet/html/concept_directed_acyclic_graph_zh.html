@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Directed Acyclic Graph | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="有向无环图">有向无环图</h2>
+<p><strong>定义。</strong> 有向图 $G=(V,E)$ 中，若不存在任何有向环（即不存在从某顶点出发沿边方向走回自身的路径），则称 $G$ 为<strong>有向无环图</strong>（Directed Acyclic Graph，DAG）。DAG 的核心性质是：顶点可以排成一个<strong>拓扑序</strong>，即线性序 $v_1,v_2,\dots,v_n$，使得每条边 $(v_i,v_j)\in E$ 都满足 $i<j$。</p>
+<p><strong>定理。</strong> 有向图 $G$ 是 DAG，当且仅当 $G$ 存在拓扑序。</p>
+<p><em>证明思路：</em> 若存在拓扑序，则沿任意有向路径下标严格递增，不可能回到起点，故无环。反之，若 $G$ 无环，则必有入度为 $0$ 的顶点（否则从任一点不断逆边回溯，有限个顶点中必会重复，从而形成环）。取出该顶点放在序列最前，删去它及其出边，剩余图仍是 DAG，对其归纳即可。$\square$</p>
+<p>这一证明同时给出算法：<strong>Kahn 算法</strong>反复删除入度为 $0$ 的顶点，时间复杂度为 $O(|V|+|E|)$。若算法在删完所有顶点前停止，则图中必有环。</p>
+<p><strong>例题。</strong> 设 $V=\{a,b,c,d\}$，$E=\{(a,b),(a,c),(b,d),(c,d)\}$。</p>
+<li>入度：$a:0,\ b:1,\ c:1,\ d:2$。</li>
+<li>删除 $a$ 后，$b,c$ 入度变为 $0$；依次删除 $b,c$ 后，$d$ 入度变为 $0$。</li>
+<li>得到拓扑序 $a,b,c,d$（$a,c,b,d$ 同样合法，拓扑序一般不唯一）。</li>
+<pre class="mermaid">graph TD
+    A[任务 a] --> B[任务 b]
+    A --> C[任务 c]
+    B --> D[任务 d]
+    C --> D</pre>
+<p><em>图：一个四顶点的 DAG；任务 $a$ 必须先于 $b,c$，二者都先于 $d$。</em></p>
+<p><strong>问题求解应用。</strong> DAG 是最小不相交路径覆盖和项目选择问题的输入结构，原因在于"无环"带来了两点便利：</p>
+<li><strong>可做动态规划。</strong> 按拓扑序处理顶点，最长路可在 $O(|V|+|E|)$ 内求出：</li>
+$$
+\mathrm{dp}[v]=\max_{(u,v)\in E}\bigl(\mathrm{dp}[u]+w(u,v)\bigr).
+$$
+<p>对上例，若各边权均为 $1$，则 $\mathrm{dp}[a]=0$，$\mathrm{dp}[b]=\mathrm{dp}[c]=1$，$\mathrm{dp}[d]=2$，最长路长度为 $2$。</p>
+<li><strong>依赖关系自然成立。</strong> 在项目选择问题中，边 $(u,v)$ 表示"选择 $u$ 就必须选择 $v$"。无环保证依赖不会循环，每个可行选择集都是<strong>闭包</strong>（若含 $u$，则含 $u$ 的所有后继），从而可转化为最大权闭合子图，用最小割求解。</li>
+<p>在最小不相交路径覆盖中，DAG 的无环性保证每个顶点只被一条路径经过一次。将每个顶点 $v$ 拆成出点 $v_{out}$ 与入点 $v_{in}$，每条边 $(u,v)$ 变成二分图中的边 $(u_{out},v_{in})$，则</p>
+$$
+\text{最少路径数}=|V|-\text{最大匹配数}.
+$$
+<p>对上例，最大匹配为 $2$（如 $a\to b$、$b\to d$ 或 $a\to b$、$c\to d$），故最少需 $4-2=2$ 条路径，例如 $a\to b\to d$ 与 $c$。</p>
+<p><strong>小结。</strong> 判断一个图是否为 DAG，就是判断它能否拓扑排序；一旦确认，就可以沿拓扑序做动态规划，或将问题归约为匹配与最小割。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

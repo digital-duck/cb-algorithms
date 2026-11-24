@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="流-flow">流(Flow)</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$,每条边 $e$ 有容量 $c(e)\ge 0$,并指定源点 $s$ 与汇点 $t$。<strong>流</strong>是一个函数 $f:E\to\mathbb{R}_{\ge 0}$,满足:</p>
+<li><strong>容量约束</strong>:对每条边 $e$,$0\le f(e)\le c(e)$;</li>
+<li><strong>流量守恒</strong>:对每个 $v\in V\setminus\{s,t\}$,</li>
+$$\sum_{(u,v)\in E} f(u,v)=\sum_{(v,w)\in E} f(v,w),$$
+<p>即流入等于流出。</p>
+<p>流的<strong>值</strong>定义为从源点净流出的量:</p>
+$$|f|=\sum_{(s,w)\in E} f(s,w)-\sum_{(u,s)\in E} f(u,s).$$
+<p>可以把它想象成水管网络:边是水管,容量是管道粗细,除了水源 $s$ 和出口 $t$ 之外,任何接头处都不能存水,也不能凭空产水。</p>
+<p><strong>例题。</strong> 考虑图中的网络,边上标注为 $f/c$(流量/容量):</p>
+<pre class="mermaid">graph LR
+    S((s)) -->|"3/4"| A((a))
+    S -->|"2/3"| B((b))
+    A -->|"2/2"| T((t))
+    A -->|"1/3"| B
+    B -->|"3/5"| T</pre>
+<p><em>图:一个带容量的网络,每条边标注"流量/容量"。</em></p>
+<p>验证:</p>
+<li>容量约束:每条边的 $f\le c$,成立。</li>
+<li>在 $a$ 处:流入 $3$,流出 $2+1=3$,守恒。</li>
+<li>在 $b$ 处:流入 $2+1=3$,流出 $3$,守恒。</li>
+<li>流的值:$|f|=3+2=5$。再检查汇点:流入 $2+3=5$,与 $|f|$ 相等。</li>
+<p>这并非巧合。对任意流,由于中间顶点守恒,所有顶点的"净流出"求和为零,因此 $s$ 的净流出恰好等于 $t$ 的净流入。</p>
+<p><strong>问题求解应用。</strong> 问题:这个网络的流值最多能达到多少?</p>
+<p><em>步骤一:找上界。</em> 考虑把顶点分成 $S=\{s,a,b\}$ 与 $T=\{t\}$ 两部分(一个"割")。所有流到 $t$ 的水必须经过 $a\to t$ 和 $b\to t$,容量之和为 $2+5=7$,所以 $|f|\le 7$。再取割 $S=\{s\}$:出边容量 $4+3=7$,同样 $|f|\le 7$。</p>
+<p><em>步骤二:尝试达到上界。</em> 令 $f(s,a)=4,\ f(s,b)=3$,$f(a,t)=2$,$f(a,b)=2$,$f(b,t)=5$。检查 $a$:入 $4$,出 $2+2=4$;检查 $b$:入 $3+2=5$,出 $5$。均守恒,且 $|f|=7$。</p>
+<p>因此最大流值为 $7$。这里体现了<strong>最大流—最小割定理</strong>的核心思想:任何流的值不超过任意割的容量,当二者相等时,流即为最大。解决此类问题的一般策略是:先验证守恒,再沿残量网络寻找增广路径(如 Ford–Fulkerson 算法),直到找到一个容量与流值相等的割为止。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

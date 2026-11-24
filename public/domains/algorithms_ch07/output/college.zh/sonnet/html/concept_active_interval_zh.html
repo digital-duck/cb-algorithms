@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Active Interval | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="活跃区间-active-interval">活跃区间(Active Interval)</h2>
+<p><strong>定义。</strong> 在对有向图或树 $G$ 做深度优先搜索(DFS)时,每个顶点 $v$ 有两个时间戳:$v.\text{pre}$ 是首次被发现(入栈)的时刻,$v.\text{post}$ 是其全部邻居处理完毕(出栈)的时刻。闭区间</p>
+$$I(v)=[v.\text{pre},\ v.\text{post}]$$
+<p>称为 $v$ 的<strong>活跃区间</strong>,即 $v$ 停留在递归栈上的时间段。</p>
+<p><strong>核心性质(括号定理)。</strong> 对任意两个顶点 $u,v$,它们的活跃区间只有两种关系:</p>
+<li>互不相交:$I(u)\cap I(v)=\varnothing$,此时二者在 DFS 森林中没有祖先关系;</li>
+<li>严格嵌套:例如 $I(v)\subset I(u)$,此时 $v$ 是 $u$ 的后代。</li>
+<p>也就是说,$u$ 是 $v$ 的祖先,当且仅当</p>
+$$u.\text{pre}<v.\text{pre}<v.\text{post}<u.\text{post}.$$
+<p><strong>为什么成立。</strong> 递归栈是后进先出的。若 $v$ 在 $u$ 仍在栈上时入栈,则 $v$ 必须先于 $u$ 出栈,所以 $I(v)$ 被 $I(u)$ 包住。若 $v$ 在 $u$ 出栈之后才被发现,两区间就不相交。区间不可能只交叉一部分,因为那会违反栈的后进先出顺序。</p>
+<p><strong>例题。</strong> 设有向图的边为 $A\to B,\ A\to C,\ B\to D$,从 $A$ 出发,按字母顺序访问邻居,计时从 1 开始:</p>
+<p>| 顶点 | pre | post | 活跃区间 | |---|---|---|---| | A | 1 | 8 | [1, 8] | | B | 2 | 5 | [2, 5] | | D | 3 | 4 | [3, 4] | | C | 6 | 7 | [6, 7] |</p>
+<p>检查:$[3,4]\subset[2,5]\subset[1,8]$,所以 $D$ 是 $B$ 的后代,$B$ 是 $A$ 的后代。$[2,5]\cap[6,7]=\varnothing$,所以 $B$ 与 $C$ 互不为祖先。</p>
+<pre class="mermaid">graph TD
+    A["A:区间 1-8"] --> B["B:区间 2-5"]
+    A --> C["C:区间 6-7"]
+    B --> D["D:区间 3-4"]</pre>
+<p><em>DFS 树及各顶点的活跃区间:子节点的区间嵌套在父节点区间之内,兄弟节点的区间互不相交。</em></p>
+<p><strong>问题求解应用。</strong></p>
+<li><strong>$O(1)$ 祖先查询。</strong> 预处理一次 DFS 后,判断 $u$ 是否为 $v$ 的祖先只需比较两个时间戳,不用沿父指针向上爬。例如查询“$A$ 是 $D$ 的祖先吗?”:$1<3$ 且 $4<8$,答案为是。</li>
+<li><strong>边分类。</strong> 对边 $(u,v)$,看 $v$ 被探索时的状态,并比较区间:</li>
+<p>   - 树边/前向边:$I(v)\subset I(u)$;    - 后向边:$I(u)\subset I(v)$,说明存在环;    - 横跨边:$I(u)$ 与 $I(v)$ 不相交,且 $v.\text{post}<u.\text{pre}$。</p>
+<li><strong>环检测。</strong> 有向图有环,当且仅当 DFS 中出现后向边,即某条边指向一个仍然活跃(在栈上)的顶点。</li>
+<p><strong>小结。</strong> 活跃区间把“递归栈上的存在时间”变成两个整数。嵌套意味着祖孙,不相交意味着无亲缘关系,这个结论是拓扑排序、强连通分量和最近公共祖先等算法的基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

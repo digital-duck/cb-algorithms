@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Tree | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="博弈树">博弈树</h2>
+<p><strong>定义。</strong> 博弈树(game tree)是一棵以"局面"为节点、以"合法着法"为边的有根树。根节点是初始局面;若从局面 $s$ 经一步合法着法可到达局面 $s'$,则 $s$ 到 $s'$ 有一条边。没有后继的节点称为<strong>叶节点</strong>(终局),每个叶节点带有一个收益值,例如 $+1$(先手胜)、$0$(平局)、$-1$(先手负)。博弈树适用于<strong>有限、双人、零和、无隐藏信息、无随机性</strong>的博弈,如井字棋、象棋、围棋。</p>
+<p>若平均每个局面有 $b$ 种合法着法(分支因子),整局最多持续 $d$ 步(深度),则叶节点数大约为 $b^d$。井字棋约有 $9! = 362880$ 条完整对局路径;国际象棋 $b\approx 35,\ d\approx 80$,树的规模约 $10^{123}$,无法穷举。</p>
+<p><strong>例题:一个小博弈。</strong> 桌上有 4 根火柴,两人轮流取 1 根或 2 根,取走最后一根者获胜。设先手为 MAX,后手为 MIN。以剩余火柴数标记局面:</p>
+<li>剩 4(MAX 走)→ 剩 3 或剩 2(MIN 走)</li>
+<li>剩 3(MIN 走)→ 剩 2 或剩 1</li>
+<li>剩 2(MAX 或 MIN 走)→ 取 2 根即胜</li>
+<pre class="mermaid">graph TD
+A["剩4根:先手走"] --> B["剩3根:后手走"]
+A --> C["剩2根:后手走"]
+B --> D["剩2根:先手走"]
+B --> E["剩1根:先手走"]
+D --> F["先手取2根,先手胜"]
+E --> G["先手取1根,先手胜"]
+C --> H["后手取2根,后手胜"]</pre>
+<p><em>取火柴博弈(剩 4 根)的博弈树:每个内部节点是一个局面,叶节点标明胜者。</em></p>
+<p><strong>问题求解:自底向上标注。</strong> 从叶节点向上逐层赋值,规则为极小极大(minimax)原则:</p>
+$$
+V(s)=\begin{cases}
+u(s), & s\text{ 为终局},\\
+\max_{s'} V(s'), & s\text{ 轮到 MAX},\\
+\min_{s'} V(s'), & s\text{ 轮到 MIN}.
+\end{cases}
+$$
+<p>令先手胜为 $+1$,后手胜为 $-1$。图中:"剩 3 根"节点的两个子节点都是 $+1$,故 $V=\min(+1,+1)=+1$;"剩 2 根(后手走)"节点 $V=-1$。根节点 $V=\max(+1,-1)=+1$,说明先手有必胜策略:取 1 根,留下 3 根。无论后手怎么取,先手都能取完。</p>
+<p><strong>一般结论。</strong> 对任何有限、完全信息的双人零和博弈,自底向上的标注必定终止,并给出确定的博弈值(Zermelo 定理的内容):要么先手有必胜策略,要么后手有,要么双方都能保证至少平局。博弈树因此把"如何下棋"转化为"如何在树上搜索"。实际中,树过大时需要用 $\alpha$-$\beta$ 剪枝(可将搜索量减至约 $b^{d/2}$)、深度限制加评估函数,或蒙特卡洛树搜索来近似。</p>
+<p><strong>练习。</strong> 把火柴数改为 6,并允许取 1、2 或 3 根,画出博弈树的前两层,计算根节点的值,并说明先手第一步应取几根。(提示:留给对手 4 根的局面对其不利。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch3: Backtracking (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

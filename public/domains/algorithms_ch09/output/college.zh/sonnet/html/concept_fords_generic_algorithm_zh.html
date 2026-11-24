@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fords Generic Algorithm | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="福特通用算法">福特通用算法</h2>
+<p><strong>定义。</strong> 设带权有向图 $G=(V,E)$,边权为 $w(u,v)$,源点为 $s$。对每个顶点 $v$ 维护距离上界 $d[v]$,初始时 $d[s]=0$,其余 $d[v]=\infty$。若某条边 $(u,v)$ 满足</p>
+$$d[u]+w(u,v)<d[v],$$
+<p>则称它为<strong>紧边</strong>(tense edge)。对紧边做<strong>松弛</strong>:令 $d[v]\leftarrow d[u]+w(u,v)$,并记 $\pi[v]\leftarrow u$。</p>
+<p>福特通用算法只有一条规则:<strong>只要存在紧边,就任选一条松弛,直到没有紧边为止。</strong> 它没有规定选边的顺序。</p>
+<pre class="mermaid">flowchart TD
+A[初始化 d 与 π] --> B{是否存在紧边?}
+B -- 是 --> C[任选一条紧边]
+C --> D[松弛该边]
+D --> B
+B -- 否 --> E[输出最短距离]</pre>
+<p><em>图:福特通用算法的循环结构。各种具体算法的区别只在于“任选一条紧边”这一步如何选择。</em></p>
+<p><strong>不变量与正确性。</strong> 在整个过程中始终有 $d[v]\ge\delta(s,v)$,其中 $\delta(s,v)$ 是真实最短距离。理由是:松弛只会设置成某条真实路径的长度。若图中没有从 $s$ 可达的负环,算法终止时没有紧边,即对所有边 $d[v]\le d[u]+w(u,v)$。沿任一最短路径 $s=v_0,\dots,v_k=v$ 逐边累加,得到 $d[v]\le\delta(s,v)$。因此 $d[v]=\delta(s,v)$。</p>
+<p><strong>例题。</strong> 边为 $s\to a\,(4)$,$s\to b\,(1)$,$b\to a\,(2)$,$a\to t\,(1)$。初始 $d[s]=0$,其余为 $\infty$。</p>
+<li>松弛 $(s,a)$:$d[a]=4$。</li>
+<li>松弛 $(a,t)$:$d[t]=5$。</li>
+<li>松弛 $(s,b)$:$d[b]=1$。</li>
+<li>$(b,a)$ 仍是紧边,因为 $1+2=3<4$。松弛后 $d[a]=3$。</li>
+<li>$(a,t)$ 又变紧,因为 $3+1=4<5$。松弛后 $d[t]=4$。</li>
+<p>此时没有紧边,得 $d[a]=3$,$d[b]=1$,$d[t]=4$。第 1、2 步的结果后来被改写,说明选边顺序不当会造成多余的松弛。</p>
+<p><strong>问题求解应用。</strong> 选边策略决定算法的效率:</p>
+<li><strong>Dijkstra</strong>:总是松弛从 $d$ 最小的未处理顶点出发的边。在非负权图上,每条边只松弛一次,用二叉堆实现时间为 $O((V+E)\log V)$。</li>
+<li><strong>Bellman–Ford</strong>:每一轮按固定顺序扫描全部边,共 $|V|-1$ 轮,时间为 $O(VE)$。它允许负权边,第 $|V|$ 轮若仍有紧边,就说明存在负环。</li>
+<li><strong>DAG 最短路</strong>:按拓扑序处理顶点,每条边只松弛一次,时间为 $O(V+E)$。</li>
+<p><strong>判断练习。</strong> 若图含有从 $s$ 可达的负环,则总有紧边存在。算法永不终止,$d$ 值无限下降。因此在实际使用中,Bellman–Ford 的轮数上限正是用来检测这种情况。</p>
+<p><strong>要点。</strong> 正确性只依赖“松弛到无紧边为止”这一条规则,效率则完全取决于选边顺序。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

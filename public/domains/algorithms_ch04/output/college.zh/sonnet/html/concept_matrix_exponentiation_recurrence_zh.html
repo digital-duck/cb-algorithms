@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matrix Exponentiation Recurrence | Algorithms Ch04</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="矩阵快速幂递推">矩阵快速幂递推</h2>
+<p><strong>定义。</strong> 若序列满足 $k$ 阶线性递推</p>
+$$a_n = c_1 a_{n-1} + c_2 a_{n-2} + \cdots + c_k a_{n-k},$$
+<p>则可把连续 $k$ 项打包成状态向量 $\mathbf v_n=(a_n, a_{n-1},\dots,a_{n-k+1})^{\mathsf T}$，于是</p>
+$$\mathbf v_{n} = M\,\mathbf v_{n-1},$$
+<p>其中 $M$ 是 $k\times k$ 的<strong>伴随矩阵</strong>：第一行为 $(c_1,c_2,\dots,c_k)$，其余部分在次对角线上为 1，其他元素为 0。反复应用得</p>
+$$\mathbf v_n = M^{\,n-k+1}\mathbf v_{k-1}.$$
+<p>逐项递推需要 $O(n)$ 次迭代；而 $M^m$ 可由<strong>快速幂</strong>计算：利用 $M^{2j}=(M^j)^2$ 与 $M^{2j+1}=M\cdot M^{2j}$，只需 $O(\log m)$ 次矩阵乘法，总代价为 $O(k^3\log n)$。</p>
+<p><strong>例题。</strong> 斐波那契数 $F_n=F_{n-1}+F_{n-2}$，$F_0=0,\ F_1=1$。此时</p>
+$$\begin{pmatrix}F_{n+1}\\F_n\end{pmatrix}=\begin{pmatrix}1&1\\1&0\end{pmatrix}\begin{pmatrix}F_n\\F_{n-1}\end{pmatrix},\qquad \begin{pmatrix}1&1\\1&0\end{pmatrix}^{n}=\begin{pmatrix}F_{n+1}&F_n\\F_n&F_{n-1}\end{pmatrix}.$$
+<p>求 $F_{10}$：记 $A=\begin{pmatrix}1&1\\1&0\end{pmatrix}$，则</p>
+$$A^2=\begin{pmatrix}2&1\\1&1\end{pmatrix},\quad A^4=\begin{pmatrix}5&3\\3&2\end{pmatrix},\quad A^8=\begin{pmatrix}34&21\\21&13\end{pmatrix}.$$
+<p>因为 $10=8+2$，所以</p>
+$$A^{10}=A^8A^2=\begin{pmatrix}89&55\\55&34\end{pmatrix},$$
+<p>右上角即 $F_{10}=55$。只做了 3 次平方和 1 次乘法，而不是 9 次逐项相加。</p>
+<p><strong>问题求解应用。</strong> 设 $a_n=3a_{n-1}-a_{n-3}$，$a_0=1,a_1=2,a_2=5$，要求 $a_{10^{18}} \bmod (10^9+7)$。</p>
+<li>确定阶数 $k=3$，写出</li>
+$$M=\begin{pmatrix}3&0&-1\\1&0&0\\0&1&0\end{pmatrix},\quad \mathbf v_2=(5,2,1)^{\mathsf T}.$$
+<li>计算 $M^{10^{18}-2}$：指数约 $2^{60}$，只需约 60 次平方，每次 $3^3=27$ 次乘法，共约 $60\times 27\times 2$ 次模乘。</li>
+<li>每次乘法后立即取模，避免整数溢出。</li>
+<li>$\mathbf v_n$ 的第一个分量即为答案。</li>
+<pre><code>def mat_mul(A, B, mod):
+    n = len(A)
+    return [[sum(A[i][t]*B[t][j] for t in range(n)) % mod
+             for j in range(n)] for i in range(n)]
+
+def mat_pow(M, e, mod):
+    n = len(M)
+    R = [[int(i == j) for j in range(n)] for i in range(n)]  # 单位矩阵
+    while e:
+        if e &amp; 1:
+            R = mat_mul(R, M, mod)
+        M = mat_mul(M, M, mod)
+        e &gt;&gt;= 1
+    return R</code></pre>
+<p><strong>要点与局限。</strong> 该方法适用于<strong>常系数</strong>线性递推；若系数随 $n$ 变化，则 $M$ 不固定，技巧失效。当 $k$ 很大时，$k^3$ 因子占主导，此时可改用多项式取模（Kitamasa 方法）。若还含常数项 $b$，可把状态扩充为 $(a_n,\dots,a_{n-k+1},1)^{\mathsf T}$，仍可用同样方法处理。</p>
+<pre class="mermaid">flowchart LR
+A[线性递推] --> B[构造伴随矩阵]
+B --> C[指数二进制分解]
+C --> D[反复平方]
+D --> E[按位累乘]
+E --> F[读出第n项]</pre>
+<p><em>从递推式到答案的流程：把递推转为矩阵幂，再用二进制快速幂在对数时间内求值。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch4: Dynamic Programming (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

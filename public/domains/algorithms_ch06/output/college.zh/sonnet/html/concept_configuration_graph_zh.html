@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configuration Graph | Algorithms Ch06</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="配置图-configuration-graph">配置图(Configuration Graph)</h2>
+<p><strong>定义。</strong> 配置图是一个图 $G=(V,E)$:顶点集 $V$ 是谜题或机构所有<em>合法配置</em>(状态)的集合,边 $\{u,v\}\in E$ 当且仅当配置 $u$ 可通过<em>一次合法移动</em>变为 $v$。若移动可逆(如华容道、魔方),图是无向的;若不可逆(如单向开关),则是有向图。把"如何走"的问题转化为图论问题:</p>
+<li>求解谜题 $\iff$ 在 $G$ 中寻找从初始顶点 $s$ 到目标顶点 $t$ 的路径;</li>
+<li>最少步数 $\iff$ $s$ 到 $t$ 的最短路径长度 $d(s,t)$;</li>
+<li>无解 $\iff$ $s$ 与 $t$ 不在同一连通分量中。</li>
+<p><strong>例题:倒水问题。</strong> 有容量为 3 升与 5 升的两个水壶,均为空。目标:量出恰好 4 升。</p>
+<p>配置记为 $(a,b)$,其中 $0\le a\le 3$,$0\le b\le 5$。合法移动包括:装满某壶、倒空某壶、把一壶倒入另一壶直到倒空或对方装满。从 $(0,0)$ 出发:</p>
+$$(0,0)\to(0,5)\to(3,2)\to(0,2)\to(2,0)\to(2,5)\to(3,4)$$
+<p>终点 $(3,4)$ 含 4 升,共 6 步。用广度优先搜索(BFS)逐层展开可证明 6 是最少步数,因为 BFS 按距离 $0,1,2,\dots$ 的顺序访问顶点。</p>
+<pre class="mermaid">graph LR
+A["(0,0)"] --> B["(0,5)"]
+B --> C["(3,2)"]
+C --> D["(0,2)"]
+D --> E["(2,0)"]
+E --> F["(2,5)"]
+F --> G["(3,4)"]
+A --> H["(3,0)"]
+H --> I["(3,5)"]
+I --> C</pre>
+<p><em>倒水问题配置图的一部分:上方主链为 6 步最短解,另一条分支经 $(3,0)$、$(3,5)$ 汇入 $(3,2)$。</em></p>
+<p><strong>应用:判断可解性与估计规模。</strong> </p>
+<li><em>规模</em>:配置数 $|V|$ 决定搜索代价。BFS 的时间复杂度为 $O(|V|+|E|)$。倒水问题至多 $4\times 6=24$ 个顶点,轻而易举;但 $3\times3$ 魔方有</li>
+$$|V|=\frac{8!\cdot 3^8\cdot 12!\cdot 2^{12}}{12}\approx 4.3\times10^{19},$$
+<p>无法显式存储,必须利用结构(如双向搜索、对称性)。</p>
+<li><em>可解性</em>:用连通分量判断。例如 15 数码问题的配置图恰好有两个连通分量,各含 $16!/2$ 个顶点。奇偶性(排列的逆序数加上空格行号)是在两个分量上取值不同的不变量,因此只需计算一次奇偶性,即可断定任意初始局面能否到达目标,无需搜索。</li>
+<li><em>最难局面</em>:图的<em>直径</em> $\max_{u,v} d(u,v)$ 给出最坏情形所需步数。魔方(半转度量)的直径为 20,即"上帝之数"。</li>
+<p><strong>解题步骤小结:</strong> (1) 明确配置的表示;(2) 写出合法移动规则,生成邻居;(3) 用 BFS 求最短路,或用不变量分析连通性;(4) 若 $|V|$ 太大,改用启发式搜索(如 A*)或利用对称性压缩。</p>
+<p><strong>练习。</strong> 对 $(3,5)$ 倒水问题,说明能否量出 $1$ 升,并求最少步数。(提示:因为 $\gcd(3,5)=1$,所有整数升数都可达。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch6: Basic Graph Algorithms (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

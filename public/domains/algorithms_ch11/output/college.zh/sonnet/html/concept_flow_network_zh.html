@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Network | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="流网络">流网络</h2>
+<p><strong>定义。</strong> 流网络(flow network)是一个有向图 $G=(V,E)$,带有两个特殊顶点:<strong>源点</strong> $s$ 和<strong>汇点</strong> $t$,以及一个非负<strong>容量函数</strong> $c:E\to\mathbb{R}_{\ge 0}$。直观上,边 $(u,v)$ 像一根水管,$c(u,v)$ 是它单位时间内最多能输送的量。若 $(u,v)\notin E$,约定 $c(u,v)=0$。</p>
+<p>在网络上,一个<strong>流</strong> $f:E\to\mathbb{R}_{\ge0}$ 必须满足两条规则:</p>
+<li><strong>容量限制</strong>:对每条边,$0\le f(u,v)\le c(u,v)$。</li>
+<li><strong>流量守恒</strong>:对每个 $v\in V\setminus\{s,t\}$,</li>
+$$\sum_{u} f(u,v)=\sum_{w} f(v,w),$$
+<p>即流入等于流出,中间顶点不储存也不产生流量。</p>
+<p>流的<strong>值</strong>定义为从源点净流出的量:</p>
+$$|f|=\sum_{v} f(s,v)-\sum_{v} f(v,s).$$
+<p>最大流问题就是在所有合法流中求使 $|f|$ 最大者。</p>
+<p><strong>示例。</strong> 考虑顶点 $s,a,b,t$,容量为 $c(s,a)=10$,$c(s,b)=5$,$c(a,b)=15$,$c(a,t)=5$,$c(b,t)=10$。</p>
+<pre class="mermaid">graph LR
+    S((源点 s)) -->|10| A((a))
+    S -->|5| B((b))
+    A -->|15| B
+    A -->|5| T((汇点 t))
+    B -->|10| T</pre>
+<p><em>图:示例流网络,边上的数字为容量。</em></p>
+<p>试取流:$f(s,a)=8$,$f(s,b)=2$,$f(a,t)=5$,$f(a,b)=3$,$f(b,t)=5$。检验:</p>
+<li>容量限制:每条边的流量都不超过容量,例如 $f(a,b)=3\le15$。</li>
+<li>守恒:在 $a$ 处流入 $8$,流出 $5+3=8$;在 $b$ 处流入 $2+3=5$,流出 $5$。</li>
+<p>流值 $|f|=8+2=10$。它合法,但不一定最大。</p>
+<p><strong>问题求解应用。</strong> 如何判断 $10$ 是否已是最优?考虑<strong>割</strong> $(S,T)$:把顶点分成 $s\in S$、$t\in T$ 两部分,其容量为 $c(S,T)=\sum_{u\in S,\,v\in T}c(u,v)$。取 $S=\{s,a,b\}$,$T=\{t\}$,则只有进入 $t$ 的边穿过割,容量为 $5+10=15$。取 $S=\{s\}$,割容量为 $10+5=15$。取 $S=\{s,a\}$,$T=\{b,t\}$,穿过的边为 $(s,b),(a,b),(a,t)$,容量 $5+15+5=25$。</p>
+<p>任何流的值都不超过任何割的容量,因为流必须穿过割。因此 $|f|\le 15$。我们能否达到 $15$?令 $f(s,a)=10$,$f(s,b)=5$,$f(a,t)=5$,$f(a,b)=5$,$f(b,t)=10$:在 $a$ 处 $10=5+5$,在 $b$ 处 $5+5=10$,守恒成立,且 $|f|=15$,等于割 $(\{s,a,b\},\{t\})$ 的容量。</p>
+<p>这正是<strong>最大流最小割定理</strong>:最大流的值等于最小割的容量。实际建模时,凡是"在容量约束下从起点向终点输送尽可能多的东西"的问题,如管道输油、网络带宽、二分图匹配、项目选择,都可以先画成流网络,再用 Ford–Fulkerson 或 Edmonds–Karp 等增广路径算法求解,并用最小割证明结果最优。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -66,6 +66,18 @@
         "file": "output/college.en/sonnet/html/book_reduction.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "tower_of_hanoi",
+        "file": "output/college.zh/sonnet/html/book_tower_of_hanoi.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "fast_exponentiation",
+        "file": "output/college.zh/sonnet/html/book_fast_exponentiation.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -103,6 +115,13 @@
         "file": "output/college.en/sonnet/html/concept_fast_exponentiation.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "fast_exponentiation_zh",
+        "label": "Fast Exponentiation Zh",
+        "file": "output/college.zh/sonnet/html/concept_fast_exponentiation_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "induction_proof",
@@ -222,6 +241,13 @@
         "file": "output/college.en/sonnet/html/concept_tower_of_hanoi.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "tower_of_hanoi_zh",
+        "label": "Tower Of Hanoi Zh",
+        "file": "output/college.zh/sonnet/html/concept_tower_of_hanoi_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [
@@ -294,6 +320,18 @@
         "file": "output/college.en/sonnet/html/book_optimal_binary_search_tree.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "n_queens",
+        "file": "output/college.zh/sonnet/html/book_n_queens.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "game_tree_search",
+        "file": "output/college.zh/sonnet/html/book_game_tree_search.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -303,6 +341,13 @@
         "file": "output/college.en/sonnet/html/concept_backtracking.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "backtracking_zh",
+        "label": "Backtracking Zh",
+        "file": "output/college.zh/sonnet/html/concept_backtracking_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "binary_search_tree",
@@ -347,11 +392,32 @@
         "language": "en"
       },
       {
+        "name": "game_tree_search_zh",
+        "label": "Game Tree Search Zh",
+        "file": "output/college.zh/sonnet/html/concept_game_tree_search_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "name": "game_tree_zh",
+        "label": "Game Tree Zh",
+        "file": "output/college.zh/sonnet/html/concept_game_tree_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "good_bad_state",
         "label": "Good Bad State",
         "file": "output/college.en/sonnet/html/concept_good_bad_state.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "good_bad_state_zh",
+        "label": "Good Bad State Zh",
+        "file": "output/college.zh/sonnet/html/concept_good_bad_state_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "include_exclude_recursion",
@@ -382,6 +448,13 @@
         "language": "en"
       },
       {
+        "name": "n_queens_zh",
+        "label": "N Queens Zh",
+        "file": "output/college.zh/sonnet/html/concept_n_queens_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "optimal_binary_search_tree",
         "label": "Optimal Binary Search Tree",
         "file": "output/college.en/sonnet/html/concept_optimal_binary_search_tree.html",
@@ -401,6 +474,20 @@
         "file": "output/college.en/sonnet/html/concept_recursion_tree.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "recursion_tree_zh",
+        "label": "Recursion Tree Zh",
+        "file": "output/college.zh/sonnet/html/concept_recursion_tree_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "name": "recursion_zh",
+        "label": "Recursion Zh",
+        "file": "output/college.zh/sonnet/html/concept_recursion_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "state_summary_minimization",
@@ -498,6 +585,18 @@
         "file": "output/college.en/sonnet/html/book_maximum_independent_set_in_trees.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "fibonacci_numbers",
+        "file": "output/college.zh/sonnet/html/book_fibonacci_numbers.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "text_segmentation",
+        "file": "output/college.zh/sonnet/html/book_text_segmentation.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -509,11 +608,25 @@
         "language": "en"
       },
       {
+        "name": "backtracking_zh",
+        "label": "Backtracking Zh",
+        "file": "output/college.zh/sonnet/html/concept_backtracking_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "dynamic_programming",
         "label": "Dynamic Programming",
         "file": "output/college.en/sonnet/html/concept_dynamic_programming.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "dynamic_programming_zh",
+        "label": "Dynamic Programming Zh",
+        "file": "output/college.zh/sonnet/html/concept_dynamic_programming_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "edit_distance",
@@ -530,6 +643,13 @@
         "language": "en"
       },
       {
+        "name": "fibonacci_numbers_zh",
+        "label": "Fibonacci Numbers Zh",
+        "file": "output/college.zh/sonnet/html/concept_fibonacci_numbers_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "longest_increasing_subsequence",
         "label": "Longest Increasing Subsequence",
         "file": "output/college.en/sonnet/html/concept_longest_increasing_subsequence.html",
@@ -542,6 +662,13 @@
         "file": "output/college.en/sonnet/html/concept_matrix_exponentiation_recurrence.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "matrix_exponentiation_recurrence_zh",
+        "label": "Matrix Exponentiation Recurrence Zh",
+        "file": "output/college.zh/sonnet/html/concept_matrix_exponentiation_recurrence_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "maximum_independent_set_in_trees",
@@ -558,6 +685,13 @@
         "language": "en"
       },
       {
+        "name": "memoization_zh",
+        "label": "Memoization Zh",
+        "file": "output/college.zh/sonnet/html/concept_memoization_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "optimal_binary_search_trees",
         "label": "Optimal Binary Search Trees",
         "file": "output/college.en/sonnet/html/concept_optimal_binary_search_trees.html",
@@ -572,11 +706,25 @@
         "language": "en"
       },
       {
+        "name": "recurrence_relation_zh",
+        "label": "Recurrence Relation Zh",
+        "file": "output/college.zh/sonnet/html/concept_recurrence_relation_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "recursion",
         "label": "Recursion",
         "file": "output/college.en/sonnet/html/concept_recursion.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "recursion_zh",
+        "label": "Recursion Zh",
+        "file": "output/college.zh/sonnet/html/concept_recursion_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "subproblem_evaluation_order",
@@ -598,6 +746,13 @@
         "file": "output/college.en/sonnet/html/concept_text_segmentation.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "text_segmentation_zh",
+        "label": "Text Segmentation Zh",
+        "file": "output/college.zh/sonnet/html/concept_text_segmentation_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "tree_dynamic_programming",
@@ -631,6 +786,12 @@
         "file": "output/college.en/sonnet/html/book_national_resident_matching_program.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "national_resident_matching_program",
+        "file": "output/college.zh/sonnet/html/book_national_resident_matching_program.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -642,11 +803,25 @@
         "language": "en"
       },
       {
+        "name": "gale_shapley_algorithm_zh",
+        "label": "Gale Shapley Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_gale_shapley_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "matching",
         "label": "Matching",
         "file": "output/college.en/sonnet/html/concept_matching.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "matching_zh",
+        "label": "Matching Zh",
+        "file": "output/college.zh/sonnet/html/concept_matching_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "national_resident_matching_program",
@@ -656,6 +831,13 @@
         "language": "en"
       },
       {
+        "name": "national_resident_matching_program_zh",
+        "label": "National Resident Matching Program Zh",
+        "file": "output/college.zh/sonnet/html/concept_national_resident_matching_program_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "preference_list",
         "label": "Preference List",
         "file": "output/college.en/sonnet/html/concept_preference_list.html",
@@ -663,11 +845,25 @@
         "language": "en"
       },
       {
+        "name": "preference_list_zh",
+        "label": "Preference List Zh",
+        "file": "output/college.zh/sonnet/html/concept_preference_list_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "stable_matching_problem",
         "label": "Stable Matching Problem",
         "file": "output/college.en/sonnet/html/concept_stable_matching_problem.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "stable_matching_problem_zh",
+        "label": "Stable Matching Problem Zh",
+        "file": "output/college.zh/sonnet/html/concept_stable_matching_problem_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [
@@ -724,6 +920,18 @@
         "file": "output/college.en/sonnet/html/book_flood_fill.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "intersection_graph",
+        "file": "output/college.zh/sonnet/html/book_intersection_graph.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "configuration_graph",
+        "file": "output/college.zh/sonnet/html/book_configuration_graph.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -733,6 +941,13 @@
         "file": "output/college.en/sonnet/html/concept_configuration_graph.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "configuration_graph_zh",
+        "label": "Configuration Graph Zh",
+        "file": "output/college.zh/sonnet/html/concept_configuration_graph_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "connectivity",
@@ -791,11 +1006,25 @@
         "language": "en"
       },
       {
+        "name": "graph_zh",
+        "label": "Graph Zh",
+        "file": "output/college.zh/sonnet/html/concept_graph_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "intersection_graph",
         "label": "Intersection Graph",
         "file": "output/college.en/sonnet/html/concept_intersection_graph.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "intersection_graph_zh",
+        "label": "Intersection Graph Zh",
+        "file": "output/college.zh/sonnet/html/concept_intersection_graph_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "reachability",
@@ -919,6 +1148,12 @@
         "file": "output/college.zh/sonnet/html/book_kosaraju_sharir_algorithm_zh.html",
         "model": "sonnet",
         "language": "zh"
+      },
+      {
+        "target": "cycle_detection",
+        "file": "output/college.zh/sonnet/html/book_cycle_detection.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -930,11 +1165,25 @@
         "language": "en"
       },
       {
+        "name": "active_interval_zh",
+        "label": "Active Interval Zh",
+        "file": "output/college.zh/sonnet/html/concept_active_interval_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "cycle_detection",
         "label": "Cycle Detection",
         "file": "output/college.en/sonnet/html/concept_cycle_detection.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "cycle_detection_zh",
+        "label": "Cycle Detection Zh",
+        "file": "output/college.zh/sonnet/html/concept_cycle_detection_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "dag",
@@ -944,8 +1193,8 @@
         "language": "en"
       },
       {
-        "name": "dag",
-        "label": "Dag",
+        "name": "dag_zh",
+        "label": "Dag Zh",
         "file": "output/college.zh/sonnet/html/concept_dag_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -965,8 +1214,8 @@
         "language": "en"
       },
       {
-        "name": "depth_first_search",
-        "label": "Depth First Search",
+        "name": "depth_first_search_zh",
+        "label": "Depth First Search Zh",
         "file": "output/college.zh/sonnet/html/concept_depth_first_search_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -979,8 +1228,8 @@
         "language": "en"
       },
       {
-        "name": "dfs_wrapper",
-        "label": "Dfs Wrapper",
+        "name": "dfs_wrapper_zh",
+        "label": "Dfs Wrapper Zh",
         "file": "output/college.zh/sonnet/html/concept_dfs_wrapper_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1000,6 +1249,13 @@
         "language": "en"
       },
       {
+        "name": "edge_classification_zh",
+        "label": "Edge Classification Zh",
+        "file": "output/college.zh/sonnet/html/concept_edge_classification_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "graph_reversal",
         "label": "Graph Reversal",
         "file": "output/college.en/sonnet/html/concept_graph_reversal.html",
@@ -1007,8 +1263,8 @@
         "language": "en"
       },
       {
-        "name": "graph_reversal",
-        "label": "Graph Reversal",
+        "name": "graph_reversal_zh",
+        "label": "Graph Reversal Zh",
         "file": "output/college.zh/sonnet/html/concept_graph_reversal_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1021,8 +1277,8 @@
         "language": "en"
       },
       {
-        "name": "kosaraju_sharir_algorithm",
-        "label": "Kosaraju Sharir Algorithm",
+        "name": "kosaraju_sharir_algorithm_zh",
+        "label": "Kosaraju Sharir Algorithm Zh",
         "file": "output/college.zh/sonnet/html/concept_kosaraju_sharir_algorithm_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1049,8 +1305,8 @@
         "language": "en"
       },
       {
-        "name": "preorder_postorder",
-        "label": "Preorder Postorder",
+        "name": "preorder_postorder_zh",
+        "label": "Preorder Postorder Zh",
         "file": "output/college.zh/sonnet/html/concept_preorder_postorder_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1063,8 +1319,8 @@
         "language": "en"
       },
       {
-        "name": "reachability",
-        "label": "Reachability",
+        "name": "reachability_zh",
+        "label": "Reachability Zh",
         "file": "output/college.zh/sonnet/html/concept_reachability_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1077,8 +1333,8 @@
         "language": "en"
       },
       {
-        "name": "sink_source_component",
-        "label": "Sink Source Component",
+        "name": "sink_source_component_zh",
+        "label": "Sink Source Component Zh",
         "file": "output/college.zh/sonnet/html/concept_sink_source_component_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1091,8 +1347,8 @@
         "language": "en"
       },
       {
-        "name": "strong_component_graph",
-        "label": "Strong Component Graph",
+        "name": "strong_component_graph_zh",
+        "label": "Strong Component Graph Zh",
         "file": "output/college.zh/sonnet/html/concept_strong_component_graph_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1105,8 +1361,8 @@
         "language": "en"
       },
       {
-        "name": "strong_connectivity",
-        "label": "Strong Connectivity",
+        "name": "strong_connectivity_zh",
+        "label": "Strong Connectivity Zh",
         "file": "output/college.zh/sonnet/html/concept_strong_connectivity_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1133,8 +1389,8 @@
         "language": "en"
       },
       {
-        "name": "topological_sort",
-        "label": "Topological Sort",
+        "name": "topological_sort_zh",
+        "label": "Topological Sort Zh",
         "file": "output/college.zh/sonnet/html/concept_topological_sort_zh.html",
         "model": "sonnet",
         "language": "zh"
@@ -1176,6 +1432,18 @@
         "file": "output/college.en/sonnet/html/book_kruskals_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "boruvkas_algorithm",
+        "file": "output/college.zh/sonnet/html/book_boruvkas_algorithm.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "jarniks_algorithm",
+        "file": "output/college.zh/sonnet/html/book_jarniks_algorithm.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -1185,6 +1453,13 @@
         "file": "output/college.en/sonnet/html/concept_boruvkas_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "boruvkas_algorithm_zh",
+        "label": "Boruvkas Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_boruvkas_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "disjoint_set_data_structure",
@@ -1201,11 +1476,25 @@
         "language": "en"
       },
       {
+        "name": "fibonacci_heap_zh",
+        "label": "Fibonacci Heap Zh",
+        "file": "output/college.zh/sonnet/html/concept_fibonacci_heap_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "generic_mst_algorithm",
         "label": "Generic Mst Algorithm",
         "file": "output/college.en/sonnet/html/concept_generic_mst_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "generic_mst_algorithm_zh",
+        "label": "Generic Mst Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_generic_mst_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "intermediate_spanning_forest",
@@ -1215,11 +1504,25 @@
         "language": "en"
       },
       {
+        "name": "intermediate_spanning_forest_zh",
+        "label": "Intermediate Spanning Forest Zh",
+        "file": "output/college.zh/sonnet/html/concept_intermediate_spanning_forest_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "jarniks_algorithm",
         "label": "Jarniks Algorithm",
         "file": "output/college.en/sonnet/html/concept_jarniks_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "jarniks_algorithm_zh",
+        "label": "Jarniks Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_jarniks_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "kruskals_algorithm",
@@ -1236,11 +1539,25 @@
         "language": "en"
       },
       {
+        "name": "minimum_spanning_tree_zh",
+        "label": "Minimum Spanning Tree Zh",
+        "file": "output/college.zh/sonnet/html/concept_minimum_spanning_tree_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "safe_edge",
         "label": "Safe Edge",
         "file": "output/college.en/sonnet/html/concept_safe_edge.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "safe_edge_zh",
+        "label": "Safe Edge Zh",
+        "file": "output/college.zh/sonnet/html/concept_safe_edge_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "spanning_tree",
@@ -1250,6 +1567,13 @@
         "language": "en"
       },
       {
+        "name": "spanning_tree_zh",
+        "label": "Spanning Tree Zh",
+        "file": "output/college.zh/sonnet/html/concept_spanning_tree_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "useless_edge",
         "label": "Useless Edge",
         "file": "output/college.en/sonnet/html/concept_useless_edge.html",
@@ -1257,11 +1581,25 @@
         "language": "en"
       },
       {
+        "name": "useless_edge_zh",
+        "label": "Useless Edge Zh",
+        "file": "output/college.zh/sonnet/html/concept_useless_edge_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "weighted_graph",
         "label": "Weighted Graph",
         "file": "output/college.en/sonnet/html/concept_weighted_graph.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "weighted_graph_zh",
+        "label": "Weighted Graph Zh",
+        "file": "output/college.zh/sonnet/html/concept_weighted_graph_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [
@@ -1288,6 +1626,12 @@
         "file": "output/college.en/sonnet/html/book_moores_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "moores_algorithm",
+        "file": "output/college.zh/sonnet/html/book_moores_algorithm.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -1299,11 +1643,25 @@
         "language": "en"
       },
       {
+        "name": "bellman_ford_zh",
+        "label": "Bellman Ford Zh",
+        "file": "output/college.zh/sonnet/html/concept_bellman_ford_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "dist_pred_labels",
         "label": "Dist Pred Labels",
         "file": "output/college.en/sonnet/html/concept_dist_pred_labels.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "dist_pred_labels_zh",
+        "label": "Dist Pred Labels Zh",
+        "file": "output/college.zh/sonnet/html/concept_dist_pred_labels_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "edge_relaxation",
@@ -1313,11 +1671,25 @@
         "language": "en"
       },
       {
+        "name": "edge_relaxation_zh",
+        "label": "Edge Relaxation Zh",
+        "file": "output/college.zh/sonnet/html/concept_edge_relaxation_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "edge_weight",
         "label": "Edge Weight",
         "file": "output/college.en/sonnet/html/concept_edge_weight.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "edge_weight_zh",
+        "label": "Edge Weight Zh",
+        "file": "output/college.zh/sonnet/html/concept_edge_weight_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "fifo_queue",
@@ -1327,11 +1699,25 @@
         "language": "en"
       },
       {
+        "name": "fifo_queue_zh",
+        "label": "Fifo Queue Zh",
+        "file": "output/college.zh/sonnet/html/concept_fifo_queue_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "fords_generic_algorithm",
         "label": "Fords Generic Algorithm",
         "file": "output/college.en/sonnet/html/concept_fords_generic_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "fords_generic_algorithm_zh",
+        "label": "Fords Generic Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_fords_generic_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "moores_algorithm",
@@ -1341,11 +1727,25 @@
         "language": "en"
       },
       {
+        "name": "moores_algorithm_zh",
+        "label": "Moores Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_moores_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "negative_cycle",
         "label": "Negative Cycle",
         "file": "output/college.en/sonnet/html/concept_negative_cycle.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "negative_cycle_zh",
+        "label": "Negative Cycle Zh",
+        "file": "output/college.zh/sonnet/html/concept_negative_cycle_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "negative_edge_weight",
@@ -1355,11 +1755,25 @@
         "language": "en"
       },
       {
+        "name": "negative_edge_weight_zh",
+        "label": "Negative Edge Weight Zh",
+        "file": "output/college.zh/sonnet/html/concept_negative_edge_weight_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "shortest_path",
         "label": "Shortest Path",
         "file": "output/college.en/sonnet/html/concept_shortest_path.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "shortest_path_zh",
+        "label": "Shortest Path Zh",
+        "file": "output/college.zh/sonnet/html/concept_shortest_path_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "sssp_problem",
@@ -1369,11 +1783,25 @@
         "language": "en"
       },
       {
+        "name": "sssp_problem_zh",
+        "label": "Sssp Problem Zh",
+        "file": "output/college.zh/sonnet/html/concept_sssp_problem_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "tense_edge",
         "label": "Tense Edge",
         "file": "output/college.en/sonnet/html/concept_tense_edge.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "tense_edge_zh",
+        "label": "Tense Edge Zh",
+        "file": "output/college.zh/sonnet/html/concept_tense_edge_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [
@@ -1406,6 +1834,18 @@
         "file": "output/college.en/sonnet/html/book_transitive_closure.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "transitive_closure",
+        "file": "output/college.zh/sonnet/html/book_transitive_closure.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "arbitrage_detection",
+        "file": "output/college.zh/sonnet/html/book_arbitrage_detection.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -1417,11 +1857,25 @@
         "language": "en"
       },
       {
+        "name": "arbitrage_detection_zh",
+        "label": "Arbitrage Detection Zh",
+        "file": "output/college.zh/sonnet/html/concept_arbitrage_detection_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "bellman_ford_algorithm",
         "label": "Bellman Ford Algorithm",
         "file": "output/college.en/sonnet/html/concept_bellman_ford_algorithm.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "bellman_ford_algorithm_zh",
+        "label": "Bellman Ford Algorithm Zh",
+        "file": "output/college.zh/sonnet/html/concept_bellman_ford_algorithm_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "fast_matrix_multiplication",
@@ -1431,11 +1885,25 @@
         "language": "en"
       },
       {
+        "name": "fast_matrix_multiplication_zh",
+        "label": "Fast Matrix Multiplication Zh",
+        "file": "output/college.zh/sonnet/html/concept_fast_matrix_multiplication_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "min_plus_matrix_multiplication",
         "label": "Min Plus Matrix Multiplication",
         "file": "output/college.en/sonnet/html/concept_min_plus_matrix_multiplication.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "min_plus_matrix_multiplication_zh",
+        "label": "Min Plus Matrix Multiplication Zh",
+        "file": "output/college.zh/sonnet/html/concept_min_plus_matrix_multiplication_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "negative_cycle",
@@ -1445,6 +1913,13 @@
         "language": "en"
       },
       {
+        "name": "negative_cycle_zh",
+        "label": "Negative Cycle Zh",
+        "file": "output/college.zh/sonnet/html/concept_negative_cycle_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "shortest_path_distance",
         "label": "Shortest Path Distance",
         "file": "output/college.en/sonnet/html/concept_shortest_path_distance.html",
@@ -1452,11 +1927,25 @@
         "language": "en"
       },
       {
+        "name": "shortest_path_distance_zh",
+        "label": "Shortest Path Distance Zh",
+        "file": "output/college.zh/sonnet/html/concept_shortest_path_distance_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "transitive_closure",
         "label": "Transitive Closure",
         "file": "output/college.en/sonnet/html/concept_transitive_closure.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "transitive_closure_zh",
+        "label": "Transitive Closure Zh",
+        "file": "output/college.zh/sonnet/html/concept_transitive_closure_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [
@@ -1513,6 +2002,18 @@
         "file": "output/college.en/sonnet/html/book_unit_capacity_network_algorithms.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "maximum_flow_problem",
+        "file": "output/college.zh/sonnet/html/book_maximum_flow_problem.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "minimum_cut_problem",
+        "file": "output/college.zh/sonnet/html/book_minimum_cut_problem.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -1545,6 +2046,13 @@
         "language": "en"
       },
       {
+        "name": "capacity_function_zh",
+        "label": "Capacity Function Zh",
+        "file": "output/college.zh/sonnet/html/concept_capacity_function_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "cut",
         "label": "Cut",
         "file": "output/college.en/sonnet/html/concept_cut.html",
@@ -1557,6 +2065,20 @@
         "file": "output/college.en/sonnet/html/concept_cut_capacity.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "cut_capacity_zh",
+        "label": "Cut Capacity Zh",
+        "file": "output/college.zh/sonnet/html/concept_cut_capacity_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "name": "cut_zh",
+        "label": "Cut Zh",
+        "file": "output/college.zh/sonnet/html/concept_cut_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "edmonds_karp_polynomial_bounds",
@@ -1580,6 +2102,13 @@
         "language": "en"
       },
       {
+        "name": "feasible_flow_zh",
+        "label": "Feasible Flow Zh",
+        "file": "output/college.zh/sonnet/html/concept_feasible_flow_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "flow",
         "label": "Flow",
         "file": "output/college.en/sonnet/html/concept_flow.html",
@@ -1594,11 +2123,32 @@
         "language": "en"
       },
       {
+        "name": "flow_network_zh",
+        "label": "Flow Network Zh",
+        "file": "output/college.zh/sonnet/html/concept_flow_network_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "flow_value",
         "label": "Flow Value",
         "file": "output/college.en/sonnet/html/concept_flow_value.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "flow_value_zh",
+        "label": "Flow Value Zh",
+        "file": "output/college.zh/sonnet/html/concept_flow_value_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "name": "flow_zh",
+        "label": "Flow Zh",
+        "file": "output/college.zh/sonnet/html/concept_flow_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "ford_fulkerson_algorithm",
@@ -1622,11 +2172,25 @@
         "language": "en"
       },
       {
+        "name": "maximum_flow_problem_zh",
+        "label": "Maximum Flow Problem Zh",
+        "file": "output/college.zh/sonnet/html/concept_maximum_flow_problem_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "minimum_cut_problem",
         "label": "Minimum Cut Problem",
         "file": "output/college.en/sonnet/html/concept_minimum_cut_problem.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "minimum_cut_problem_zh",
+        "label": "Minimum Cut Problem Zh",
+        "file": "output/college.zh/sonnet/html/concept_minimum_cut_problem_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "residual_capacity",
@@ -1699,6 +2263,18 @@
         "file": "output/college.en/sonnet/html/book_project_selection.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "exam_scheduling",
+        "file": "output/college.zh/sonnet/html/book_exam_scheduling.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "minimal_faculty_hiring",
+        "file": "output/college.zh/sonnet/html/book_minimal_faculty_hiring.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -1717,11 +2293,25 @@
         "language": "en"
       },
       {
+        "name": "bipartite_matching_zh",
+        "label": "Bipartite Matching Zh",
+        "file": "output/college.zh/sonnet/html/concept_bipartite_matching_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "directed_acyclic_graph",
         "label": "Directed Acyclic Graph",
         "file": "output/college.en/sonnet/html/concept_directed_acyclic_graph.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "directed_acyclic_graph_zh",
+        "label": "Directed Acyclic Graph Zh",
+        "file": "output/college.zh/sonnet/html/concept_directed_acyclic_graph_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "disjoint_path_cover",
@@ -1731,6 +2321,13 @@
         "language": "en"
       },
       {
+        "name": "disjoint_path_cover_zh",
+        "label": "Disjoint Path Cover Zh",
+        "file": "output/college.zh/sonnet/html/concept_disjoint_path_cover_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "exam_scheduling",
         "label": "Exam Scheduling",
         "file": "output/college.en/sonnet/html/concept_exam_scheduling.html",
@@ -1738,11 +2335,25 @@
         "language": "en"
       },
       {
+        "name": "exam_scheduling_zh",
+        "label": "Exam Scheduling Zh",
+        "file": "output/college.zh/sonnet/html/concept_exam_scheduling_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "matching",
         "label": "Matching",
         "file": "output/college.en/sonnet/html/concept_matching.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "matching_zh",
+        "label": "Matching Zh",
+        "file": "output/college.zh/sonnet/html/concept_matching_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "maxflow_mincut_theorem",
@@ -1759,11 +2370,25 @@
         "language": "en"
       },
       {
+        "name": "maximum_flow_zh",
+        "label": "Maximum Flow Zh",
+        "file": "output/college.zh/sonnet/html/concept_maximum_flow_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "minimal_faculty_hiring",
         "label": "Minimal Faculty Hiring",
         "file": "output/college.en/sonnet/html/concept_minimal_faculty_hiring.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "minimal_faculty_hiring_zh",
+        "label": "Minimal Faculty Hiring Zh",
+        "file": "output/college.zh/sonnet/html/concept_minimal_faculty_hiring_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "minimum_cut",
@@ -1785,6 +2410,13 @@
         "file": "output/college.en/sonnet/html/concept_tuple_selection.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "tuple_selection_zh",
+        "label": "Tuple Selection Zh",
+        "file": "output/college.zh/sonnet/html/concept_tuple_selection_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "tags": [
@@ -1829,6 +2461,18 @@
         "file": "output/college.en/sonnet/html/book_draughts_move_hardness.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "target": "canonical_np_hard_problems",
+        "file": "output/college.zh/sonnet/html/book_canonical_np_hard_problems.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "target": "np_hard_games_and_puzzles",
+        "file": "output/college.zh/sonnet/html/book_np_hard_games_and_puzzles.html",
+        "model": "sonnet",
+        "language": "zh"
       }
     ],
     "generated_concepts": [
@@ -1854,6 +2498,13 @@
         "language": "en"
       },
       {
+        "name": "canonical_np_hard_problems_zh",
+        "label": "Canonical Np Hard Problems Zh",
+        "file": "output/college.zh/sonnet/html/concept_canonical_np_hard_problems_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "choosing_reduction_source",
         "label": "Choosing Reduction Source",
         "file": "output/college.en/sonnet/html/concept_choosing_reduction_source.html",
@@ -1873,6 +2524,13 @@
         "file": "output/college.en/sonnet/html/concept_decision_problem.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "decision_problem_zh",
+        "label": "Decision Problem Zh",
+        "file": "output/college.zh/sonnet/html/concept_decision_problem_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "draughts_move_hardness",
@@ -1896,6 +2554,13 @@
         "language": "en"
       },
       {
+        "name": "karp_reduction_zh",
+        "label": "Karp Reduction Zh",
+        "file": "output/college.zh/sonnet/html/concept_karp_reduction_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "min_vertex_cover",
         "label": "Min Vertex Cover",
         "file": "output/college.en/sonnet/html/concept_min_vertex_cover.html",
@@ -1908,6 +2573,13 @@
         "file": "output/college.en/sonnet/html/concept_np_class.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "np_class_zh",
+        "label": "Np Class Zh",
+        "file": "output/college.zh/sonnet/html/concept_np_class_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "np_hard",
@@ -1924,11 +2596,32 @@
         "language": "en"
       },
       {
+        "name": "np_hard_games_and_puzzles_zh",
+        "label": "Np Hard Games And Puzzles Zh",
+        "file": "output/college.zh/sonnet/html/concept_np_hard_games_and_puzzles_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
+        "name": "np_hard_zh",
+        "label": "Np Hard Zh",
+        "file": "output/college.zh/sonnet/html/concept_np_hard_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "polynomial_time",
         "label": "Polynomial Time",
         "file": "output/college.en/sonnet/html/concept_polynomial_time.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "polynomial_time_zh",
+        "label": "Polynomial Time Zh",
+        "file": "output/college.zh/sonnet/html/concept_polynomial_time_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "reduction_general_pattern",
@@ -1938,11 +2631,25 @@
         "language": "en"
       },
       {
+        "name": "reduction_general_pattern_zh",
+        "label": "Reduction General Pattern Zh",
+        "file": "output/college.zh/sonnet/html/concept_reduction_general_pattern_zh.html",
+        "model": "sonnet",
+        "language": "zh"
+      },
+      {
         "name": "reduction_proof_technique",
         "label": "Reduction Proof Technique",
         "file": "output/college.en/sonnet/html/concept_reduction_proof_technique.html",
         "model": "sonnet",
         "language": "en"
+      },
+      {
+        "name": "reduction_proof_technique_zh",
+        "label": "Reduction Proof Technique Zh",
+        "file": "output/college.zh/sonnet/html/concept_reduction_proof_technique_zh.html",
+        "model": "sonnet",
+        "language": "zh"
       },
       {
         "name": "sat",

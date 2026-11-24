@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boruvkas Algorithm | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="boruvka-算法">Boruvka 算法</h2>
+<h3 id="定义">定义</h3>
+<p><strong>Boruvka 算法</strong>是一种求最小生成树(MST)的算法。设连通加权无向图 $G=(V,E)$,边权互不相同。算法维护一个森林 $F$,初始时每个顶点各自成为一个连通分量。每一轮执行两步:</p>
+<li>对 $F$ 的每个连通分量 $C$,找出恰好一条端点在 $C$ 内、另一端点在 $C$ 外的<strong>最小权边</strong>(即该分量的<strong>安全边</strong>)。</li>
+<li>将所有这些安全边<strong>同时</strong>加入 $F$,合并相应的分量。</li>
+<p>重复上述过程,直到只剩一个分量。</p>
+<p><strong>正确性</strong>依据割性质:对任意分量 $C$,割 $(C, V\setminus C)$ 上的最小权边必属于 MST。边权互不相同时,MST 唯一,所有同时加入的安全边都属于它,且不会成环。(若有相同权值,需用固定的编号规则打破平局,否则可能成环。)</p>
+<h3 id="例题">例题</h3>
+<p>设图有 6 个顶点 $A,\dots,F$,边权如下: $AB=4,\ AC=1,\ BC=3,\ BD=2,\ CE=7,\ DE=5,\ DF=6,\ EF=8$。</p>
+<p><strong>第 1 轮</strong>(每个顶点为一个分量):</p>
+<li>$A$:$AC=1$;$B$:$BD=2$;$C$:$AC=1$;$D$:$BD=2$;$E$:$DE=5$;$F$:$DF=6$。</li>
+<li>去重后加入 $\{AC, BD, DE, DF\}$,得到两个分量 $\{A,C\}$ 和 $\{B,D,E,F\}$。</li>
+<p><strong>第 2 轮</strong>:</p>
+<li>分量 $\{A,C\}$ 的出边有 $AB=4,\ BC=3,\ CE=7$,最小为 $BC=3$。</li>
+<li>分量 $\{B,D,E,F\}$ 的最小出边同样是 $BC=3$。</li>
+<li>加入 $BC$,只剩一个分量。</li>
+<p>MST 的总权重为 $1+2+5+6+3=17$。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>复杂度分析。</strong> 每轮扫描所有边一次,为每个分量记录最小出边,用时 $O(E)$(借助并查集判断端点所属分量)。关键在于轮数:每个分量至少与另一个分量合并,所以分量数每轮至少减半。设第 $k$ 轮后的分量数为 $n_k$,则</p>
+$$n_k \le \frac{n_0}{2^k} = \frac{V}{2^k}.$$
+<p>当 $n_k<2$ 时算法结束,故轮数为 $O(\log V)$,总时间为</p>
+$$T(V,E)=O(E\log V).$$
+<p><strong>何时选用它?</strong></p>
+<li><strong>并行/分布式计算</strong>:各分量选择最小边的过程相互独立,可以同时进行。这是 Boruvka 算法相对 Kruskal 和 Prim 的主要优势。</li>
+<li>它常作为更快的随机线性时间 MST 算法中的子步骤。</li>
+<p><strong>练习。</strong> 若将上例中的 $BC$ 权值改为 $4$(与 $AB$ 相同),第 2 轮会发生什么?请说明为什么需要平局规则,并给出一种方案(例如按边的编号排序)。</p>
+<p><strong>要点。</strong> 每轮并行加入所有安全边,分量数至少减半,所以只需 $O(\log V)$ 轮,总时间为 $O(E\log V)$。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimum Cut Problem | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最小割问题">最小割问题</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$,每条边 $e$ 有容量 $c(e)\ge 0$,并指定源点 $s$ 与汇点 $t$。一个 $(s,t)$-割是把顶点集划分为 $(S,\bar S)$,其中 $s\in S$,$t\in \bar S=V\setminus S$。割的容量定义为所有从 $S$ 指向 $\bar S$ 的边的容量之和:</p>
+$$
+\operatorname{cap}(S,\bar S)=\sum_{(u,v)\in E,\ u\in S,\ v\in \bar S} c(u,v).
+$$
+<p><strong>最小割问题</strong>:在所有 $(s,t)$-割中,求容量最小的那一个。注意,只有"从 $S$ 到 $\bar S$"方向的边才计入容量,反向边不计。</p>
+<p><strong>为什么重要。</strong> 每个 $(s,t)$-流都必须穿过任意一个割,所以任何可行流的值都不超过任何割的容量。由此得到最大流最小割定理:</p>
+$$
+\max_{f}\ |f| \;=\; \min_{(S,\bar S)} \operatorname{cap}(S,\bar S).
+$$
+<p>因此,求出最大流,就同时得到了最小割的容量。</p>
+<p><strong>例题。</strong> 考虑下面的网络:$s\to a$(容量 3),$s\to b$(容量 2),$a\to b$(容量 1),$a\to t$(容量 2),$b\to t$(容量 3)。求最小割。</p>
+<li><strong>求最大流。</strong> 沿 $s\to a\to t$ 送 2 单位,沿 $s\to b\to t$ 送 2 单位,再沿 $s\to a\to b\to t$ 送 1 单位。此时 $s\to a$ 用了 3,$s\to b$ 用了 2,$a\to t$ 用了 2,$b\to t$ 用了 3。总流量为 5,且找不到增广路。</li>
+<li><strong>从残量图找割。</strong> 在残量图中,从 $s$ 出发已无法到达任何顶点,所以 $S=\{s\}$,$\bar S=\{a,b,t\}$。</li>
+<li><strong>计算容量。</strong> $\operatorname{cap}=c(s,a)+c(s,b)=3+2=5$,与最大流相等,所以这就是最小割。</li>
+<p>作为对照,取 $S=\{s,a\}$,则容量为 $c(s,b)+c(a,b)+c(a,t)=2+1+2=5$,也是最小割。可见最小割不一定唯一。</p>
+<p><strong>问题求解应用。</strong> 求最小割的标准流程如下:</p>
+<li>建立网络,并指定 $s,t$。无向边要拆成两条方向相反、容量相同的有向边。</li>
+<li>用 Edmonds–Karp 算法(时间 $O(VE^2)$)或 Dinic 算法求最大流。</li>
+<li>在最终残量图中,从 $s$ 做一次 BFS,可达顶点集合记为 $S$。</li>
+<li>输出所有从 $S$ 指向 $\bar S$ 的原图边,这些边就是最小割边。它们的容量之和等于最大流值。</li>
+<p>这一方法有很多应用。例如在图像分割中,可把像素视为顶点,把"前景/背景"的代价作为容量,最小割就给出代价最小的分割。在网络可靠性问题中,最小割给出"最少需要切断多少链路才能使 $s$ 与 $t$ 失去连通"。</p>
+<pre class="mermaid">graph LR
+    s((源点 s)) -->|3| a((a))
+    s -->|2| b((b))
+    a -->|1| b
+    a -->|2| t((汇点 t))
+    b -->|3| t</pre>
+<p><em>例题中的网络。割 $S=\{s\}$ 切断 $s\to a$ 与 $s\to b$,容量为 $3+2=5$,等于最大流值。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

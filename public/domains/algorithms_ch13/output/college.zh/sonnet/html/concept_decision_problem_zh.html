@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Problem | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="判定问题">判定问题</h2>
+<p><strong>定义。</strong> 判定问题(decision problem)是输出只有一个布尔值("是"或"否")的计算问题。形式上,设 $\Sigma$ 为有限字母表,判定问题等价于一个<strong>语言</strong> $L \subseteq \Sigma^*$,其任务是:给定输入串 $x$,判断是否有 $x \in L$。算法 $A$ <strong>判定</strong> $L$,当且仅当对每个输入 $x$,$A$ 都会停机,并且</p>
+$$A(x)=\begin{cases}\text{是}, & x\in L\\ \text{否}, & x\notin L\end{cases}$$
+<p>判定问题之所以重要,是因为许多优化或搜索问题都可以改写成它的形式,复杂性理论(P、NP 等类)也正是以它为基础建立的。</p>
+<p><strong>例题。</strong> 考虑问题 PRIME:输入正整数 $n\ge 2$,问 $n$ 是否为素数?</p>
+<li>输入 $n=91$。试除 $d=2,3,5$ 均不能整除;$d=7$ 时 $91=7\times 13$,故输出"否"。</li>
+<li>输入 $n=97$。只需试除 $d\le\lfloor\sqrt{97}\rfloor=9$,即 $2,3,5,7$,均不整除,故输出"是"。</li>
+<p>试除法只需检查到 $\sqrt n$,所以它做了 $O(\sqrt n)$ 次除法。注意,输入长度是 $\log_2 n$ 位,因此以输入长度衡量,这是<strong>指数</strong>时间。2002 年的 AKS 算法才证明了 PRIME $\in \mathrm{P}$。</p>
+<p><strong>问题求解应用:把优化问题化为判定问题。</strong> 最短路问题是"求 $s$ 到 $t$ 的最短路径长度",这是一个函数问题。把它改写为判定形式:</p>
+<p>> 给定图 $G$、顶点 $s,t$ 和整数 $k$,是否存在长度 $\le k$ 的 $s$–$t$ 路径?</p>
+<p>假设有一个判定该问题的算法。由于最短路长度是介于 $0$ 与 $W$(各边权之和)之间的整数,我们可以对 $k$ 做二分查找,仅调用该算法 $O(\log W)$ 次,就能求出最短路长度。因此,优化版本的难度至多比判定版本多一个多项式因子。这正是复杂性理论只研究判定问题却不损失一般性的原因。</p>
+<p><strong>判定的三种结果。</strong> </p>
+<li><strong>可判定且高效</strong>:如 PRIME、图的连通性,属于 P。</li>
+<li><strong>可验证但未知是否高效</strong>:如子集和问题,给定"证书"(一个子集)可在多项式时间内验证,属于 NP。</li>
+<li><strong>不可判定</strong>:如停机问题,不存在对所有输入都能停机并给出正确答案的算法。</li>
+<pre class="mermaid">flowchart LR
+    A["优化问题: 求最短路长度"] --> B["转化为判定问题: 是否存在长度≤k的路径?"]
+    B --> C["对k二分查找"]
+    C --> D["O(log W)次调用"]
+    D --> E["得到最优值"]</pre>
+<p><em>图:利用判定问题的二分查找求解优化问题。</em></p>
+<p><strong>小结。</strong> 判定问题把计算抽象为"是/否"的语言成员判断。它既是复杂性分类的基本单位,也是通过二分等手段求解更一般问题的构件。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

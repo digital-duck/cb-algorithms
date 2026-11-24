@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intersection Graph | Algorithms Ch06</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="交集图-intersection-graph">交集图(Intersection Graph)</h2>
+<p><strong>定义。</strong> 设 $\mathcal{F}=\{S_1,S_2,\dots,S_n\}$ 是一族对象(通常是某个集合的子集,如区间、圆盘、线段)。$\mathcal{F}$ 的<strong>交集图</strong> $G=(V,E)$ 定义为:</p>
+<li>顶点集 $V=\{v_1,\dots,v_n\}$,每个对象 $S_i$ 对应一个顶点 $v_i$;</li>
+<li>边集 $E=\{\,v_iv_j \mid i\ne j,\ S_i\cap S_j\neq\varnothing\,\}$。</li>
+<p>也就是说,两个顶点相邻,当且仅当对应的对象有公共部分。几乎每个图都可以表示为某族集合的交集图,因此有意义的问题是:当对象被限制为某一类几何形状时,得到的图有什么特殊性质。最经典的一类是<strong>区间图</strong>:每个 $S_i$ 都是实数轴上的闭区间。</p>
+<p><strong>例题。</strong> 有五场活动,各自占用的时间段为: $A=[1,4]$,$B=[3,6]$,$C=[5,8]$,$D=[7,10]$,$E=[2,3]$。</p>
+<p>逐对检查是否有重叠:</p>
+<li>$A\cap B=[3,4]\neq\varnothing$,所以 $AB$ 是边;</li>
+<li>$A\cap E=\{3\}\neq\varnothing$(闭区间,端点相接也算相交),所以 $AE$ 是边;</li>
+<li>$B\cap E=\{3\}$,所以 $BE$ 是边;</li>
+<li>$B\cap C=[5,6]$,所以 $BC$ 是边;</li>
+<li>$C\cap D=[7,8]$,所以 $CD$ 是边;</li>
+<li>其余各对不相交。</li>
+<p>于是 $E(G)=\{AB,AE,BE,BC,CD\}$。</p>
+<pre class="mermaid">graph LR
+    A((活动A)) --- B((活动B))
+    A --- E((活动E))
+    B --- E
+    B --- C((活动C))
+    C --- D((活动D))</pre>
+<p><em>五个时间区间的交集图:三角形 $ABE$ 说明这三场活动在 $t=3$ 时刻同时进行。</em></p>
+<p><strong>问题求解应用。</strong> 交集图把"冲突"问题转化为图论问题。</p>
+<p><em>问题:至少需要几个会议室,才能让上述活动互不冲突地安排?</em></p>
+<p>给每场活动分配一个会议室,相当于对 $G$ 做<strong>顶点着色</strong>,相邻顶点(时间冲突)必须使用不同的颜色(房间)。</p>
+<li>下界:三角形 $ABE$ 是一个团,其中三个顶点两两相邻,故至少需要 $\omega(G)=3$ 个房间。</li>
+<li>上界:取 $A\to 1$,$B\to 2$,$E\to 3$,$C\to 1$(与 $B$ 冲突,与 $A$ 不冲突),$D\to 2$(与 $C$ 冲突,与 $B$ 不冲突)。这是合法着色,用了 3 个房间。</li>
+<p>因此最少需要 3 个会议室,即 $\chi(G)=3=\omega(G)$。</p>
+<p>这不是巧合。区间图是<strong>完美图</strong>,总有 $\chi(G)=\omega(G)$。团的大小恰好等于某个时刻同时进行的活动数,所以最少房间数就是"最大同时进行的活动数",只需扫描一遍时间轴就能算出,不必真的去求解一般图着色这个 NP 难问题。同样的思路也适用于:</p>
+<li>圆盘交集图,可用来分析无线信号干扰与频道分配;</li>
+<li>线段交集图,可用来分析布线冲突;</li>
+<li>基因组中的重叠片段,可用来做序列拼接。</li>
+<p><strong>要点:</strong> 先判断对象属于哪一类几何形状,再利用该类交集图的结构性质(如完美性),把一般情形下很难的问题变成易解的问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch6: Basic Graph Algorithms (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

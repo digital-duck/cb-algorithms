@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shortest Path | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最短路径">最短路径</h2>
+<p><strong>定义。</strong> 设带权图 $G=(V,E,w)$,其中 $w:E\to\mathbb{R}$ 为边权。从顶点 $s$ 到顶点 $t$ 的一条路径 $P=(s=v_0,v_1,\dots,v_k=t)$ 的<strong>长度</strong>(权重)为</p>
+$$w(P)=\sum_{i=1}^{k} w(v_{i-1},v_i).$$
+<p><strong>最短路径</strong>是所有 $s\to t$ 路径中 $w(P)$ 最小的那条,其权重记为最短距离 $\delta(s,t)=\min_P w(P)$。若 $t$ 不可达,则 $\delta(s,t)=\infty$。注意:"最短"指总权重最小,而不是经过的边数最少(后者是无权图的特例)。</p>
+<p><strong>关键性质(最优子结构)。</strong> 若 $s\to\dots\to u\to\dots\to t$ 是最短路径,则其中任一子路径也是相应两端点间的最短路径。由此得到<strong>三角不等式</strong>:对任意边 $(u,v)$,</p>
+$$\delta(s,v)\le \delta(s,u)+w(u,v).$$
+<p>这正是"松弛"操作的依据:若发现 $d[u]+w(u,v)<d[v]$,就更新 $d[v]\leftarrow d[u]+w(u,v)$。</p>
+<pre class="mermaid">graph LR
+    A((A)) -->|2| B((B))
+    A -->|7| C((C))
+    B -->|3| C
+    B -->|8| D((D))
+    C -->|1| D</pre>
+<p><em>示例图:从 A 到 D 有多条路径,边上数字为权重。</em></p>
+<p><strong>例题。</strong> 求上图中从 $A$ 到 $D$ 的最短路径。</p>
+<p>枚举所有路径:</p>
+<li>$A\to B\to D$:$2+8=10$</li>
+<li>$A\to C\to D$:$7+1=8$</li>
+<li>$A\to B\to C\to D$:$2+3+1=6$</li>
+<p>故最短路径为 $A\to B\to C\to D$,$\delta(A,D)=6$。注意:直接边数最少的路径并非最优。</p>
+<p>用 Dijkstra 算法(要求 $w\ge0$)验证:初始 $d[A]=0$,其余为 $\infty$。</p>
+<li>取出 $A$:$d[B]=2,\ d[C]=7$。</li>
+<li>取出 $B$($d=2$):$d[C]=\min(7,2+3)=5$,$d[D]=10$。</li>
+<li>取出 $C$($d=5$):$d[D]=\min(10,5+1)=6$。</li>
+<li>取出 $D$:结束,$d[D]=6$。</li>
+<p><strong>问题求解应用。</strong> 选择算法时先看图的性质:</p>
+<p>| 情形 | 算法 | 时间复杂度 | |---|---|---| | 无权图 | BFS | $O(V+E)$ | | 非负权重 | Dijkstra(二叉堆) | $O((V+E)\log V)$ | | 含负权边 | Bellman–Ford | $O(VE)$ | | 所有点对 | Floyd–Warshall | $O(V^3)$ |</p>
+<pre><code>import heapq
+def dijkstra(G, s):
+    d = {v: float("inf") for v in G}; d[s] = 0
+    pq = [(0, s)]
+    while pq:
+        du, u = heapq.heappop(pq)
+        if du &gt; d[u]: continue
+        for v, w in G[u]:
+            if du + w &lt; d[v]:
+                d[v] = du + w
+                heapq.heappush(pq, (d[v], v))
+    return d</code></pre>
+<p><strong>为何 Dijkstra 要求非负权重?</strong> 当 $w\ge0$ 时,一个顶点一旦以最小的 $d$ 被取出,后续路径只会增加长度,不可能再改进它,因此其距离已最终确定。若存在负边,这一论证失效。若图中存在总权重为负的环,则 $\delta$ 无下界,最短路径无定义,Bellman–Ford 可检测这种情形。</p>
+<p>典型应用包括地图导航(边权为时间或距离)、网络路由(边权为延迟)以及状态空间搜索。将实际问题建模为带权图,是应用该概念的第一步。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

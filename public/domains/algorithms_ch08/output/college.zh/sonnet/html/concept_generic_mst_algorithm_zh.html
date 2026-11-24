@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generic Mst Algorithm | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="通用最小生成树算法">通用最小生成树算法</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 是连通的无向带权图，权函数为 $w:E\to\mathbb{R}$。<strong>最小生成树</strong>（MST）是连接所有顶点、总权重 $w(T)=\sum_{e\in T}w(e)$ 最小的无环边集 $T$。所有经典 MST 算法共享同一种策略：维护一个边集 $A$，使其始终是某棵 MST 的子集（称为<strong>循环不变式</strong>），每一步添加一条<strong>安全边</strong>。</p>
+<p>> 若 $A\cup\{(u,v)\}$ 仍然是某棵最小生成树的子集，则称 $(u,v)$ 是 $A$ 的<strong>安全边</strong>。</p>
+<p>通用算法如下：</p>
+<pre><code>GENERIC-MST(G, w):
+    A = ∅
+    while A 尚未构成生成树:
+        找出 A 的一条安全边 (u, v)
+        A = A ∪ {(u, v)}
+    return A</code></pre>
+<li><strong>初始化</strong>：$A=\varnothing$，它是任意 MST 的子集。</li>
+<li><strong>保持</strong>：每次只加入安全边，因此不变式成立。</li>
+<li><strong>终止</strong>：当 $|A|=|V|-1$ 时，$A$ 是一棵生成树，且包含于某棵 MST，因此它自身就是 MST。循环恰好执行 $|V|-1$ 次。</li>
+<p><strong>如何识别安全边？</strong> 核心是<strong>割性质</strong>：设 $A\subseteq E$ 包含于某棵 MST，$(S,V\setminus S)$ 是<strong>不切断 $A$ 的任何边</strong>的割。若 $(u,v)$ 是横跨该割的<strong>最小权边</strong>，则 $(u,v)$ 对 $A$ 是安全的。</p>
+<p><em>证明思路</em>：设 $T$ 是包含 $A$ 的 MST。若 $(u,v)\notin T$，把它加入 $T$ 会形成一个环，该环必有另一条横跨割的边 $(x,y)\in T$。令 $T'=T-\{(x,y)\}+\{(u,v)\}$，它仍是生成树。因为 $w(u,v)\le w(x,y)$，所以 $w(T')\le w(T)$。因此 $T'$ 也是 MST，且包含 $A\cup\{(u,v)\}$。$\blacksquare$</p>
+<p><strong>例题。</strong> 四个顶点 $a,b,c,d$，边权为：$w(a,b)=1$，$w(b,c)=4$，$w(a,c)=3$，$w(c,d)=2$，$w(b,d)=5$。</p>
+<li>$A=\varnothing$。取割 $\{a\}\mid\{b,c,d\}$，横跨的边有 $(a,b)=1$ 和 $(a,c)=3$，最小者为 $(a,b)$。加入后 $A=\{(a,b)\}$。</li>
+<li>取割 $\{a,b\}\mid\{c,d\}$（不切断 $(a,b)$），横跨边有 $(a,c)=3$、$(b,c)=4$、$(b,d)=5$，最小者为 $(a,c)$。加入后 $A=\{(a,b),(a,c)\}$。</li>
+<li>取割 $\{a,b,c\}\mid\{d\}$，横跨边为 $(c,d)=2$ 和 $(b,d)=5$，选 $(c,d)$。</li>
+<p>此时 $|A|=3=|V|-1$，$w(A)=1+3+2=6$，这就是 MST。</p>
+<p><strong>问题求解应用。</strong> 通用算法是一个“模板”，不同算法只是选择割的方式不同：</p>
+<li><strong>Kruskal 算法</strong>：$A$ 是一片森林。每次选全局最小、且连接两个不同连通分量的边。割取为“其中一个分量 $\mid$ 其余顶点”。</li>
+<li><strong>Prim 算法</strong>：$A$ 始终是一棵树。取割为“树内顶点 $\mid$ 树外顶点”，每次选横跨该割的最小边。</li>
+<p><strong>练习</strong>：在上例中，用 Prim 算法从 $d$ 出发，写出每一步所用的割和选中的边。（答案：$(c,d)$，然后 $(a,c)$，最后 $(a,b)$。）</p>
+<p>要证明某个新算法正确，只需验证它每一步所选的边都是某个“不切断 $A$”的割上的最小权边。</p>
+<pre class="mermaid">flowchart TD
+    A["开始：A 为空集"] --> B{"A 是生成树吗？"}
+    B -- "否" --> C["选一个不切断 A 的割"]
+    C --> D["取横跨该割的最小权边"]
+    D --> E["把该边加入 A"]
+    E --> B
+    B -- "是" --> F["输出最小生成树"]</pre>
+<p><em>图：通用 MST 算法的流程。每次循环通过割性质找到一条安全边并加入 A，直到 A 成为生成树。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

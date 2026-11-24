@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cut Capacity | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="割容量-cut-capacity">割容量(Cut Capacity)</h2>
+<p><strong>定义。</strong> 设有向网络 $G=(V,E)$,每条边 $e$ 有非负容量 $c(e)$。一个 $(s,t)$-割是把顶点集划分为 $(S,T)$,其中 $s\in S$,$t\in T$,$T=V\setminus S$。该割的<strong>容量</strong>是所有"起点在 $S$、终点在 $T$"的边的容量之和:</p>
+$$
+\operatorname{cap}(S,T)=\sum_{\substack{(u,v)\in E\\ u\in S,\ v\in T}} c(u,v).
+$$
+<p>注意两点。第一,只计算从 $S$ 指向 $T$ 的边,从 $T$ 指向 $S$ 的反向边不计入。第二,割容量取决于划分 $(S,T)$,不同的划分有不同的容量。</p>
+<p><strong>例题。</strong> 考虑网络:$s\to a$(容量 3),$s\to b$(容量 2),$a\to b$(容量 1),$a\to t$(容量 2),$b\to t$(容量 3),另有一条回边 $b\to a$(容量 4)。</p>
+<p>取 $S=\{s,a\}$,$T=\{b,t\}$。穿过割、方向由 $S$ 到 $T$ 的边有:</p>
+<li>$s\to b$:2</li>
+<li>$a\to b$:1</li>
+<li>$a\to t$:2</li>
+<p>边 $b\to a$ 方向由 $T$ 到 $S$,不计入。因此</p>
+$$\operatorname{cap}(S,T)=2+1+2=5.$$
+<p>再取 $S'=\{s\}$,则穿过的边为 $s\to a$ 和 $s\to b$,容量为 $3+2=5$。取 $S''=\{s,a,b\}$,则穿过的边为 $a\to t$ 和 $b\to t$,容量为 $2+3=5$。</p>
+<pre class="mermaid">graph LR
+    s((源点 s)) -->|3| a((a))
+    s -->|2| b((b))
+    a -->|1| b
+    b -->|4| a
+    a -->|2| t((汇点 t))
+    b -->|3| t</pre>
+<p><em>示例网络。割 $S=\{s,a\}$ 只统计由 $S$ 指向 $T=\{b,t\}$ 的三条边,回边 $b\to a$ 不计入。</em></p>
+<p><strong>问题求解应用。</strong> 割容量给出最大流的上界。对任意流 $f$ 和任意 $(s,t)$-割 $(S,T)$,从 $s$ 送到 $t$ 的流量都必须穿过该割,因此</p>
+$$|f|\le \operatorname{cap}(S,T).$$
+<p>这是弱对偶性:任何一个割的容量都是最大流值的上界。</p>
+<p><strong>最大流最小割定理</strong>更进一步:最大流的值等于所有 $(s,t)$-割中容量的最小值,</p>
+$$\max_f |f|=\min_{(S,T)}\operatorname{cap}(S,T).$$
+<p>在上例中,三个割的容量都是 5。构造流 $s\to a$:3,$s\to b$:2,$a\to t$:2,$a\to b$:1,$b\to t$:3,它满足流量守恒,总流量为 5。流值 5 达到了割容量的上界,所以这个流是最大流,而 $S=\{s,a\}$ 是一个最小割。</p>
+<p><strong>解题步骤。</strong> 要证明某个流是最优的,不必枚举所有割。只需找到一个容量等于该流值的割即可。具体做法是:先求出流,再在残量网络中从 $s$ 出发搜索,把能到达的顶点记为 $S$,其余记为 $T$,这个 $(S,T)$ 就是最小割。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

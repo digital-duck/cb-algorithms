@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Useless Edge | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="无用边-useless-edge">无用边(Useless Edge)</h2>
+<p><strong>定义。</strong> 在 Kruskal 算法中,设已选边集合 $F$ 构成一个森林。若边 $e=(u,v)\notin F$ 的两个端点 $u,v$ 已经位于 $F$ 的同一个连通分量中,则称 $e$ 为<strong>无用边</strong>。原因是 $F$ 中已有一条从 $u$ 到 $v$ 的路径,再加入 $e$ 就会形成圈,而树不能含圈,所以 $e$ 不可能属于最小生成树(MST)。</p>
+<p>判定条件可写成</p>
+$$
+\operatorname{find}(u)=\operatorname{find}(v)\ \Longrightarrow\ e\ \text{为无用边},
+$$
+<p>其中 $\operatorname{find}$ 返回顶点所在分量的代表元(并查集操作)。</p>
+<p><strong>为什么可以安全丢弃?</strong> 按权值从小到大处理边时,连接 $u$ 与 $v$ 的那条路径上的每条边,权值都不超过 $w(e)$。由圈性质(cycle property):圈中权值最大的边可以从某棵 MST 中去掉。因此丢掉 $e$ 不会增加总权重。</p>
+<p><strong>例题。</strong> 图有顶点 $A,B,C,D$,边权为 $w(AB)=1,\ w(BC)=2,\ w(AC)=3,\ w(CD)=4$。按权值升序处理:</p>
+<li>$AB$:$A,B$ 在不同分量,加入 $F$。</li>
+<li>$BC$:$B$ 在 $\{A,B\}$,$C$ 单独成一类,加入 $F$,得到 $\{A,B,C\}$。</li>
+<li>$AC$:此时 $\operatorname{find}(A)=\operatorname{find}(C)$,两端点已连通(经由 $A\!-\!B\!-\!C$),所以 $AC$ 是<strong>无用边</strong>,丢弃。</li>
+<li>$CD$:$D$ 在另一分量,加入 $F$。</li>
+<p>最终 MST 为 $\{AB,BC,CD\}$,总权重 $1+2+4=7$。若错误地加入 $AC$,就会形成圈 $A\!-\!B\!-\!C\!-\!A$,并多付出权重 3。</p>
+<p><strong>问题求解应用。</strong> 无用边的判定带来两个实用结论:</p>
+<li><strong>提前终止。</strong> MST 恰有 $n-1$ 条边。每接受一条有用边,分量数减 1;当分量数降到 1 时,剩下的边都必然是无用边,可直接停止扫描。</li>
+<li><strong>复杂度。</strong> 每条边只需做两次 $\operatorname{find}$。借助路径压缩与按秩合并,判定均摊代价为 $O(\alpha(n))$($\alpha$ 为反阿克曼函数,实际中不超过 5)。总时间由排序主导,为 $O(m\log m)$。</li>
+<p><strong>练习。</strong> 若所有边权互不相同,MST 唯一。请思考:此时某条边是否为无用边,会不会依赖处理顺序?(提示:权值相同的边可任意排序,但无用与否取决于它之前已接受了哪些边;权值互异时顺序固定,判定结果唯一。)</p>
+<pre class="mermaid">graph TD
+    E["取出下一条最小边 e=(u,v)"] --> Q{"find(u) 是否等于 find(v)?"}
+    Q -->|"是"| U["无用边:丢弃,避免成圈"]
+    Q -->|"否"| K["有用边:加入 F 并合并分量"]
+    U --> N["处理下一条边"]
+    K --> N</pre>
+<p><em>图:Kruskal 算法对每条边的判定流程。端点已在同一分量时为无用边,否则加入森林 F。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

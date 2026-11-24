@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Capacity Function | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="容量函数">容量函数</h2>
+<p><strong>定义。</strong> 在流网络 $G=(V,E)$ 中，<strong>容量函数</strong>是一个映射</p>
+$$c: E \to \mathbb{R}_{\ge 0},$$
+<p>它给每条有向边 $(u,v)\in E$ 指定一个非负数 $c(u,v)$，表示这条边最多能承载多少流量。对于不存在的边，约定 $c(u,v)=0$。容量函数是网络的"硬件规格"。它由问题给定，在求解过程中不会改变。要优化的对象是<strong>流</strong> $f$，它必须服从容量函数的约束：</p>
+$$0 \le f(u,v) \le c(u,v)\quad \text{对所有 }(u,v)\in E.$$
+<p>这条不等式称为<strong>容量约束</strong>。再加上除源点 $s$ 和汇点 $t$ 以外各顶点的<strong>流量守恒</strong>，即 $\sum_{u} f(u,v)=\sum_{w} f(v,w)$，就构成了合法流的完整定义。</p>
+<p><strong>例题。</strong> 考虑网络：$c(s,a)=10$，$c(s,b)=5$，$c(a,b)=4$，$c(a,t)=6$，$c(b,t)=8$。</p>
+<p>下面这个流是否合法？$f(s,a)=9$，$f(s,b)=3$，$f(a,b)=4$，$f(a,t)=5$，$f(b,t)=7$。</p>
+<li>容量约束：逐条检查，$9\le10$，$3\le5$，$4\le4$，$5\le6$，$7\le8$，全部成立。</li>
+<li>在 $a$ 处守恒：流入 $9$，流出 $4+5=9$，成立。</li>
+<li>在 $b$ 处守恒：流入 $3+4=7$，流出 $7$，成立。</li>
+<p>所以该流合法，流值为 $f(a,t)+f(b,t)=12$。边 $(a,b)$ 已满载，称为<strong>饱和边</strong>。</p>
+<pre class="mermaid">graph LR
+    s((源点 s)) -->|"容量 10"| a((a))
+    s -->|"容量 5"| b((b))
+    a -->|"容量 4"| b
+    a -->|"容量 6"| t((汇点 t))
+    b -->|"容量 8"| t</pre>
+<p><em>图：例题中的流网络，边上标注的是容量函数的取值。</em></p>
+<p><strong>问题求解应用。</strong> 容量函数直接给出流值的上界。任取一个把 $s$ 与 $t$ 分开的顶点划分 $(S,T)$，其中 $s\in S$，$t\in T$，则任何合法流的值都不超过<strong>割容量</strong></p>
+$$c(S,T)=\sum_{u\in S,\,v\in T} c(u,v).$$
+<p>取 $S=\{s,a,b\}$、$T=\{t\}$，得 $c(S,T)=c(a,t)+c(b,t)=6+8=14$，所以流值最大为 $14$。再取 $S=\{s\}$，得 $c(S,T)=10+5=15$，这个界更松。取 $S=\{s,a\}$，得 $c(s,b)+c(a,b)+c(a,t)=5+4+6=15$，也不如 $14$ 紧。三个割里最小的是 $14$，但它是否真能达到，还要再核对。</p>
+<p>我们尝试把例题中的流改进：令 $f(s,a)=10$，$f(s,b)=4$，$f(a,b)=4$，$f(a,t)=6$，$f(b,t)=8$。</p>
+<li>容量约束：$10\le10$，$4\le5$，$4\le4$，$6\le6$，$8\le8$，成立。</li>
+<li>在 $a$ 处：流入 $10$，流出 $4+6=10$。</li>
+<li>在 $b$ 处：流入 $4+4=8$，流出 $8$。</li>
+<p>这是合法流，流值为 $14$，与割容量 $14$ 相等。因此 $14$ 就是最大流值。这体现了最大流最小割定理：当流值等于某个割容量时，两者同时达到最优。</p>
+<p><strong>小结。</strong> 容量函数规定每条边的上限。检验一个流是否合法，要逐边比较 $f\le c$，并检查守恒条件。估计最大流时，容量函数通过割容量给出上界。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

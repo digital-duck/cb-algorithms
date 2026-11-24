@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Value | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="流量值">流量值</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 是带容量 $c(u,v)\ge 0$ 的流网络,$s$ 为源点,$t$ 为汇点。对一个可行流 $f$(满足容量约束与除 $s,t$ 外各顶点的流量守恒),其<strong>流量值</strong>定义为从源点净流出的总流量:</p>
+$$|f| = \sum_{v\in V} f(s,v) - \sum_{v\in V} f(v,s).$$
+<p>这里 $f(u,v)$ 表示边 $(u,v)$ 上的流量,第二项减去流回源点的部分,因此 $|f|$ 是"净"流出量。</p>
+<p><strong>核心性质。</strong> 由于中间顶点流量守恒,流入 $t$ 的净流量与流出 $s$ 的净流量相等:</p>
+$$|f| = \sum_{v\in V} f(v,t) - \sum_{v\in V} f(t,v).$$
+<p><em>理由:</em> 对所有顶点求"净流出"之和,每条边的流量一次记为正、一次记为负,总和为 $0$。中间顶点的净流出均为 $0$,所以 $s$ 的净流出加上 $t$ 的净流出等于 $0$,即 $|f|=-(t\text{ 的净流出})$,也就是 $t$ 的净流入。</p>
+<p><strong>例题。</strong> 网络有边 $s\to a$(流量 4)、$s\to b$(流量 2)、$a\to b$(流量 1)、$a\to t$(流量 3)、$b\to t$(流量 3)。</p>
+<li>检查守恒:顶点 $a$ 流入 4,流出 $1+3=4$;顶点 $b$ 流入 $2+1=3$,流出 3。均成立。</li>
+<li>源点净流出:$|f| = 4+2 = 6$。</li>
+<li>汇点净流入:$3+3 = 6$。两者一致。</li>
+<p><strong>问题求解应用。</strong> 假设某条边的流量是未知量 $x$,而网络中其余流量已知。可以先利用守恒方程求出 $x$,再用 $|f|$ 验证结果。</p>
+<p>例如,将上例中 $a\to b$ 的流量改记为 $x$,已知 $s\to a$ 为 4、$a\to t$ 为 3。对顶点 $a$ 应用守恒:$4 = 3 + x$,得 $x=1$。再对顶点 $b$:流入 $2+x=3$,流出 $b\to t$ 也为 3,验证通过。</p>
+<p>另一个常见用途是<strong>检验与优化</strong>:任何割 $(S,T)$($s\in S,\ t\in T$)的净流量都等于 $|f|$,因此</p>
+$$|f| \le c(S,T)=\sum_{u\in S,\,v\in T} c(u,v).$$
+<p>在上例中取 $S=\{s\}$,若 $c(s,a)+c(s,b)=6$,则 $|f|=6$ 已达到上界,该流即为最大流。这正是最大流最小割定理的出发点:流量值永远不超过任意割的容量,当两者相等时即找到了最优解。</p>
+<pre class="mermaid">graph LR
+    s((源点 s)) -->|4| a((顶点 a))
+    s -->|2| b((顶点 b))
+    a -->|1| b
+    a -->|3| t((汇点 t))
+    b -->|3| t</pre>
+<p><em>示例流网络:边上的数字为流量。源点净流出 $4+2=6$,汇点净流入 $3+3=6$,即 $|f|=6$。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fifo Queue | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="先进先出队列">先进先出队列</h2>
+<p><strong>定义。</strong> 先进先出(FIFO,First-In-First-Out)队列是一种线性数据结构:元素只能从<strong>队尾</strong>加入(入队,$\text{enqueue}$),只能从<strong>队首</strong>移除(出队,$\text{dequeue}$)。最先进入的元素最先被处理,就像排队买票。两种基本操作在合理实现(链表或循环数组)下的时间复杂度均为 $O(1)$。</p>
+<p>在图遍历中,队列用来决定顶点的处理顺序。<strong>广度优先搜索(BFS)</strong> 正是依靠这一性质:先发现的顶点先展开,因此算法总是先访问距离起点 $s$ 为 $k$ 的所有顶点,再访问距离为 $k+1$ 的顶点。</p>
+<pre class="mermaid">flowchart LR
+    A["入队: 新顶点"] --> B["队尾"]
+    B --> C["队列中间元素"]
+    C --> D["队首"]
+    D --> E["出队: 处理顶点"]</pre>
+<p><em>图:元素从队尾进入、从队首离开,先到者先被处理。</em></p>
+<p><strong>例题。</strong> 无向图的边为 $A\!-\!B,\ A\!-\!C,\ B\!-\!D,\ C\!-\!D,\ D\!-\!E$,从 $A$ 开始做 BFS,邻居按字母序处理。</p>
+<li>初始:队列 $[A]$,已访问 $\{A\}$。</li>
+<li>出队 $A$,将未访问邻居 $B,C$ 入队:队列 $[B,C]$。</li>
+<li>出队 $B$,入队 $D$:队列 $[C,D]$。</li>
+<li>出队 $C$,其邻居 $D$ 已访问,不再入队:队列 $[D]$。</li>
+<li>出队 $D$,入队 $E$:队列 $[E]$。</li>
+<li>出队 $E$,队列为空,结束。</li>
+<p>访问顺序为 $A,B,C,D,E$。关键规则:<strong>入队时就标记已访问</strong>,以免同一顶点被重复入队。</p>
+<pre><code>from collections import deque
+
+def bfs(graph, s):
+    dist = {s: 0}
+    q = deque([s])
+    while q:
+        u = q.popleft()          # 出队, O(1)
+        for v in graph[u]:
+            if v not in dist:
+                dist[v] = dist[u] + 1
+                q.append(v)      # 入队, O(1)
+    return dist</code></pre>
+<p>注意:应使用 <code>deque</code>,而不是列表的 <code>list.pop(0)</code>,后者每次出队需 $O(n)$ 时间。</p>
+<p><strong>问题求解应用。</strong> 在无权图中求最短路径时,FIFO 顺序保证了一个重要结论:任何顶点第一次被发现时,所用的边数就是它到 $s$ 的最短距离 $\delta(s,v)$。原因在于队列中的距离值始终单调不降,且最多只相差 1,即队列内容形如 $[k,k,\dots,k,\,k+1,\dots,k+1]$。若把队列换成后进先出的栈,算法就变成深度优先搜索,这一保证随之失效。</p>
+<p>在上例中,$E$ 的距离为 $dist[E]=3$,对应路径 $A\to B\to D\to E$。</p>
+<p>由于每个顶点至多入队、出队一次,每条边至多被检查常数次,BFS 的总时间复杂度为 $O(|V|+|E|)$。</p>
+<p><strong>练习。</strong> 对同一个图从 $E$ 出发做 BFS,写出每一步的队列内容与最终访问顺序。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

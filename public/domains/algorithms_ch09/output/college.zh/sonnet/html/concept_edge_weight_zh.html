@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Weight | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="边权-edge-weight">边权(Edge Weight)</h2>
+<p><strong>定义。</strong> 在图 $G=(V,E)$ 中,<strong>边权</strong>是由函数 $w: E \to \mathbb{R}$ 赋予每条边 $e=(u,v)$ 的一个数值 $w(e)$,可表示距离、费用、时间、容量损耗等。带有边权的图称为<strong>加权图</strong>。对一条路径 $P = (v_0, v_1, \dots, v_k)$,其<strong>路径权重</strong>(总代价)为沿途各边权之和:</p>
+$$
+w(P)=\sum_{i=0}^{k-1} w(v_i, v_{i+1}).
+$$
+<p>注意:路径的"边数"与"权重"是两个不同的量。边数最少的路径未必权重最小。</p>
+<p><strong>例题。</strong> 设城市图有边:$A\!-\!B$ 权 $4$,$A\!-\!C$ 权 $1$,$C\!-\!B$ 权 $2$,$B\!-\!D$ 权 $5$,$C\!-\!D$ 权 $8$。求 $A$ 到 $D$ 的最小权重路径。</p>
+<p>枚举:</p>
+<li>$A\to B\to D$:$4+5=9$(2 条边)</li>
+<li>$A\to C\to D$:$1+8=9$(2 条边)</li>
+<li>$A\to C\to B\to D$:$1+2+5=8$(3 条边)</li>
+<p>最优路径是边数最多的 $A\to C\to B\to D$,总权重 $8$。若把所有边权都当作 $1$(即只数边数),会错误地认为最优路径只有 2 条边。</p>
+<pre class="mermaid">graph LR
+    A((A)) -- 4 --- B((B))
+    A -- 1 --- C((C))
+    C -- 2 --- B
+    B -- 5 --- D((D))
+    C -- 8 --- D</pre>
+<p><em>示例加权图:边上的数字即边权,最优路径 A→C→B→D 的总权重为 8。</em></p>
+<p><strong>问题求解应用。</strong> 边权的符号与性质决定了应选用的算法:</p>
+<li><strong>非负权重</strong>:Dijkstra 算法适用。其正确性依赖于"加入更多边不会使路径变短",即 $w(e)\ge 0$。</li>
+<li><strong>含负权边</strong>(如套利中的收益、能量释放):需使用 Bellman–Ford 算法,它还能检测<strong>负权环</strong>——若存在可达的负权环,则最短路径无下界。</li>
+<li><strong>乘性量转加性</strong>:若边表示独立概率 $p_e$(如链路可靠性),要最大化路径总可靠性 $\prod p_e$,令 $w(e)=-\ln p_e$。因为</li>
+$$
+-\ln\prod_i p_i=\sum_i\bigl(-\ln p_i\bigr),
+$$
+<p>最大化乘积等价于最小化权重和,从而可直接套用最短路径算法。</p>
+<p><strong>练习。</strong> 三条链路的可靠性依次为 $0.9,\,0.8,\,0.5$,求这条路径的总可靠性及其对应的路径权重。 答案:总可靠性 $0.9\times0.8\times0.5=0.36$;路径权重 $-\ln 0.36\approx 1.02$。</p>
+<p><strong>要点。</strong> 建模时先问:"我要沿路径累加的是什么量?"把它定为边权,再按权重是否非负、是否可加来选择算法。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

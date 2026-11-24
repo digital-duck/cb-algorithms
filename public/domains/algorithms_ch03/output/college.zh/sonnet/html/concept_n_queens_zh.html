@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>N Queens | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="n-皇后问题">N 皇后问题</h2>
+<p><strong>定义。</strong> 在 $n\times n$ 棋盘上放置 $n$ 个皇后,使任意两个皇后不在同一行、同一列或同一对角线上。皇后位于 $(r,c)$ 与 $(r',c')$ 时发生冲突,当且仅当</p>
+$$
+c=c' \quad\text{或}\quad r-c=r'-c' \quad\text{或}\quad r+c=r'+c'.
+$$
+<p>每行恰好放一个皇后,因此一个解可以表示为列号序列 $(c_0,c_1,\dots,c_{n-1})$,其中 $c_r$ 是第 $r$ 行皇后所在的列。这样行冲突已被排除,只需检查列和两个对角线。</p>
+<p><strong>回溯法。</strong> 逐行放置:在第 $r$ 行依次尝试每一列,若与前面的皇后无冲突就放下并递归到第 $r+1$ 行;若该行没有合法列,就撤销上一行的选择(回溯),换下一列。这是剪枝的深度优先搜索,比枚举全部 $n^n$ 种放法(或 $n!$ 种排列)高效得多。</p>
+<pre><code>def solve(n):
+    cols, d1, d2, res = set(), set(), set(), []
+    def go(r, path):
+        if r == n:
+            res.append(path[:]); return
+        for c in range(n):
+            if c in cols or r-c in d1 or r+c in d2:
+                continue
+            cols.add(c); d1.add(r-c); d2.add(r+c); path.append(c)
+            go(r+1, path)
+            path.pop(); cols.remove(c); d1.remove(r-c); d2.remove(r+c)
+    go(0, [])
+    return res</code></pre>
+<p>集合使每次冲突检测为 $O(1)$。</p>
+<p><strong>例题:$n=4$。</strong> 第 0 行放 $c_0=0$。第 1 行:列 0、1 分别与其同列、同对角线冲突,取 $c_1=2$。第 2 行:列 0 同列,列 1 与 $(1,2)$ 同对角线($r+c=2+1=3=1+2$),列 2 同列,列 3 与 $(1,2)$ 同对角线($r-c=-1=1-2$),无合法列,回溯。改 $c_1=3$,第 2 行取 $c_2=1$,第 3 行列 0、1、2、3 均冲突,再回溯,最终 $c_0=0$ 整个分支失败。尝试 $c_0=1$:得 $c_1=3,\ c_2=0,\ c_3=2$,成功。所以 $(1,3,0,2)$ 是一个解,其镜像 $(2,0,3,1)$ 是另一个,$n=4$ 共 2 个解。</p>
+<pre class="mermaid">graph TD
+A["第0行: c0=1"] --> B["第1行: c1=3"]
+B --> C["第2行: c2=0"]
+C --> D["第3行: c3=2"]
+D --> E["找到解 1,3,0,2"]
+A2["第0行: c0=0"] --> B2["第1行: c1=2"]
+B2 --> X1["第2行无合法列 回溯"]
+A2 --> B3["第1行: c1=3"]
+B3 --> C3["第2行: c2=1"]
+C3 --> X2["第3行无合法列 回溯"]</pre>
+<p><em>图:$n=4$ 时的搜索树片段。$c_0=1$ 分支直达解,$c_0=0$ 分支在更深处被剪枝并回溯。</em></p>
+<p><strong>问题求解应用。</strong> 已知解的个数:$n=1,\dots,8$ 依次为 $1,0,0,2,10,4,40,92$。因此 $n=2,3$ 无解,回溯会穷尽搜索树后返回空列表。若只需“是否存在解”,在 <code>r == n</code> 时直接返回 <code>True</code> 并逐层向上传递即可,不必枚举全部。</p>
+<p><strong>复杂度。</strong> 第 $r$ 行至多有 $n-r$ 个可选列(列互不相同),所以搜索树节点数至多为 $O(n!)$,实际远小于此,因为对角线冲突提前剪枝。回溯的核心思想是:<strong>一旦部分解已违反约束,就放弃它的全部后续扩展</strong>。同样的框架也适用于数独、图着色和子集和等约束满足问题。</p>
+<p><strong>练习。</strong> 手工追踪 $n=5$,统计以 $c_0=0$ 开头的解的个数(答案:2)。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch3: Backtracking (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

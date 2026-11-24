@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reduction General Pattern | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="归约的一般模式">归约的一般模式</h2>
+<p><strong>定义。</strong> 设 $X$、$Y$ 是两个判定问题。多项式时间归约 $X \le_p Y$ 是一个多项式时间可计算的函数 $f$,把 $X$ 的实例 $x$ 变换为 $Y$ 的实例 $f(x)$,并满足:</p>
+$$x \in X \iff f(x) \in Y.$$
+<p>其意义在于:若 $Y$ 能在多项式时间内求解,则 $X$ 也能;反过来,若 $X$ 是 NP 难的,则 $Y$ 也是 NP 难的。<strong>注意方向</strong>:要证明 $Y$ 难,必须从一个已知的难问题 $X$ 归约到 $Y$。</p>
+<p><strong>标准三步配方。</strong></p>
+<li><strong>构造变换</strong> $f$:把任意 $X$ 的实例 $x$ 机械地转换成 $Y$ 的实例 $f(x)$,并说明 $f$ 的运行时间是 $|x|$ 的多项式。</li>
+<li><strong>正向(⇒)</strong>:若 $x$ 是"是"实例,利用 $x$ 的证书(解)$S$ 构造 $f(x)$ 的证书 $S'$。</li>
+<li><strong>反向(⇐)</strong>:若 $f(x)$ 是"是"实例,利用其证书 $S'$ 还原出 $x$ 的证书 $S$。</li>
+<p>第 2、3 步即"证书变换",它们不必在算法中执行,只用于证明等价性。</p>
+<pre class="mermaid">flowchart LR
+    A["X 的实例 x"] -->|"多项式时间变换 f"| B["Y 的实例 f(x)"]
+    A -.->|"x 的证书 S"| C["f(x) 的证书 S'"]
+    C -.->|"反向还原"| A</pre>
+<p><em>图:归约的三个要素——实例变换 $f$(实线),以及两个方向的证书变换(虚线)。</em></p>
+<p><strong>例题:独立集 $\le_p$ 顶点覆盖。</strong></p>
+<li>独立集(IS):给定图 $G=(V,E)$ 和整数 $k$,是否存在大小至少为 $k$ 的顶点子集,其中任意两点不相邻?</li>
+<li>顶点覆盖(VC):是否存在大小至多为 $m$ 的顶点子集,使每条边至少有一个端点在其中?</li>
+<p><em>第 1 步:</em> 令 $f(G,k)=(G,\;|V|-k)$。图不变,只需做一次减法,显然是多项式时间。</p>
+<p><em>第 2 步(⇒):</em> 设 $S$ 是大小 $\ge k$ 的独立集。对任一边 $(u,v)$,$u,v$ 不能同时在 $S$ 中,故至少一个在 $V\setminus S$ 中。因此 $V\setminus S$ 是覆盖,大小 $\le |V|-k$。</p>
+<p><em>第 3 步(⇐):</em> 设 $C$ 是大小 $\le |V|-k$ 的顶点覆盖。若 $u,v\notin C$ 且 $(u,v)\in E$,则该边未被覆盖,矛盾。故 $V\setminus C$ 内无边,是大小 $\ge k$ 的独立集。</p>
+<p>证书变换在两个方向上都是"取补集"。</p>
+<p><strong>问题求解应用。</strong> 假设已知 IS 是 NP 完全的,要证明 VC 是 NP 完全的,按以下清单进行:</p>
+<li>证明 $VC\in$ NP(给定覆盖,逐边检查,多项式时间)。</li>
+<li>选择一个已知 NP 难的问题(此处为 IS)作为 $X$。</li>
+<li>按三步配方给出 $f$ 及双向证明。</li>
+<p>常见错误是<strong>方向写反</strong>(从 $Y$ 归约到 $X$),或<strong>只证一个方向</strong>。检验自己的归约时,可以问:一个"否"实例是否一定映射到"否"实例?这等价于反向证明的逆否命题。</p>
+<p>当归约不像补集这样直接时(如 3-SAT $\le_p$ IS),需要为每个子句构造"小工具"(gadget),证书变换就成了证明的核心:满足赋值对应于从每个子句三角形中各选一个顶点。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

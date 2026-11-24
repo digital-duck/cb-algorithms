@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reduction Proof Technique | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="归约证明技术">归约证明技术</h2>
+<h3 id="定义">定义</h3>
+<p><strong>归约证明技术</strong>是证明某个问题 $A$ 是 NP 难的标准方法。设 $B$ 是一个已知的 NP 难问题。若能构造一个多项式时间可计算的函数 $f$，把 $B$ 的任意实例 $x$ 变换为 $A$ 的实例 $f(x)$，并满足</p>
+$$x \text{ 是 } B \text{ 的"是"实例} \iff f(x) \text{ 是 } A \text{ 的"是"实例},$$
+<p>就称 $B$ 多项式时间归约到 $A$，记作 $B \le_p A$。</p>
+<p>其逻辑是：若 $A$ 能被多项式时间求解，则 $B$ 也能（先算 $f(x)$，再调用 $A$ 的算法）。这与 $B$ 是 NP 难相矛盾，除非 $\mathrm{P}=\mathrm{NP}$。所以 $A$ 至少和 $B$ 一样难。</p>
+<p><strong>写证明的四个步骤：</strong></p>
+<li>选定一个已知 NP 难的问题 $B$。</li>
+<li>描述变换 $f$。</li>
+<li>证明 $f$ 在多项式时间内可计算。</li>
+<li>证明"是"实例与"是"实例互相对应，即正反两个方向都要证。</li>
+<p><strong>常见错误：</strong> 把方向写反。必须是"已知难题 $\to$ 目标问题"。从 $A$ 归约到 $B$ 什么也证明不了。</p>
+<h3 id="例题-独立集-np-难">例题：独立集 NP 难</h3>
+<p>已知 3-SAT 是 NP 难的。<strong>独立集问题</strong>是：给定图 $G$ 和整数 $k$，问 $G$ 中是否存在 $k$ 个两两不相邻的顶点。</p>
+<p><strong>构造 $f$：</strong> 设 3-SAT 公式 $\varphi$ 有 $m$ 个子句。</p>
+<li>每个子句对应一个三角形，三个顶点分别对应该子句的三个文字。</li>
+<li>对每对互补文字 $x_i$ 与 $\lnot x_i$，在它们对应的顶点之间连一条边。</li>
+<li>令 $k=m$。</li>
+<p>顶点数至多 $3m$，边数为 $O(m^2)$，所以 $f$ 是多项式时间的。</p>
+<p><strong>正向（$\Rightarrow$）：</strong> 若 $\varphi$ 可满足，则在每个子句中选一个取值为真的文字，共 $m$ 个顶点。同一三角形里只选了一个顶点。互补文字不会同时为真，所以它们之间的边不会连接两个被选顶点。因此这 $m$ 个顶点构成独立集。</p>
+<p><strong>反向（$\Leftarrow$）：</strong> 若存在大小为 $m$ 的独立集，则每个三角形至多含其中一个顶点，所以恰好每个三角形各含一个。把被选文字赋值为真，由于互补文字之间有边，不会出现矛盾赋值。其余变量任意赋值。于是每个子句都有真文字，$\varphi$ 可满足。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>问题：</strong> 顶点覆盖问题要求选出至多 $k$ 个顶点，使每条边至少有一个端点被选中。证明它是 NP 难的。</p>
+<p><strong>解：</strong> 从独立集归约。对图 $G=(V,E)$ 和整数 $k$，令 $f(G,k)=(G,\,|V|-k)$。图本身不变，因此变换显然是多项式时间的。</p>
+<p>关键事实：$S$ 是独立集 $\iff$ $V\setminus S$ 是顶点覆盖。</p>
+<li>若 $S$ 独立，则任一条边不可能两个端点都在 $S$ 中，所以至少有一个端点在 $V\setminus S$ 中。</li>
+<li>反过来，若 $V\setminus S$ 覆盖所有边，则 $S$ 中任意两点之间没有边。</li>
+<p>所以 $G$ 有大小为 $k$ 的独立集，当且仅当 $G$ 有大小为 $|V|-k$ 的顶点覆盖。顶点覆盖因此是 NP 难的。</p>
+<p><strong>策略总结：</strong> 先找与目标问题"结构相近"的已知难题。简单的问题（如顶点覆盖）常常只需对参数做变换。较远的问题则需要用"小部件"（如上面的三角形）把约束编码进去。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

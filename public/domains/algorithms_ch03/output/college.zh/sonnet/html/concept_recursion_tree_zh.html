@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recursion Tree | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="递归树">递归树</h2>
+<p><strong>定义。</strong> 递归树(recursion tree)是把一个递归算法的全部调用过程画成的树:每个节点代表一个子问题,节点上标注该子问题在<strong>本层自身</strong>花费的非递归工作量;每条边代表一次递归调用,从父问题指向它调用的子问题。根节点是原问题,叶节点是不再递归的基本情形。把所有节点的代价相加,就得到算法的总运行时间。</p>
+<p>对于形如</p>
+$$T(n)=aT\!\left(\frac{n}{b}\right)+f(n)$$
+<p>的递归式,递归树具有清晰的规律:第 $i$ 层有 $a^i$ 个节点,每个子问题规模为 $n/b^i$,树高为 $\log_b n$,叶子数为 $a^{\log_b n}=n^{\log_b a}$。</p>
+<pre class="mermaid">graph TD
+A["T(n):代价 n"] --> B["T(n/2):代价 n/2"]
+A --> C["T(n/2):代价 n/2"]
+B --> D["T(n/4):代价 n/4"]
+B --> E["T(n/4):代价 n/4"]
+C --> F["T(n/4):代价 n/4"]
+C --> G["T(n/4):代价 n/4"]</pre>
+<p><em>归并排序 $T(n)=2T(n/2)+n$ 的递归树前三层:每层总代价都是 $n$。</em></p>
+<p><strong>例题。</strong> 求 $T(n)=2T(n/2)+n$ 的解。</p>
+<li>第 $i$ 层有 $2^i$ 个节点,每个节点代价 $n/2^i$,所以该层总代价为 $2^i\cdot\dfrac{n}{2^i}=n$。</li>
+<li>树高为 $\log_2 n$,共有 $\log_2 n+1$ 层。</li>
+<li>各层求和:$T(n)=n(\log_2 n+1)=\Theta(n\log n)$。</li>
+<p><strong>问题求解应用。</strong> 解 $T(n)=3T(n/4)+n^2$ 时,按"逐层求和"的步骤:</p>
+<li>第 $i$ 层有 $3^i$ 个节点,每个节点代价 $(n/4^i)^2$,层总代价为</li>
+$$3^i\cdot\frac{n^2}{16^i}=\left(\frac{3}{16}\right)^i n^2 .$$
+<li>层代价构成公比 $\frac{3}{16}<1$ 的递减等比数列,因此总和被首项主导:</li>
+$$T(n)\le n^2\sum_{i=0}^{\infty}\left(\frac{3}{16}\right)^i=\frac{16}{13}n^2 .$$
+<li>又根节点本身代价为 $n^2$,故 $T(n)=\Theta(n^2)$。</li>
+<p><strong>读树的三种情形。</strong> 观察层代价随深度的变化,即可判断结果:</p>
+<li>层代价<strong>递减</strong>(如上例):根主导,$T(n)=\Theta(f(n))$;</li>
+<li>层代价<strong>不变</strong>(如归并排序):总和 $=$ 每层代价 $\times$ 层数;</li>
+<li>层代价<strong>递增</strong>(如 $T(n)=4T(n/2)+n$,层代价为 $2^i n$):叶子主导,$T(n)=\Theta(n^{\log_b a})=\Theta(n^2)$。</li>
+<p><strong>注意。</strong> 递归树给出的是有力的直观推导;若要作为严格证明,应当用数学归纳法(代入法)验证猜出的界。此外,递归树也能揭示重复计算:朴素斐波那契 $F(n)=F(n-1)+F(n-2)$ 的树中,同一子问题反复出现,节点数呈指数增长,这正是引入记忆化(动态规划)的动机。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch3: Backtracking (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

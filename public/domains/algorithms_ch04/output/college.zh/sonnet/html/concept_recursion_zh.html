@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recursion | Algorithms Ch04</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="递归">递归</h2>
+<p><strong>定义。</strong> 递归(recursion)是归约(reduction)的一种特殊情形:把一个问题归约为一个或多个<strong>规模更小的同类问题</strong>,再由一位想象中的“递归仙子”(Recursion Fairy)去解决这些更小的实例。我们只需做两件事:</p>
+<li><strong>基础情形</strong>:对最小的实例直接给出答案;</li>
+<li><strong>递归步骤</strong>:假设仙子能正确解决所有更小的实例,说明如何用这些结果拼出原问题的答案。</li>
+<p>关键在于<strong>信任仙子</strong>:不要去展开每一层调用,只需验证“若更小的实例正确,则当前实例正确”。这正是数学归纳法的结构,因此递归算法的正确性可用归纳法证明。</p>
+<p><strong>例题:汉诺塔。</strong> 将 $n$ 个盘子从柱 $A$ 移到柱 $C$,借助柱 $B$,每次只能移动一个盘子,且大盘不能压在小盘上。</p>
+<li>基础情形:$n=0$ 时无需任何操作。</li>
+<li>递归步骤:请仙子把上面的 $n-1$ 个盘子从 $A$ 移到 $B$;自己把最大的盘子从 $A$ 移到 $C$;再请仙子把 $n-1$ 个盘子从 $B$ 移到 $C$。</li>
+<pre><code>def hanoi(n, src, dst, tmp):
+    if n == 0:
+        return
+    hanoi(n - 1, src, tmp, dst)   # 仙子:移走上面的 n-1 个
+    print(f"{src} -&gt; {dst}")      # 自己:移最大的盘子
+    hanoi(n - 1, tmp, dst, src)   # 仙子:移回 n-1 个</code></pre>
+<p><strong>复杂度分析。</strong> 设 $T(n)$ 为移动次数,则</p>
+$$T(0)=0,\qquad T(n)=2T(n-1)+1.$$
+<p>逐层展开可得 $T(n)=2T(n-1)+1=4T(n-2)+3=\cdots=2^{k}T(n-k)+(2^{k}-1)$。取 $k=n$,得</p>
+$$T(n)=2^{n}-1.$$
+<p><strong>归纳验证:</strong> $n=0$ 时 $2^0-1=0$ 成立;若 $T(n-1)=2^{n-1}-1$,则 $T(n)=2(2^{n-1}-1)+1=2^n-1$。</p>
+<pre class="mermaid">graph TD
+    A["hanoi(3)"] --> B["hanoi(2):A到B"]
+    A --> C["移动最大盘:A到C"]
+    A --> D["hanoi(2):B到C"]
+    B --> E["hanoi(1)"]
+    B --> F["hanoi(1)"]
+    D --> G["hanoi(1)"]
+    D --> H["hanoi(1)"]</pre>
+<p><em>汉诺塔的递归调用树:每个规模为 $n$ 的问题分解为两个规模为 $n-1$ 的子问题加一次直接移动。</em></p>
+<p><strong>问题求解应用。</strong> 设计递归算法时,可按以下步骤思考:</p>
+<li><strong>明确子问题</strong>:它必须与原问题同类,且规模严格更小;</li>
+<li><strong>写出基础情形</strong>:确保每条调用链都能到达它,否则会无限递归;</li>
+<li><strong>只设计“合并”步骤</strong>:假设仙子已给出正确的子问题答案,思考如何组合它们。</li>
+<p><strong>练习:</strong> 用同样的思路写出计算 $n!$ 的递归定义($0!=1$,$n!=n\cdot(n-1)!$),并证明它恰好进行 $n$ 次乘法。再思考:若 $T(n)=2T(n/2)+n$,解为何种量级?(提示:递归树每层代价为 $n$,共 $\log_2 n$ 层,故 $T(n)=\Theta(n\log n)$。)</p>
+<p>递归的威力在于:复杂问题只需“一步合并 + 信任仙子”,而正确性与代价都可由归纳法和递推式严格分析。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch4: Dynamic Programming (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

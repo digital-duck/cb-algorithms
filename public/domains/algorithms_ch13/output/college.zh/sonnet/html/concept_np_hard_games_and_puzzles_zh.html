@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Np Hard Games And Puzzles | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="为何许多游戏与谜题是-np-难的">为何许多游戏与谜题是 NP 难的</h2>
+<h3 id="定义">定义</h3>
+<p>回忆：问题属于 <strong>NP</strong>，指其解可在多项式时间内被验证；问题是 <strong>NP 难</strong>，指 NP 中的每个问题都能在多项式时间内归约到它。若 $P \neq NP$（目前普遍相信），NP 难问题没有多项式时间算法。</p>
+<p>一个有趣的观察是：扫雷（Minesweeper）、数独（Sudoku）、俄罗斯方块（Tetris）、超级马里奥兄弟（Super Mario Bros.）等游戏，其<strong>推广版本</strong>（棋盘大小 $n$ 可任意增长）都是 NP 难的，其中不少还是 NP 完全的。注意：固定尺寸的 $9\times 9$ 数独只有有限种局面，严格说不存在"渐近复杂度"；NP 难性针对的是 $n\times n$ 推广。</p>
+<h3 id="例题-用归约证明数独-np-难">例题：用归约证明数独 NP 难</h3>
+<p><strong>目标</strong>：证明推广数独（$n^2\times n^2$ 网格）是 NP 难的。</p>
+<p><strong>思路</strong>：从已知 NP 完全问题——拉丁方补全（Latin Square Completion，给定部分填好的 $n\times n$ 方阵，能否使每行每列恰含 $1,\dots,n$ 各一次）——归约。Yato 与 Seta（2003）证明了数独与之等价地困难，且其归约保持解的个数（称 ASP 完全）。</p>
+<p><strong>验证属于 NP</strong>：给定填好的网格，检查每行、每列、每宫恰含 $1,\dots,n^2$ 各一次，需时 $O(n^4)$，是多项式。</p>
+<p><strong>归约的核心</strong>：用一个小"小工具"（gadget）模拟约束。拉丁方的"每行每列不重复"恰是数独的行、列约束；额外增加的宫约束可通过构造让预填数字使其自动满足。于是</p>
+$$
+\text{拉丁方补全有解} \iff \text{构造出的数独有解},
+$$
+<p>且构造耗时多项式，故数独 NP 难。结合验证属于 NP，得数独 NP 完全。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>问题</strong>：为什么玩家实际能解 $9\times 9$ 数独，却说它"困难"？</p>
+<p><strong>解答</strong>：</p>
+<li>实例规模固定且很小，回溯搜索最坏 $9^{81}$ 的上界在剪枝后实际只需极少步骤。</li>
+<li>NP 难描述的是<strong>最坏情况</strong>随 $n$ 增长的趋势，不排除典型实例容易。</li>
+<li>因此面对 NP 难谜题，实用策略是：约束传播 + 回溯，或转化为 SAT / 整数规划交给求解器。</li>
+<p><strong>常见归约模式</strong>（供你自己证明时参考）：</p>
+<p>| 游戏 | 归约来源 | 关键 gadget | |---|---|---| | 扫雷 | 电路可满足性 | 用数字格模拟与/或/非门 | | 俄罗斯方块 | 3-划分问题 | 用方块序列强制填充模式 | | 超级马里奥 | 3-SAT | 变量选择路径，子句为必经关卡 |</p>
+<pre class="mermaid">flowchart LR
+A[已知 NP 完全问题] --> B[构造游戏 gadget]
+B --> C[多项式时间归约]
+C --> D[游戏局面]
+D --> E[游戏可解 当且仅当 原问题有解]</pre>
+<p><em>证明游戏 NP 难的通用流程：把已知难题翻译成游戏局面。</em></p>
+<h3 id="小结">小结</h3>
+<p>游戏之所以"难而有趣"，部分原因在于其规则足以编码任意逻辑约束；一旦能搭出逻辑门，NP 难性便随之而来。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Backtracking | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="回溯法">回溯法</h2>
+<p><strong>定义。</strong> 回溯法(backtracking)是一种递归搜索策略:每次只为解增加一个分量,在每个决策点依次尝试所有可选项,并对每个选项递归地向下探索。若当前的部分解已经违反约束(或不可能扩展为完整解),就<strong>剪枝</strong>,撤销最近一步选择(即"回溯"),换下一个选项继续。</p>
+<p>设部分解为 $x=(x_1,\dots,x_k)$,候选集为 $C(x)$,则通用框架为:</p>
+<pre><code>def backtrack(x):
+    if is_complete(x):
+        record(x); return
+    for c in candidates(x):
+        if feasible(x, c):      # 剪枝检查
+            x.append(c)         # 选择
+            backtrack(x)        # 探索
+            x.pop()             # 撤销(回溯)</code></pre>
+<p>"选择 → 探索 → 撤销"三步是回溯法的核心。它本质上是对<strong>解空间树</strong>的深度优先遍历,与暴力枚举的区别在于:一旦某个节点不可行,其整棵子树都被跳过。</p>
+<p><strong>例题:子集和。</strong> 从集合 $\{3,5,6,7\}$ 中选出若干数,使其和为 $15$。</p>
+<p>按顺序决定每个数"取"或"不取",记当前和为 $s$:</p>
+<li>取 3($s=3$)→ 取 5($s=8$)→ 取 6($s=14$)→ 取 7 得 $21>15$,剪枝;不取 7 得 $14\ne15$,失败。回溯到 6。</li>
+<li>不取 6($s=8$)→ 取 7 得 $15$ ✓。找到解 $\{3,5,7\}$。</li>
+<p>因为所有数为正,只要 $s>15$ 就可以立即剪枝,这避免了展开大量子树。</p>
+<pre class="mermaid">graph TD
+    A["s=0"] --> B["取3, s=3"]
+    A --> C["不取3, s=0"]
+    B --> D["取5, s=8"]
+    B --> E["不取5, s=3"]
+    D --> F["取6, s=14"]
+    D --> G["不取6, s=8"]
+    F --> H["取7, s=21 剪枝"]
+    G --> I["取7, s=15 成功"]</pre>
+<p><em>子集和的解空间树(局部):超过目标值的分支被剪枝,成功分支给出解 $\{3,5,7\}$。</em></p>
+<p><strong>问题求解应用:$n$ 皇后。</strong> 在 $n\times n$ 棋盘上放置 $n$ 个皇后,使其互不攻击。逐行放置,第 $r$ 行选择列 $c$,可行条件是:与已放皇后不同列、不同对角线,即对所有 $i<r$,</p>
+$$c\ne c_i,\qquad |c-c_i|\ne r-i.$$
+<pre><code>def solve(n):
+    cols, res = [], 0
+    def bt(r):
+        nonlocal res
+        if r == n: res += 1; return
+        for c in range(n):
+            if all(c != cols[i] and abs(c-cols[i]) != r-i for i in range(r)):
+                cols.append(c); bt(r+1); cols.pop()
+    bt(0)
+    return res</code></pre>
+<p>对 $n=8$,朴素枚举需检查 $8^8\approx1.7\times10^7$ 种放法,而回溯法因提前剪枝,只访问约两千多个节点即可找出全部 92 个解。</p>
+<p><strong>复杂度与使用要点。</strong> 最坏情况下回溯仍是指数级,例如子集和为 $O(2^n)$,排列问题为 $O(n!)$;其优势依赖于剪枝的强度。设计时应注意:(1)状态必须能被<strong>完全撤销</strong>;(2)约束检查应尽早进行;(3)合理排序候选项,可更快发现解或更早剪枝。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch3: Backtracking (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

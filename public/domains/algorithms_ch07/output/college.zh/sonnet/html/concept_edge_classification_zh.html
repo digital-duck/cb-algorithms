@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Classification | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="边分类-edge-classification">边分类(Edge Classification)</h2>
+<h3 id="定义">定义</h3>
+<p>对有向图 $G=(V,E)$ 做深度优先搜索(DFS)时,每个顶点 $v$ 有两个时间戳:发现时间 $d[v]$(变为灰色)与完成时间 $f[v]$(变为黑色)。区间 $[d[v],f[v]]$ 称为 $v$ 的<strong>活动区间</strong>。任意两个顶点的活动区间要么互不相交,要么一个完全包含另一个(括号定理)。</p>
+<p>据此,DFS 将每条边 $(u,v)\in E$ 分为四类:</p>
+<p>| 类型 | 区间关系 | 探索边 $(u,v)$ 时 $v$ 的颜色 | |---|---|---| | 树边 | $v$ 是由 $u$ 首次发现的 | 白色 | | 后向边 | $[d[u],f[u]]\subset[d[v],f[v]]$($v$ 是 $u$ 的祖先,含自环) | 灰色 | | 前向边 | $[d[v],f[v]]\subset[d[u],f[u]]$($v$ 是 $u$ 的非子后代) | 黑色,且 $d[u]<d[v]$ | | 横跨边 | 两区间不相交 | 黑色,且 $d[v]<d[u]$ |</p>
+<p>在无向图中,只会出现树边和后向边。</p>
+<h3 id="例题">例题</h3>
+<p>图的边为:$A\to B,\ A\to C,\ B\to C,\ C\to A,\ B\to D,\ D\to C,\ E\to D$。从 $A$ 开始 DFS(按字母序访问邻居),再从 $E$ 重启。</p>
+<li>$A$:$d=1$;访问 $B$:$d=2$;$B$ 的邻居 $C$:$d=3$。$C\to A$ 指向灰色顶点,故为<strong>后向边</strong>。$C$ 完成:$f=4$。</li>
+<li>回到 $B$,边 $B\to C$ 在 $C$ 被发现时即为树边。接着 $B\to D$:$D$ 为白色,$d=5$,树边。$D\to C$ 指向黑色的 $C$,且 $d[C]<d[D]$,是<strong>前向边的反例</strong>——因 $C$ 不是 $D$ 的后代,而是先于 $D$ 完成的兄弟分支,实际上 $C$ 的区间 $[3,4]$ 与 $D$ 的区间 $[5,6]$ 不相交且 $d[C]<d[D]$,所以是<strong>横跨边</strong>。</li>
+<li>$D$ 完成 $f=6$,$B$ 完成 $f=7$,$A$ 的边 $A\to C$:$C$ 已是黑色,$[3,4]\subset[1,8]$ 且 $C$ 是 $A$ 的非子后代,故为<strong>前向边</strong>;$A$ 完成 $f=8$。</li>
+<li>重启 $E$:$d=9$,$E\to D$ 指向黑色且 $d[D]<d[E]$,区间不相交,为<strong>横跨边</strong>;$f[E]=10$。</li>
+<p>(注:$B\to C$ 在上面按顺序已被作为树边处理,$A\to B$ 同为树边。)</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>判断有向图是否有环。</strong> 有向图 $G$ 无环,当且仅当 DFS 不产生后向边。</p>
+<p><em>证明要点</em>:若存在后向边 $(u,v)$,则 $v$ 是 $u$ 的祖先,树路径 $v\leadsto u$ 加上 $(u,v)$ 构成环。反之,设存在环,令 $v$ 为环上第一个被发现的顶点,环上前驱为 $u$。发现 $v$ 时,环上其余顶点均为白色,由白色路径定理它们都成为 $v$ 的后代,故 $(u,v)$ 连接后代与祖先,是后向边。</p>
+<p>在上例中 $C\to A$ 是后向边,印证了环 $A\to B\to C\to A$ 的存在。</p>
+<p><strong>拓扑排序</strong>:无后向边时,所有边满足 $f[u]>f[v]$,因此按完成时间递减排列即得拓扑序。可用此判据区分边类型:后向边满足 $f[u]<f[v]$,其余三类满足 $f[u]>f[v]$。</p>
+<pre class="mermaid">graph TD
+    A["A (1,8)"] -->|树边| B["B (2,7)"]
+    B -->|树边| C["C (3,4)"]
+    C -.->|后向边| A
+    B -->|树边| D["D (5,6)"]
+    A -.->|前向边| C
+    D -.->|横跨边| C
+    E["E (9,10)"] -.->|横跨边| D</pre>
+<p><em>图中标注 (d, f) 时间戳:实线为树边,虚线为非树边,展示四类边在同一次 DFS 中的分布。</em></p>
+<p><strong>小结</strong>:边分类只需在 DFS 中检查目标顶点的颜色与时间戳,复杂度仍为 $O(V+E)$,却能同时回答"是否有环"与"能否拓扑排序"等问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

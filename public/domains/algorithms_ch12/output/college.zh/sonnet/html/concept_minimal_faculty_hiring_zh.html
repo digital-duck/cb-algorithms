@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimal Faculty Hiring | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最少教师聘用问题">最少教师聘用问题</h2>
+<p><strong>定义。</strong> 设有 $n$ 门课程,每门课有固定的开课时间段。若同一位教授在上完课程 $u$ 之后,还能赶上课程 $v$(即 $u$ 结束时间加上通勤时间不晚于 $v$ 的开始时间),就在 $u \to v$ 之间连一条有向边。由于时间只能向前,这样得到的<strong>课程相容图</strong> $G=(V,E)$ 是有向无环图(DAG)。</p>
+<p>一位教授一学期的课表对应 $G$ 中的一条路径。若要求每门课恰由一位教授教授,则一个排课方案就是把 $V$ 划分为若干条<strong>顶点不相交的路径</strong>,即<strong>最小不相交路径覆盖</strong>。所需教授人数等于路径条数,我们要使其最小。</p>
+<p><strong>核心定理。</strong> 对 DAG $G$,最小不相交路径覆盖的路径数为</p>
+$$
+k_{\min} = n - M,
+$$
+<p>其中 $M$ 是下述二分图 $B$ 的最大匹配数:$B$ 的左部为每个顶点的"出点" $u^{+}$,右部为"入点" $v^{-}$,对每条边 $u\to v\in E$ 连边 $u^{+}v^{-}$。</p>
+<p><strong>证明思路。</strong> 一个不相交路径覆盖中,每条路径含 $|P|-1$ 条边,所以总边数为 $n-k$。这些边在 $B$ 中互不共享出点或入点(每个顶点至多有一个后继、一个前驱),构成一个大小为 $n-k$ 的匹配。反过来,$B$ 中任一匹配给每个顶点至多指定一个后继和一个前驱;因 $G$ 无环,选出的边不会成环,只会形成路径。于是匹配大小 $m$ 对应 $n-m$ 条路径。最小化 $k$ 就等价于最大化匹配。 $\square$</p>
+<p><strong>例题。</strong> 有 5 门课:$A$(8:00)、$B$(10:00)、$C$(10:00)、$D$(13:00)、$E$(15:00)。可行边为 $A\to B,\ A\to C,\ B\to D,\ C\to D,\ C\to E,\ D\to E$。</p>
+<p>构造二分图,求最大匹配:取 $A^{+}B^{-}$、$B^{+}D^{-}$、$C^{+}E^{-}$、$D^{+}\!\!$ 此时无剩余右端可用,故先检查能否增广。重新选择:$A^{+}B^{-}$、$B^{+}D^{-}$、$D^{+}E^{-}$、$C^{+}$ 无可用的入点($B^-,D^-,E^-$ 均已被占用,$C^{+}$ 的邻点只有 $D^-,E^-$),尝试增广路 $C^{+}\to D^{-}\to B^{+}$,但 $B^{+}$ 的另一邻点只有 $D^-$,无法改道。因此 $M=3$。</p>
+<p>于是 $k_{\min}=5-3=2$。对应方案:教授甲上 $A\to B\to D\to E$,教授乙上 $C$。</p>
+<p><strong>问题求解应用。</strong> 步骤如下:</p>
+<li>按时间与通勤约束建立 DAG;</li>
+<li>拆点建二分图 $B$;</li>
+<li>用匈牙利算法或 Hopcroft–Karp 算法求最大匹配,复杂度分别为 $O(VE)$ 与 $O(E\sqrt{V})$;</li>
+<li>答案为 $n-M$,沿匹配边串联即可还原每位教授的课表。</li>
+<pre class="mermaid">graph LR
+    A[课程A 8:00] --> B[课程B 10:00]
+    A --> C[课程C 10:00]
+    B --> D[课程D 13:00]
+    C --> D
+    C --> E[课程E 15:00]
+    D --> E</pre>
+<p><em>课程相容 DAG:一条边表示同一位教授可以先后教授这两门课。最少教授人数等于最小不相交路径覆盖数。</em></p>
+<p><strong>注意。</strong> 若允许一位教授与另一位的路径共享顶点(如课程可由多位教授轮流上),问题变为一般路径覆盖,需先做传递闭包。本节的"每门课恰一人"要求才对应不相交覆盖。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

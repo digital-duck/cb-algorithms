@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negative Edge Weight | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="负边权">负边权</h2>
+<p><strong>定义。</strong> 在加权有向图 $G=(V,E)$ 中,若某条边 $(u,v)$ 的权重 $w(u,v)<0$,就称它为<strong>负边权</strong>。权重通常表示"代价",负权则表示这一步转移<em>带来收益</em>,例如套利交易中的获利、化学反应中释放的能量,或工作流中某个步骤抵消了前面的开销。路径 $P=(v_0,v_1,\dots,v_k)$ 的总权重为</p>
+$$w(P)=\sum_{i=0}^{k-1} w(v_i,v_{i+1}).$$
+<p>最短路径问题就是求使 $w(P)$ 最小的路径。</p>
+<p><strong>为什么需要特别对待。</strong> Dijkstra 算法依赖一个前提:一旦某个顶点被"确定",其距离就不会再减小。负边权会破坏这个前提,因为后面的负边可能让已确定的距离继续变小。因此含负边权的图应使用 Bellman–Ford 算法,它对所有边反复松弛:</p>
+$$d[v]\leftarrow \min\bigl(d[v],\; d[u]+w(u,v)\bigr),$$
+<p>共进行 $|V|-1$ 轮,时间复杂度为 $O(|V|\cdot|E|)$。</p>
+<p><strong>负环。</strong> 若图中存在总权重为负的回路,则可以无限绕行使总权重趋于 $-\infty$,此时最短路径没有定义。Bellman–Ford 在第 $|V|$ 轮若仍有边可以松弛,就说明存在可达的负环。</p>
+<p><strong>例题。</strong> 考虑边 $A\to B$ 权重 $4$,$A\to C$ 权重 $2$,$C\to B$ 权重 $-3$,求 $A$ 到 $B$ 的最短路径。</p>
+<p>直接走 $A\to B$ 的代价是 $4$;经过 $C$ 的代价是 $2+(-3)=-1$。所以最短距离为 $-1$。Dijkstra 会先以距离 $4$ 确定 $B$(因为 $4>2$ 时先处理 $C$ 其实可行,但在更复杂的图中顺序出错就会得到错误结果),而 Bellman–Ford 总能正确处理。</p>
+<pre class="mermaid">graph LR
+    A((A)) -->|4| B((B))
+    A -->|2| C((C))
+    C -->|-3| B</pre>
+<p><em>图:从 $A$ 到 $B$ 的两条路径,经过 $C$ 的路径因负边权而总代价更低(−1)。</em></p>
+<p><strong>问题求解应用。</strong> 设汇率图中,边权取 $-\ln(\text{汇率})$。一条货币兑换回路的汇率乘积大于 $1$,等价于</p>
+$$\sum -\ln r_i<0,$$
+<p>即图中存在负环。于是"是否存在套利机会"就转化为"是否存在负环",可用 Bellman–Ford 检测。</p>
+<p><strong>解题步骤小结:</strong></p>
+<li>判断图中是否有负边;若有,不要使用 Dijkstra。</li>
+<li>用 Bellman–Ford 执行 $|V|-1$ 轮松弛。</li>
+<li>再多做一轮:若仍有距离变小,则存在负环,最短路径无定义;否则 $d[\cdot]$ 即为最终结果。</li>
+<p><strong>要点:</strong> 负边权本身并不可怕,真正的危险是负环。理解这一区别,是正确选择最短路径算法的关键。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>
