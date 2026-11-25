@@ -69,13 +69,13 @@
       },
       {
         "target": "tower_of_hanoi",
-        "file": "output/college.zh/sonnet/html/book_tower_of_hanoi.html",
+        "file": "output/college.zh/sonnet/html/book_tower_of_hanoi_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "fast_exponentiation",
-        "file": "output/college.zh/sonnet/html/book_fast_exponentiation.html",
+        "file": "output/college.zh/sonnet/html/book_fast_exponentiation_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -323,13 +323,13 @@
       },
       {
         "target": "n_queens",
-        "file": "output/college.zh/sonnet/html/book_n_queens.html",
+        "file": "output/college.zh/sonnet/html/book_n_queens_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "game_tree_search",
-        "file": "output/college.zh/sonnet/html/book_game_tree_search.html",
+        "file": "output/college.zh/sonnet/html/book_game_tree_search_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -588,13 +588,13 @@
       },
       {
         "target": "fibonacci_numbers",
-        "file": "output/college.zh/sonnet/html/book_fibonacci_numbers.html",
+        "file": "output/college.zh/sonnet/html/book_fibonacci_numbers_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "text_segmentation",
-        "file": "output/college.zh/sonnet/html/book_text_segmentation.html",
+        "file": "output/college.zh/sonnet/html/book_text_segmentation_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -789,7 +789,7 @@
       },
       {
         "target": "national_resident_matching_program",
-        "file": "output/college.zh/sonnet/html/book_national_resident_matching_program.html",
+        "file": "output/college.zh/sonnet/html/book_national_resident_matching_program_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -923,13 +923,13 @@
       },
       {
         "target": "intersection_graph",
-        "file": "output/college.zh/sonnet/html/book_intersection_graph.html",
+        "file": "output/college.zh/sonnet/html/book_intersection_graph_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "configuration_graph",
-        "file": "output/college.zh/sonnet/html/book_configuration_graph.html",
+        "file": "output/college.zh/sonnet/html/book_configuration_graph_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -1151,7 +1151,7 @@
       },
       {
         "target": "cycle_detection",
-        "file": "output/college.zh/sonnet/html/book_cycle_detection.html",
+        "file": "output/college.zh/sonnet/html/book_cycle_detection_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -1435,13 +1435,13 @@
       },
       {
         "target": "boruvkas_algorithm",
-        "file": "output/college.zh/sonnet/html/book_boruvkas_algorithm.html",
+        "file": "output/college.zh/sonnet/html/book_boruvkas_algorithm_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "jarniks_algorithm",
-        "file": "output/college.zh/sonnet/html/book_jarniks_algorithm.html",
+        "file": "output/college.zh/sonnet/html/book_jarniks_algorithm_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -1629,7 +1629,7 @@
       },
       {
         "target": "moores_algorithm",
-        "file": "output/college.zh/sonnet/html/book_moores_algorithm.html",
+        "file": "output/college.zh/sonnet/html/book_moores_algorithm_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -1837,13 +1837,13 @@
       },
       {
         "target": "transitive_closure",
-        "file": "output/college.zh/sonnet/html/book_transitive_closure.html",
+        "file": "output/college.zh/sonnet/html/book_transitive_closure_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "arbitrage_detection",
-        "file": "output/college.zh/sonnet/html/book_arbitrage_detection.html",
+        "file": "output/college.zh/sonnet/html/book_arbitrage_detection_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -2005,13 +2005,13 @@
       },
       {
         "target": "maximum_flow_problem",
-        "file": "output/college.zh/sonnet/html/book_maximum_flow_problem.html",
+        "file": "output/college.zh/sonnet/html/book_maximum_flow_problem_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "minimum_cut_problem",
-        "file": "output/college.zh/sonnet/html/book_minimum_cut_problem.html",
+        "file": "output/college.zh/sonnet/html/book_minimum_cut_problem_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -2266,13 +2266,13 @@
       },
       {
         "target": "exam_scheduling",
-        "file": "output/college.zh/sonnet/html/book_exam_scheduling.html",
+        "file": "output/college.zh/sonnet/html/book_exam_scheduling_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "minimal_faculty_hiring",
-        "file": "output/college.zh/sonnet/html/book_minimal_faculty_hiring.html",
+        "file": "output/college.zh/sonnet/html/book_minimal_faculty_hiring_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
@@ -2464,13 +2464,13 @@
       },
       {
         "target": "canonical_np_hard_problems",
-        "file": "output/college.zh/sonnet/html/book_canonical_np_hard_problems.html",
+        "file": "output/college.zh/sonnet/html/book_canonical_np_hard_problems_zh.html",
         "model": "sonnet",
         "language": "zh"
       },
       {
         "target": "np_hard_games_and_puzzles",
-        "file": "output/college.zh/sonnet/html/book_np_hard_games_and_puzzles.html",
+        "file": "output/college.zh/sonnet/html/book_np_hard_games_and_puzzles_zh.html",
         "model": "sonnet",
         "language": "zh"
       }
