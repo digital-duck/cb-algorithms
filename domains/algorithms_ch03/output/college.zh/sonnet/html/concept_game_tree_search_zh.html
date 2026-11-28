@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Tree Search | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="博弈树搜索">博弈树搜索</h2>
+<h3 id="定义">定义</h3>
+<p><strong>博弈树</strong>是描述双人轮流行动博弈的树:结点表示局面,边表示一步合法走法,叶结点表示游戏结束。设两名玩家交替行动,且无平局、有限步结束(如取石子游戏)。<strong>博弈树搜索</strong>是对这棵树做深度优先的回溯搜索,判定任一局面对"当前轮到走棋的一方"是好还是坏,并找出必胜走法。</p>
+<p>局面的好坏用递归定义:</p>
+<li><strong>必胜局面(N 局面)</strong>:存在一步走法,使对手进入必败局面。</li>
+<li><strong>必败局面(P 局面)</strong>:所有走法都使对手进入必胜局面;终局时无法走棋的一方为必败。</li>
+<p>写成公式,设 $W(s)$ 表示局面 $s$ 对先手必胜:</p>
+$$W(s)=\bigvee_{s'\in \text{moves}(s)} \neg W(s')$$
+<p>无合法走法时 $W(s)=\text{False}$(此为递归基)。</p>
+<h3 id="例题">例题</h3>
+<p>取石子:一堆 $n$ 颗石子,每次可取 1、2 或 3 颗,取走最后一颗者获胜。判断 $n=4$ 与 $n=5$。</p>
+<li>$n=0$:无法走棋,$W(0)=\text{False}$。</li>
+<li>$n=1,2,3$:可一次取完,使对手面对 0,故 $W=\text{True}$。</li>
+<li>$n=4$:走法通向 3、2、1,它们都是必胜局面,即对手总能赢,所以 $W(4)=\text{False}$。</li>
+<li>$n=5$:取 1 颗通向 4(必败),所以 $W(5)=\text{True}$,必胜走法为"取 1 颗"。</li>
+<p>规律是:$n \bmod 4 = 0$ 时先手必败。</p>
+<pre><code>def win(n, memo={}):
+    if n in memo: return memo[n]
+    # 存在一步使对手必败,则当前必胜
+    memo[n] = any(not win(n - k) for k in (1, 2, 3) if k &lt;= n)
+    return memo[n]
+
+def best_move(n):
+    for k in (1, 2, 3):
+        if k &lt;= n and not win(n - k):
+            return k   # 找到必胜走法
+    return None        # 必败局面,无必胜走法</code></pre>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>问题</strong>:两人从 $n=10$ 开始取石子(规则同上),先手应怎么走?</p>
+<p><strong>解</strong>:调用 <code>best_move(10)</code>。依次检查:取 1 得 9,$9 \bmod 4=1$,对手必胜;取 2 得 8,$8 \bmod 4=0$,对手必败。因此先手取 2 颗,此后无论对手取 $k$ 颗,先手都回应 $4-k$ 颗,始终把 4 的倍数留给对手。</p>
+<p><strong>复杂度</strong>:若不加记忆,每个局面分出 $b$ 个子局面,深度为 $d$,则搜索结点数为 $O(b^d)$。这里相同的 $n$ 会被重复计算,用 <code>memo</code> 缓存后,局面只有 $n+1$ 个,时间降为 $O(n)$。对于象棋、围棋这类状态空间巨大的游戏,仍需采用 α-β 剪枝或启发式评估来限制搜索。</p>
+<p><strong>要点</strong>:</p>
+<li>先写出局面与走法的表示,再写递归基(无路可走)。</li>
+<li>利用"只要存在一步使对手必败即为必胜"来提前返回,这是回溯中的剪枝。</li>
+<li>在状态会重复出现时,加记忆化。</li>
+<pre class="mermaid">graph TD
+    A["n=5 先手"] --> B["取1 → n=4 对手"]
+    A --> C["取2 → n=3 对手"]
+    A --> D["取3 → n=2 对手"]
+    B --> E["n=4 必败: 走法都通向必胜"]
+    C --> F["n=3 必胜: 可取完"]
+    D --> G["n=2 必胜: 可取完"]</pre>
+<p><em>图:$n=5$ 的博弈树。取 1 颗使对手面对必败局面 $n=4$,所以这是必胜走法。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch3: Backtracking (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

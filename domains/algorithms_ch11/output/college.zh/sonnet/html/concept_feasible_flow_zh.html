@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feasible Flow | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="可行流">可行流</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$ 带有容量函数 $c:E\to\mathbb{R}_{\ge 0}$,并指定源点 $s$ 与汇点 $t$。函数 $f:E\to\mathbb{R}$ 称为<strong>可行流</strong>,如果它同时满足两个条件:</p>
+<li><strong>容量约束</strong>:对每条边 $e$,有 $0\le f(e)\le c(e)$。</li>
+<li><strong>流量守恒</strong>:对每个 $v\in V\setminus\{s,t\}$,有</li>
+$$\sum_{e\text{ 进入 }v} f(e)=\sum_{e\text{ 离开 }v} f(e).$$
+<p>流的<strong>值</strong>为 $|f|=\sum_{e\text{ 离开 }s}f(e)-\sum_{e\text{ 进入 }s}f(e)$。部分教材在"周围语境"中只强调容量约束,但要使 $f$ 真正表示"从 $s$ 到 $t$ 的流",守恒条件同样必不可少。</p>
+<p><strong>例题。</strong> 图中有四个顶点 $s,a,b,t$,边的容量为:$c(s,a)=4$,$c(s,b)=2$,$c(a,b)=3$,$c(a,t)=2$,$c(b,t)=5$。判断下面的 $f$ 是否可行:</p>
+<p>$f(s,a)=3,\ f(s,b)=2,\ f(a,b)=1,\ f(a,t)=2,\ f(b,t)=3$。</p>
+<li>容量检查:$3\le4,\ 2\le2,\ 1\le3,\ 2\le2,\ 3\le5$,且都不小于 0,通过。</li>
+<li>守恒检查:顶点 $a$ 流入 $3$,流出 $1+2=3$;顶点 $b$ 流入 $2+1=3$,流出 $3$。通过。</li>
+<p>因此 $f$ 是可行流,其值为 $|f|=3+2=5$。</p>
+<pre class="mermaid">flowchart LR
+    S((源点 s)) -->|"3/4"| A((a))
+    S -->|"2/2"| B((b))
+    A -->|"1/3"| B
+    A -->|"2/2"| T((汇点 t))
+    B -->|"3/5"| T</pre>
+<p><em>边标签"流量/容量"。每条边都满足 $0\le f(e)\le c(e)$,且 $a$、$b$ 处流入等于流出。</em></p>
+<p><strong>解题应用。</strong> 面对一个候选流,按固定顺序检验:</p>
+<li>逐边核对 $0\le f(e)\le c(e)$;任何一条边违反即不可行。</li>
+<li>对每个中间顶点计算"流入 − 流出",必须为 0。</li>
+<li>满足以上两点后,再计算 $|f|$。</li>
+<p>若把上例改为 $f(s,a)=4$、其余不变,则顶点 $a$ 流入 4、流出 3,守恒被破坏,不可行。修正方法是把 $f(a,b)$ 增至 $2$:此时 $a$ 流出 $2+2=4$,但 $b$ 流入变成 $2+2=4$,流出需为 4,于是令 $f(b,t)=4\le5$。新流值为 $|f|=4+2=6$,仍可行,并且比原来更大。</p>
+<p>可行流是最大流问题的<strong>搜索空间</strong>:所有可行流构成一个由线性不等式定义的凸多面体,最大流算法(如 Ford–Fulkerson)正是在其中不断增大 $|f|$,同时始终保持可行性。另一个重要事实是,任何可行流都满足 $|f|\le c(S,\bar S)$,其中 $(S,\bar S)$ 是任意 $s$–$t$ 割。这给出了流值的上界,也是最大流最小割定理的基础。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

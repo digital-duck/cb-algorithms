@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dfs Wrapper | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="dfs-wrapper">Dfs Wrapper</h2>
+<p><strong>定义</strong></p>
+<p>深度优先搜索（DFS）本身只能从一个起点出发，遍历该起点所在的<strong>连通分量</strong>（对有向图则是从该顶点可达的所有顶点）。但许多问题要求处理整个图，包括那些不连通的部分——例如统计连通分量个数、检测所有环、或对森林做拓扑排序。<code>dfs_wrapper</code> 正是为此设计的外层控制结构：它遍历图中的每一个顶点，只要该顶点尚未被访问过，就以它为起点调用一次 DFS。这样，无论图是否连通，也无论有多少个孤立分量，每个顶点最终都会被访问恰好一次。</p>
+<p><strong>伪代码</strong></p>
+<pre><code>function dfs_wrapper(G):
+    visited = {}  # 全局访问标记，跨越所有 DFS 调用共享
+    for v in G.vertices:
+        if v not in visited:
+            dfs(v, visited)</code></pre>
+<p>关键点在于 <code>visited</code> 集合是<strong>全局共享</strong>的：它不会在每次调用 <code>dfs(v)</code> 后重置，否则会重复访问同一分量。</p>
+<p><strong>正确性与复杂度</strong></p>
+<p>正确性来自一个简单的不变量：外层循环结束时，<code>visited</code> 中包含且仅包含所有顶点，因为循环遍历了每个顶点一次，且只有未访问的顶点才会触发新一轮 DFS。设图有 $V$ 个顶点、$E$ 条边，用邻接表存储。外层 <code>for</code> 循环本身是 $O(V)$；而所有内层 DFS 调用加起来（不是每次单独算）总共访问每条边至多两次（无向图）或一次（有向图），因此总时间复杂度仍是 $O(V+E)$——与单次 DFS 的复杂度相同，因为 <code>visited</code> 保证了没有重复工作。</p>
+<p><strong>问题求解应用</strong>：判断一个无向图有多少个连通分量，只需在每次触发新的 <code>dfs(v)</code> 时计数器加一；当外层循环结束时，计数器的值就是连通分量数。同样的框架略作修改即可用于：检测有向图中的环（结合递归栈标记）、计算森林中每棵树的高度、或为不连通图生成拓扑排序。</p>
+<pre class="mermaid">flowchart TD
+    A[开始: 遍历所有顶点] --> B{顶点已访问?}
+    B -- 是 --> C[跳过, 检查下一个顶点]
+    B -- 否 --> D[以该顶点为起点执行DFS]
+    D --> E[标记该分量内所有顶点为已访问]
+    E --> C
+    C --> F{还有未检查的顶点?}
+    F -- 是 --> B
+    F -- 否 --> G[结束: 所有顶点均已访问]</pre>
+<p><em>该图展示 dfs_wrapper 如何通过外层循环依次检查每个顶点，并对每个未访问的顶点触发一次新的 DFS，从而覆盖所有连通分量。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

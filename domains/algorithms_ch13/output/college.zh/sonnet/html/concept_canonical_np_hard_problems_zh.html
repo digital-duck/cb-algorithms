@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Canonical Np Hard Problems | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="典型-np-难问题">典型 NP 难问题</h2>
+<p><strong>定义。</strong> 若语言 $L$ 属于 NP 难，则 NP 中任意问题都能多项式时间归约到 $L$。要证明新问题 $X$ 是 NP 难的，只需从一个已知的 NP 难问题 $A$ 出发，构造多项式时间归约 $A \le_p X$。下面这些"典型问题"就是常用的归约起点：</p>
+<li><strong>1-in-3SAT</strong>：每个子句含 3 个文字，要求每个子句恰有一个文字为真。</li>
+<li><strong>平面电路可满足性（PlanarCircuitSat）</strong>：布线无交叉的电路是否存在使输出为 1 的输入。</li>
+<li><strong>X3M（精确三元覆盖）</strong>：给定集合 $U$（$|U|=3q$）及若干三元子集，能否选出 $q$ 个互不相交的子集恰好覆盖 $U$。</li>
+<li><strong>Partition（划分）</strong>：给定整数 $a_1,\dots,a_n$，能否分成和相等的两部分。</li>
+<li><strong>SetCover（集合覆盖）</strong>：用最少的集合覆盖全集。</li>
+<li><strong>Max2Sat</strong>：每个子句含 2 个文字，最多能同时满足多少个子句。</li>
+<li><strong>MaxCut（最大割）</strong>：把图的顶点分成两部分，使跨越两部分的边数最多。</li>
+<p><strong>选择原则。</strong> 目标问题的结构像谁，就选谁作源：数值问题选 Partition，覆盖问题选 X3M 或 SetCover，图的切分问题选 Max2Sat 或 MaxCut，平面几何或布局问题选 PlanarCircuitSat。</p>
+<p><strong>例题。</strong> 证明 SubsetSum（给定 $a_1,\dots,a_n$ 和目标 $t$，是否存在子集之和为 $t$）是 NP 难的。</p>
+<p><em>解。</em> 从 Partition 归约。给定实例 $a_1,\dots,a_n$，令 $S=\sum a_i$，取 $t=S/2$（若 $S$ 为奇数，输出一个固定的"否"实例）。则</p>
+$$\exists\, I\subseteq[n]:\ \sum_{i\in I}a_i=\tfrac{S}{2}\iff \text{存在划分，两部分之和均为 } \tfrac{S}{2}.$$
+<p>构造只需一次求和与一次除法，是多项式时间的，且"是"实例映射为"是"实例，"否"实例映射为"否"实例。因此 Partition $\le_p$ SubsetSum，SubsetSum 是 NP 难的。$\blacksquare$</p>
+<p><strong>解题应用：归约的四步套路。</strong></p>
+<li><strong>选源</strong>：按上面的原则挑一个结构相近的典型问题。</li>
+<li><strong>造构件（gadget）</strong>：用目标问题的对象模拟源问题的变量、子句或元素。</li>
+<li><strong>验证等价</strong>：证明"源实例有解 $\iff$ 目标实例有解"，两个方向都要写。</li>
+<li><strong>验证规模</strong>：说明构造的时间和输出大小都是输入的多项式。</li>
+<p><em>练习。</em> 证明 MaxCut 是 NP 难的，可选 Max2Sat 为源。提示：对每个变量 $x$ 建一个顶点，每个 2-子句 $(\ell_1\vee\ell_2)$ 对应若干条边，使"子句被满足"等价于"这些边中有足够多的边被割开"。再想一想：为什么这里选 Max2Sat 比选 1-in-3SAT 更自然？（提示：看子句大小与边的端点数是否匹配。）</p>
+<pre class="mermaid">graph TD
+A["SAT"] --> B["3SAT"]
+B --> C["1-in-3SAT"]
+B --> D["Max2Sat"]
+C --> E["X3M"]
+E --> F["Partition"]
+D --> G["MaxCut"]
+E --> H["SetCover"]</pre>
+<p><em>图：典型 NP 难问题之间常见的归约链。箭头 $A\to B$ 表示可由 $A$ 归约到 $B$，选源时可沿此图寻找最接近目标问题的起点。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

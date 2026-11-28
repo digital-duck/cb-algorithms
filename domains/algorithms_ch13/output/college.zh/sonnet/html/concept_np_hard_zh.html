@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Np Hard | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="np-难-np-hard">NP 难(NP-hard)</h2>
+<p><strong>定义。</strong> 称问题 $\Pi$ 是 <strong>NP 难</strong>的,如果 NP 中的每一个问题 $L$ 都可以在多项式时间内归约到 $\Pi$,记作</p>
+$$
+\forall L \in \mathrm{NP}:\; L \le_p \Pi .
+$$
+<p>也就是说,只要有一个能解 $\Pi$ 的多项式时间算法,就能借助归约解决 NP 中的所有问题,从而得到 $\mathrm{P}=\mathrm{NP}$。</p>
+<p>注意两点:</p>
+<li>NP 难表示"<strong>至少和 NP 中最难的问题一样难</strong>",而 $\Pi$ 本身不必属于 NP。例如停机问题是 NP 难的,却不可判定。</li>
+<li>若 $\Pi$ 既是 NP 难的,又属于 NP,则称它是 <strong>NP 完全</strong>的($\mathrm{NP\text{-}complete}$)。</li>
+<p><strong>传递性。</strong> 若 $L_1 \le_p L_2$ 且 $L_2 \le_p L_3$,则 $L_1 \le_p L_3$。因此,只要已知某个问题 $A$ 是 NP 难的,再证明 $A \le_p \Pi$,就能推出 $\Pi$ 也是 NP 难的。第一个 NP 难问题由 Cook–Levin 定理给出:SAT 是 NP 完全的。</p>
+<h3 id="例题-证明-团问题-是-np-难的">例题:证明"团问题"是 NP 难的</h3>
+<p><strong>团(CLIQUE)</strong>:给定图 $G$ 和整数 $k$,问 $G$ 中是否存在 $k$ 个两两相邻的顶点。已知 3-SAT 是 NP 难的,下面证明 $\text{3-SAT} \le_p \text{CLIQUE}$。</p>
+<p><strong>构造。</strong> 设公式 $\varphi$ 有 $m$ 个子句,每个子句含 3 个文字。</p>
+<li>为每个子句中的每个文字建一个顶点,共 $3m$ 个。</li>
+<li>在两个顶点之间连边,当且仅当它们来自<strong>不同子句</strong>,并且<strong>不互为矛盾</strong>(例如不是 $x$ 与 $\lnot x$)。</li>
+<li>令 $k=m$。</li>
+<p><strong>正确性。</strong></p>
+<li>若 $\varphi$ 可满足:每个子句挑出一个为真的文字,这 $m$ 个文字来自不同子句,且彼此不矛盾,因此两两相邻,构成大小为 $m$ 的团。</li>
+<li>反之,若存在大小为 $m$ 的团:团内顶点两两来自不同子句,所以每个子句恰好出一个顶点。令这些文字都为真,由于没有矛盾对,这样的赋值是自洽的,$\varphi$ 因此可满足。</li>
+<p>该构造至多产生 $3m$ 个顶点和 $O(m^2)$ 条边,是多项式时间的。所以 CLIQUE 是 NP 难的。又因为给定顶点集可在多项式时间内验证,CLIQUE 属于 NP,故它是 NP 完全的。</p>
+<h3 id="解题应用">解题应用</h3>
+<p><strong>如何用 NP 难性指导实践?</strong> 遇到新问题时,可按下面的步骤处理:</p>
+<li>选一个已知的 NP 难问题 $A$(如 3-SAT、顶点覆盖、哈密顿回路)。</li>
+<li>构造多项式时间的归约 $A \le_p \Pi$,并证明"是/否"实例相互对应。</li>
+<li>得出 $\Pi$ 为 NP 难后,不要再寻找精确的多项式时间算法(除非你能证明 $\mathrm{P}=\mathrm{NP}$)。改用下列策略:</li>
+<p>   - <strong>近似算法</strong>:例如顶点覆盖有 2-近似算法;    - <strong>启发式或参数化算法</strong>:利用实例的特殊结构;    - <strong>限制输入</strong>:如在树或平面图上,许多 NP 难问题可以高效求解。</p>
+<p><strong>练习。</strong> 旅行商问题(TSP)的判定版本为:是否存在总长不超过 $B$ 的回路?请从哈密顿回路出发,构造归约证明它是 NP 难的。 <em>提示:</em> 给原图中的边赋权 1,给不存在的边赋权 2,并取 $B=n$。</p>
+<pre class="mermaid">flowchart LR
+    A["NP 中任意问题 L"] --> B["SAT(Cook–Levin)"]
+    B --> C["3-SAT"]
+    C --> D["团问题"]
+    C --> E["顶点覆盖"]
+    D --> F["新问题 Π"]
+    F --> G["Π 是 NP 难的"]</pre>
+<p><em>图:NP 难性通过多项式时间归约沿箭头传递。只要从已知的 NP 难问题出发,构造出到新问题 $\Pi$ 的归约,就证明了 $\Pi$ 是 NP 难的。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

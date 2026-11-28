@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gale Shapley Algorithm | Algorithms Ch05</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="盖尔-沙普利算法-gale-shapley-algorithm">盖尔-沙普利算法(Gale–Shapley Algorithm)</h2>
+<h3 id="定义">定义</h3>
+<p>在医院—医生匹配问题中,有 $n$ 家医院和 $n$ 名医生,每一方对另一方的所有成员都有严格的偏好排序。<strong>匹配</strong> $\mu$ 是医院与医生之间的一一配对。若存在一对 $(h,d)$,它们没有被配对在一起,但彼此都更偏好对方胜过各自当前的伙伴,则称 $(h,d)$ 为<strong>阻塞对</strong>。没有阻塞对的匹配称为<strong>稳定匹配</strong>。</p>
+<p><strong>盖尔-沙普利算法(医院提议版)</strong> 按轮进行:</p>
+<li>每家未匹配的医院向其偏好表中尚未求过的最优医生提出邀请。</li>
+<li>每名医生在所有收到的邀请(包括当前暂时接受的那一个)中,暂时接受最喜欢的,拒绝其余。</li>
+<li>被拒绝的医院回到未匹配状态,下一轮继续向下一位医生提议。</li>
+<li>当所有医院都已匹配时停止。</li>
+<h3 id="例题">例题</h3>
+<p>设 3 家医院 $H_1,H_2,H_3$ 和 3 名医生 $D_1,D_2,D_3$,偏好(左为最优):</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">医院</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">偏好</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">医生</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">偏好</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_1 > D_2 > D_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_2 > H_1 > H_3$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D1 > D_3 > D_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_1 > H_3 > H_2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_1 > D_2 > D_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_1 > H_2 > H_3$</td>
+    </tr>
+  </tbody>
+</table>
+<li><strong>第 1 轮</strong>:三家医院都向 $D_1$ 提议。$D_1$ 偏好 $H_2$,故暂时接受 $H_2$,拒绝 $H_1,H_3$。</li>
+<li><strong>第 2 轮</strong>:$H_1$ 向 $D_2$ 提议,$H_3$ 向 $D_2$ 提议。$D_2$ 偏好 $H_1$,接受 $H_1$,拒绝 $H_3$。</li>
+<li><strong>第 3 轮</strong>:$H_3$ 向 $D_3$ 提议,$D_3$ 无其他邀请,暂时接受。</li>
+<p>结果:$\mu=\{(H_1,D_2),(H_2,D_1),(H_3,D_3)\}$。检验:$H_1$ 更想要 $D_1$,但 $D_1$ 偏好现任 $H_2$;$H_3$ 更想要 $D_1,D_2$,但两人都偏好各自现任。无阻塞对,匹配稳定。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>定理 1(终止性)</strong> 算法至多进行 $n^2$ 次提议后终止。</p>
+<p><em>证明</em>:每家医院对每名医生至多提议一次,故总提议数 $\le n^2$,而每轮至少产生一次新提议,所以算法必然终止。又因为只要有医院未匹配,它就仍有未求过的医生(否则 $n$ 家医院都曾向某医生提议,该医生已被匹配,与"医院未匹配且已向所有医生提议"矛盾),所以终止时所有人均已匹配。</p>
+<p><strong>定理 2(稳定性)</strong> 输出的匹配是稳定的。</p>
+<p><em>证明</em>:假设 $(h,d)$ 是阻塞对,$h$ 更偏好 $d$ 胜过其最终伙伴。那么 $h$ 必然先向 $d$ 提议过并被拒绝(或后来被替换)。医生接受的伙伴只会越来越好,因此 $d$ 的最终伙伴不比 $h$ 差,即 $d$ 并不偏好 $h$,与阻塞对定义矛盾。$\square$</p>
+<p><strong>最优性</strong> 可以进一步证明:每家医院得到的医生,是<strong>所有稳定匹配中</strong>它能得到的最好的一位(医院最优),而每名医生得到的则是最差的稳定伙伴。因此"谁来提议"决定了谁受益。</p>
+<p><strong>应用思路</strong>:面对任何"双边匹配"问题(住院医师分配、学校录取、器官交换),先写出双方偏好表,令受益方作为提议方,按上述轮次模拟;复杂度为 $O(n^2)$,可直接用于验证方案是否稳定。</p>
+<pre class="mermaid">flowchart TD
+    A[开始: 所有医院未匹配] --> B[未匹配医院向最优未求过的医生提议]
+    B --> C{医生是否已有伙伴?}
+    C -->|否| D[医生暂时接受]
+    C -->|是| E{更偏好新医院?}
+    E -->|是| F[换成新医院, 原医院变为未匹配]
+    E -->|否| G[拒绝新医院]
+    D --> H{仍有未匹配医院?}
+    F --> H
+    G --> H
+    H -->|是| B
+    H -->|否| I[输出稳定匹配]</pre>
+<p><em>图:医院提议版盖尔-沙普利算法的流程,循环直至所有医院都被匹配。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch5: Greedy Algorithms (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

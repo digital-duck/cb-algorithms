@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recurrence Relation | Algorithms Ch04</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="递推关系">递推关系</h2>
+<h3 id="定义">定义</h3>
+<p><strong>递推关系</strong>(recurrence relation)用序列中较小下标的项来表示第 $n$ 项,并配以<strong>初始条件</strong>(基例)。一个递推关系要完整地确定序列,必须同时给出两部分:</p>
+<li>递推式:$a_n = f(a_{n-1}, a_{n-2}, \dots, a_{n-k})$,对所有 $n \ge k$ 成立;</li>
+<li>基例:$a_0, a_1, \dots, a_{k-1}$ 的具体取值。</li>
+<p>缺少基例,递推式只描述一族序列;有了基例,序列唯一确定。例如斐波那契数列:</p>
+$$F_n = F_{n-1} + F_{n-2},\quad F_0 = 0,\ F_1 = 1.$$
+<h3 id="例题-解一阶线性递推">例题:解一阶线性递推</h3>
+<p>求解 $a_n = 2a_{n-1} + 1$,$a_0 = 0$。</p>
+<p><strong>步骤 1:展开前几项。</strong> $a_1 = 1,\ a_2 = 3,\ a_3 = 7,\ a_4 = 15$。</p>
+<p><strong>步骤 2:猜测通式。</strong> 各项比 $2$ 的幂小 $1$,猜 $a_n = 2^n - 1$。</p>
+<p><strong>步骤 3:用数学归纳法验证。</strong></p>
+<li>基例:$a_0 = 2^0 - 1 = 0$ ✓。</li>
+<li>归纳步:设 $a_{n-1} = 2^{n-1} - 1$,则</li>
+$$a_n = 2(2^{n-1} - 1) + 1 = 2^n - 1.$$
+<p>这就是"汉诺塔"问题中移动 $n$ 个圆盘所需的最少步数。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>(1)二阶常系数齐次递推。</strong> 对 $a_n = c_1 a_{n-1} + c_2 a_{n-2}$,设 $a_n = r^n$,代入得<strong>特征方程</strong></p>
+$$r^2 = c_1 r + c_2.$$
+<p>若有两个不同的根 $r_1, r_2$,则通解为 $a_n = A r_1^n + B r_2^n$,系数 $A, B$ 由基例确定。</p>
+<p>对斐波那契数列,$r^2 = r + 1$,解得 $r = \frac{1 \pm \sqrt5}{2}$,代入 $F_0 = 0,\ F_1 = 1$ 得比内公式:</p>
+$$F_n = \frac{1}{\sqrt5}\left[\left(\frac{1+\sqrt5}{2}\right)^n - \left(\frac{1-\sqrt5}{2}\right)^n\right].$$
+<p>所以 $F_n$ 以黄金比例 $\varphi \approx 1.618$ 指数增长。</p>
+<p><strong>(2)分治算法的复杂度。</strong> 归并排序的运行时间满足</p>
+$$T(n) = 2T(n/2) + n,\quad T(1) = 1.$$
+<p>每层递归的总工作量为 $n$,共有 $\log_2 n$ 层,因此 $T(n) = \Theta(n \log n)$。一般形式 $T(n) = aT(n/b) + f(n)$ 可用<strong>主定理</strong>(Master Theorem)比较 $f(n)$ 与 $n^{\log_b a}$ 的增长速度来求解。</p>
+<p><strong>(3)编程实现。</strong> 直接按定义递归计算 $F_n$ 会重复求解子问题,时间为指数级;加上记忆化,或从基例向上迭代,即可降到 $O(n)$:</p>
+<pre><code>def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a</code></pre>
+<h3 id="小结">小结</h3>
+<p>解递推关系的通用流程是:<strong>写出递推式与基例 → 展开或猜测 → 用归纳或特征方程求闭式 → 检验基例</strong>。遇到分治类问题,先建立 $T(n)$ 的递推式,再分析其渐近增长。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch4: Dynamic Programming (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

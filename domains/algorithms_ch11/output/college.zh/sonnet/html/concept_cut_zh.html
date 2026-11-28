@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cut | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="割-cut">割(Cut)</h2>
+<p><strong>定义。</strong> 在带有源点 $s$ 和汇点 $t$ 的流网络 $G=(V,E)$ 中,一个 <strong>$s$-$t$ 割</strong> 是把顶点集划分为两个不相交的子集 $S$ 和 $T=V\setminus S$,且满足 $s\in S$、$t\in T$。割的<strong>容量</strong>定义为从 $S$ 指向 $T$ 的所有边的容量之和:</p>
+$$
+c(S,T)=\sum_{u\in S,\;v\in T,\;(u,v)\in E} c(u,v).
+$$
+<p>注意:只计算 $S\to T$ 方向的边,从 $T$ 指向 $S$ 的边不计入容量。直观上,割就是"切断"网络、使 $s$ 无法再到达 $t$ 所需付出的代价。</p>
+<p><strong>与流的关系。</strong> 对任意可行流 $f$,穿过割的<strong>净流量</strong>等于流的值:</p>
+$$
+|f| = \sum_{u\in S,v\in T} f(u,v)-\sum_{u\in T,v\in S} f(u,v)\le c(S,T).
+$$
+<p>因此任何流的值都不超过任何割的容量。这正是最大流最小割定理的基础:最大流的值等于最小割的容量。</p>
+<p><strong>例题。</strong> 网络有顶点 $s,a,b,t$,边容量为:$c(s,a)=3$,$c(s,b)=2$,$c(a,b)=1$,$c(a,t)=2$,$c(b,t)=3$。</p>
+<p>取 $S=\{s,a\}$,$T=\{b,t\}$。从 $S$ 到 $T$ 的边有 $(s,b)$、$(a,b)$、$(a,t)$,所以</p>
+$$
+c(S,T)=2+1+2=5.
+$$
+<p>再取 $S'=\{s\}$,$T'=\{a,b,t\}$,则 $c(S',T')=c(s,a)+c(s,b)=3+2=5$。</p>
+<p>取 $S''=\{s,a,b\}$,$T''=\{t\}$,则 $c(S'',T'')=c(a,t)+c(b,t)=2+3=5$。</p>
+<p>三个割的容量都是 5。</p>
+<p><strong>问题求解应用。</strong> 如何证明最大流恰为 5?</p>
+<li>构造一个流:$s\to a\to t$ 送 2 单位,$s\to a\to b\to t$ 送 1 单位,$s\to b\to t$ 送 2 单位。检查容量:$(s,a)$ 流量 3,$(s,b)$ 流量 2,$(a,b)$ 流量 1,$(a,t)$ 流量 2,$(b,t)$ 流量 3,均不超限,流值为 $2+1+2=5$。</li>
+<li>上面的割容量为 5,而任何流的值都不超过任何割的容量,所以 $|f|\le 5$。</li>
+<p>流值 5 达到了割容量 5 的上界,因此该流是最大流,该割是最小割。<strong>要点:</strong> 找到一个流和一个割使两者数值相等,就同时证明了二者都已最优。</p>
+<p><strong>常见错误。</strong> 计算容量时误把 $T\to S$ 的边也加进去;或者忘了检查 $s\in S$、$t\in T$ 这个前提。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

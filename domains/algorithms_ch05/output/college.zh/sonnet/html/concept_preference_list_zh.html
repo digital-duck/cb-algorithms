@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preference List | Algorithms Ch05</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="偏好列表">偏好列表</h2>
+<p><strong>定义。</strong> 在匹配问题中，每个参与者对所有可能的伙伴给出一个<strong>严格全序</strong>排名，称为该参与者的<strong>偏好列表</strong>（preference list）。设两个集合 $M$（如医院）和 $W$（如实习生），参与者 $m\in M$ 的偏好列表记作</p>
+$$P(m)=\;w_{i_1}\succ_m w_{i_2}\succ_m\cdots\succ_m w_{i_n},$$
+<p>其中 $w\succ_m w'$ 表示 $m$ 认为 $w$ 优于 $w'$。严格全序要求：任意两个不同伙伴都可比较（完全性），且不存在并列。为便于计算，常定义<strong>排名函数</strong> $\operatorname{rank}_m(w)$，它表示 $w$ 在 $P(m)$ 中的位置（1 表示最喜欢）。于是 $w\succ_m w'$ 当且仅当 $\operatorname{rank}_m(w)<\operatorname{rank}_m(w')$。</p>
+<p>偏好列表是匹配算法（如 Gale–Shapley 稳定匹配算法）的<strong>唯一输入</strong>：算法只比较名次，不关心偏好的“强度”。</p>
+<p><strong>例题。</strong> 三位学生 $a,b,c$ 与三个项目 $X,Y,Z$：</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">参与者</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">偏好列表</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$X\succ Y\succ Z$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$X\succ Z\succ Y$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$c$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$Y\succ X\succ Z$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$X$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b\succ a\succ c$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$Y$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a\succ b\succ c$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$Z$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a\succ c\succ b$</td>
+    </tr>
+  </tbody>
+</table>
+<p>读表：$\operatorname{rank}_a(Y)=2$，$\operatorname{rank}_X(c)=3$。学生 $a$ 认为 $X$ 优于 $Z$，这是一个比较关系，而不是打分。</p>
+<p><strong>问题求解：判断稳定性。</strong> 匹配 $\mu_1=\{(a,X),(b,Z),(c,Y)\}$ 是否稳定？</p>
+<p>稳定性要求不存在<strong>阻塞对</strong>：即一对 $(s,p)$ 尚未配对，却互相认为对方优于当前伙伴。</p>
+<li>检查 $(b,X)$：$b$ 当前是 $Z$，而 $X\succ_b Z$，所以 $b$ 愿意换；$X$ 当前是 $a$，而 $b\succ_X a$，所以 $X$ 也愿意换。双方都愿意，因此 $(b,X)$ 是阻塞对。</li>
+<li>结论：$\mu_1$ <strong>不稳定</strong>。</li>
+<p>修正：令 $\mu_2=\{(b,X),(a,Y),(c,Z)\}$。检查 $(a,X)$：$a$ 偏好 $X$，但 $X$ 更喜欢 $b$，不构成阻塞。检查 $(c,Y)$：$c$ 偏好 $Y$，但 $Y$ 更喜欢 $a$，不构成阻塞。检查 $(c,X)$：$X$ 更喜欢 $b$，不构成阻塞。其余各对依次检查，也都无法使双方同时获益，所以 $\mu_2$ 稳定。</p>
+<p><strong>实践要点。</strong></p>
+<li>偏好列表只需要<strong>序</strong>，所以可以用数组或字典实现，排名函数查询的时间复杂度为 $O(1)$（预先建立 $\operatorname{rank}$ 表）。若不预处理，每次比较要扫描列表，代价为 $O(n)$。</li>
+<li>对 $n$ 人对 $n$ 人的问题，输入规模为 $O(n^2)$，因为每人都要给出长度为 $n$ 的列表。Gale–Shapley 算法最多进行 $n^2$ 次提议，因此总时间为 $O(n^2)$，与输入规模同阶。</li>
+<li>实际场景中常允许<strong>不完整列表</strong>（只排出可接受的伙伴）和<strong>并列</strong>；此时稳定性的定义与算法都要相应调整，最终匹配的规模也可能随之变化。</li>
+<p><strong>小结。</strong> 偏好列表把“喜好”抽象为一个可比较的严格全序，使稳定性成为可以精确检验的性质：只需逐对查找阻塞对。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch5: Greedy Algorithms (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

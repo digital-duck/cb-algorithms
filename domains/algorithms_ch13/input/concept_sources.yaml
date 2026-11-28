@@ -1,0 +1,184 @@
+domain: Algorithms_JeffE
+sources:
+  boolean_circuit:
+    label: Boolean Circuit
+    sections:
+    - id: ch13_a_game_you_can_t_win
+      title: A Game You Can't Win
+  circuit_satisfiability:
+    label: Circuit Satisfiability (CircuitSat)
+    sections:
+    - id: ch13_a_game_you_can_t_win
+      title: A Game You Can't Win
+    - id: ch13_p_versus_np
+      title: P versus NP
+  polynomial_time:
+    label: Polynomial Time
+    sections:
+    - id: ch13_p_versus_np
+      title: P versus NP
+  decision_problem:
+    label: Decision Problem
+    sections:
+    - id: ch13_p_versus_np
+      title: P versus NP
+  p_class:
+    label: Complexity Class P
+    sections:
+    - id: ch13_p_versus_np
+      title: P versus NP
+  np_class:
+    label: Complexity Class NP
+    sections:
+    - id: ch13_p_versus_np
+      title: P versus NP
+  co_np_class:
+    label: Complexity Class co-NP
+    sections:
+    - id: ch13_p_versus_np
+      title: P versus NP
+  np_hard:
+    label: NP-hard
+    sections:
+    - id: ch13_np_hard_np_easy_and_np_complete
+      title: NP-hard, NP-easy, and NP-complete
+  np_complete:
+    label: NP-complete
+    sections:
+    - id: ch13_np_hard_np_easy_and_np_complete
+      title: NP-hard, NP-easy, and NP-complete
+  cook_levin_theorem:
+    label: Cook-Levin Theorem
+    sections:
+    - id: ch13_np_hard_np_easy_and_np_complete
+      title: NP-hard, NP-easy, and NP-complete
+  turing_machine:
+    label: Turing Machine
+    sections:
+    - id: ch13_formal_definitions_hc_svnt_dracones
+      title: ♥Formal Definitions (HC SVNT DRACONES)
+  turing_reduction:
+    label: Turing (Cook) Reduction
+    sections:
+    - id: ch13_formal_definitions_hc_svnt_dracones
+      title: ♥Formal Definitions (HC SVNT DRACONES)
+  karp_reduction:
+    label: Many-One (Karp) Reduction
+    sections:
+    - id: ch13_formal_definitions_hc_svnt_dracones
+      title: ♥Formal Definitions (HC SVNT DRACONES)
+  reduction_proof_technique:
+    label: Reduction-Based NP-Hardness Proof
+    sections:
+    - id: ch13_reductions_and_sat
+      title: Reductions and Sat
+  boolean_formula:
+    label: Boolean Formula
+    sections:
+    - id: ch13_reductions_and_sat
+      title: Reductions and Sat
+  sat:
+    label: Formula Satisfiability (Sat)
+    sections:
+    - id: ch13_reductions_and_sat
+      title: Reductions and Sat
+  conjunctive_normal_form:
+    label: Conjunctive Normal Form (CNF)
+    sections:
+    - id: ch13_3sat_from_circuitsat
+      title: 3Sat (from CircuitSat)
+  3sat:
+    label: 3SAT
+    sections:
+    - id: ch13_3sat_from_circuitsat
+      title: 3Sat (from CircuitSat)
+  max_independent_set:
+    label: Maximum Independent Set
+    sections:
+    - id: ch13_maximum_independent_set_from_3sat
+      title: Maximum Independent Set (from 3Sat)
+  reduction_general_pattern:
+    label: General Reduction Outline
+    sections:
+    - id: ch13_the_general_pattern
+      title: The General Pattern
+  max_clique:
+    label: Maximum Clique
+    sections:
+    - id: ch13_graph_coloring_from_3sat
+      title: Graph Coloring (from 3Sat)
+  min_vertex_cover:
+    label: Minimum Vertex Cover
+    sections:
+    - id: ch13_graph_coloring_from_3sat
+      title: Graph Coloring (from 3Sat)
+  graph_coloring:
+    label: Graph Coloring (3-Coloring)
+    sections:
+    - id: ch13_graph_coloring_from_3sat
+      title: Graph Coloring (from 3Sat)
+  hamiltonian_cycle:
+    label: Hamiltonian Cycle
+    sections:
+    - id: ch13_hamiltonian_cycle
+      title: Hamiltonian Cycle
+  traveling_salesman:
+    label: Traveling Salesman Problem
+    sections:
+    - id: ch13_hamiltonian_cycle
+      title: Hamiltonian Cycle
+  subset_sum:
+    label: Subset Sum
+    sections:
+    - id: ch13_subset_sum_from_vertex_cover
+      title: Subset Sum (from Vertex Cover)
+  pseudo_polynomial_hardness:
+    label: Pseudo-Polynomial Time and Weak/Strong NP-Hardness
+    sections:
+    - id: ch13_subset_sum_from_vertex_cover
+      title: Subset Sum (from Vertex Cover)
+  canonical_np_hard_problems:
+    label: Catalog of Canonical NP-hard Problems
+    sections:
+    - id: ch13_other_useful_np_hard_problems
+      title: Other Useful NP-hard Problems
+  np_hard_games_and_puzzles:
+    label: NP-hardness of Puzzles and Games
+    sections:
+    - id: ch13_other_useful_np_hard_problems
+      title: Other Useful NP-hard Problems
+  choosing_reduction_source:
+    label: Choosing the Reduction Source Problem
+    sections:
+    - id: ch13_choosing_the_right_problem
+      title: Choosing the Right Problem
+  draughts_move_hardness:
+    label: NP-Hardness of Finding a Legal Draughts Move
+    sections:
+    - id: ch13_a_frivolous_real_world_example
+      title: A Frivolous Real-World Example
+  pspace:
+    label: Complexity Class PSPACE
+    sections:
+    - id: ch13_on_beyond_zebra
+      title: ♥On Beyond Zebra
+  pspace_hard:
+    label: PSPACE-hard
+    sections:
+    - id: ch13_on_beyond_zebra
+      title: ♥On Beyond Zebra
+  qbf:
+    label: Quantified Boolean Formula (QBF)
+    sections:
+    - id: ch13_on_beyond_zebra
+      title: ♥On Beyond Zebra
+  exp_class:
+    label: Complexity Class EXP
+    sections:
+    - id: ch13_on_beyond_zebra
+      title: ♥On Beyond Zebra
+  complexity_class_hierarchy:
+    label: Hierarchy Beyond EXP
+    sections:
+    - id: ch13_on_beyond_zebra
+      title: ♥On Beyond Zebra

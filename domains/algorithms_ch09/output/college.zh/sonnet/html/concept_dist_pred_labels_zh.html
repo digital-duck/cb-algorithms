@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dist Pred Labels | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="距离与前驱标签">距离与前驱标签</h2>
+<p><strong>定义。</strong> 在单源最短路径算法(如 Dijkstra、Bellman-Ford)中,算法并不一次性得到答案,而是为每个顶点 $v$ 维护两个随时可被更新的变量:</p>
+<li><strong>距离标签</strong> $d[v]$:从源点 $s$ 到 $v$ 目前已发现的最短路径长度的<strong>上界</strong>(估计值);</li>
+<li><strong>前驱标签</strong> $\pi[v]$:这条当前最优路径上 $v$ 的前一个顶点。</li>
+<p>初始化为</p>
+$$d[s]=0,\qquad d[v]=\infty\ (v\ne s),\qquad \pi[v]=\text{NIL}.$$
+<p>算法的核心操作是<strong>松弛</strong>(relaxation)。对边 $(u,v)$,权重为 $w(u,v)$,若</p>
+$$d[u]+w(u,v)<d[v],$$
+<p>则令 $d[v]\leftarrow d[u]+w(u,v)$,$\pi[v]\leftarrow u$。距离标签只会减小,且始终满足 $d[v]\ge\delta(s,v)$,其中 $\delta(s,v)$ 是真实最短距离。算法结束时 $d[v]=\delta(s,v)$,并且沿 $\pi$ 反向回溯即可还原路径。</p>
+<p><strong>例题。</strong> 图中有边:$s\to a$(4),$s\to b$(1),$b\to a$(2),$a\to t$(1),$b\to t$(6)。</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">步骤</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$d[s]$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$d[a]$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$d[b]$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$d[t]$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$\pi[a]$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$\pi[b]$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$\pi[t]$</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">初始</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">0</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\infty$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\infty$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\infty$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">NIL</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">NIL</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">NIL</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">松弛 $s\to a$, $s\to b$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">0</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\infty$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$s$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$s$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">NIL</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">松弛 $b\to a$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">0</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\infty$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$s$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">NIL</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">松弛 $b\to t$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">0</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">7</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$s$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">松弛 $a\to t$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">0</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$s$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a$</td>
+    </tr>
+  </tbody>
+</table>
+<p>在第三行中,$d[b]+w(b,a)=1+2=3<4$,所以 $a$ 的距离与前驱同时被改写。注意:$d$ 与 $\pi$ <strong>总是成对更新</strong>,否则距离与路径会不一致。</p>
+<pre class="mermaid">graph LR
+    S["源点 s (d=0)"] -->|4| A["a (d=3, 前驱=b)"]
+    S -->|1| B["b (d=1, 前驱=s)"]
+    B -->|2| A
+    A -->|1| T["t (d=4, 前驱=a)"]
+    B -->|6| T</pre>
+<p><em>最终标签状态:沿前驱指针 $t\to a\to b\to s$ 反向回溯,得到最短路径 $s\to b\to a\to t$,长度为 4。</em></p>
+<p><strong>问题求解应用。</strong> 求 $t$ 的最短路径时,分两步:</p>
+<li>读取 $d[t]=4$,即最短路径长度;</li>
+<li>从 $t$ 出发反复取 $\pi$:$t\to\pi[t]=a\to\pi[a]=b\to\pi[b]=s$,反转后得到路径 $s,b,a,t$。</li>
+<p>这也是检验结果的方法:路径上各边权重之和必须等于 $d[t]$,即 $1+2+1=4$ ✓。若不相等,说明某次松弛漏更新了 $\pi$ 或 $d$。</p>
+<p><strong>为何正确。</strong> 松弛保证 $d[v]$ 永远不小于真实距离(上界性质),而每个顶点的 $\pi$ 指向使其 $d$ 值被最后一次改进的顶点。算法终止后,所有边都满足 $d[v]\le d[u]+w(u,v)$,于是 $d[v]=\delta(s,v)$,前驱指针构成以 $s$ 为根的<strong>最短路径树</strong>。每个顶点只需存储一个前驱,就能用 $O(|V|)$ 空间表示全部最短路径,而不必为每个目标顶点单独保存整条路径。</p>
+<p><strong>练习。</strong> 若把边 $b\to a$ 的权重改为 5,各顶点的最终 $d$ 与 $\pi$ 是什么?(答案:$d[a]=4,\pi[a]=s$;$d[t]=5,\pi[t]=a$。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

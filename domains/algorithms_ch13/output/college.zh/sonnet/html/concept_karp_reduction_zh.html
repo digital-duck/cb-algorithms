@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karp Reduction | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="karp-归约">Karp 归约</h2>
+<p><strong>定义。</strong> 设 $A, B \subseteq \Sigma^<em>$ 为两个判定问题(语言)。若存在一个多项式时间可计算的函数 $f:\Sigma^</em>\to\Sigma^*$,使得对每个输入 $x$ 都有</p>
+$$x \in A \iff f(x) \in B,$$
+<p>则称 $A$ <strong>Karp 归约</strong>(多项式时间多对一归约)到 $B$,记作 $A \le_p B$。关键要求有两点:$f$ 必须在多项式时间内可计算;$f$ 必须同时保持"是"实例与"否"实例(即"当且仅当")。</p>
+<p><strong>核心定理。</strong> 若 $A \le_p B$ 且 $B \in \mathrm{P}$,则 $A \in \mathrm{P}$。</p>
+<p><em>证明。</em> 给定 $x$,先用时间 $p(|x|)$ 计算 $f(x)$,于是 $|f(x)| \le p(|x|)$。再用 $B$ 的多项式时间判定器(运行时间 $q(\cdot)$)判定 $f(x)$,总时间为 $p(|x|)+q(p(|x|))$,仍是多项式。由等价性,其输出即为 $x\in A$ 的答案。$\square$</p>
+<p>取逆否命题:若 $A$ 难(例如 NP 完全),则 $B$ 至少一样难。这正是证明 NP 完全性的标准方法。</p>
+<p><strong>例题:从 3-SAT 归约到独立集(INDEPENDENT-SET)。</strong> 给定含 $m$ 个子句的 3-CNF 公式 $\varphi$,构造图 $G$ 与整数 $k=m$:</p>
+<li>每个子句 $C_j=(\ell_1\vee\ell_2\vee\ell_3)$ 对应一个三角形,有 3 个顶点,分别对应它的 3 个文字。</li>
+<li>对每对互补的文字(如 $x_i$ 与 $\neg x_i$),在对应顶点间连一条边。</li>
+<p>令 $f(\varphi)=(G,m)$。构造最多产生 $3m$ 个顶点和 $O(m^2)$ 条边,所以是多项式时间。</p>
+<p><strong>正确性(两个方向都要证)。</strong></p>
+<li>($\Rightarrow$)若 $\varphi$ 可满足,则从每个子句中选一个为真的文字,共 $m$ 个顶点。它们分属不同三角形,所以三角形内没有边;而互补文字不会同时为真,所以互补边也没有。因此它们构成大小为 $m$ 的独立集。</li>
+<li>($\Leftarrow$)若 $G$ 有大小为 $m$ 的独立集,则每个三角形至多含其中一个顶点,所以恰好每个三角形含一个。令这些文字为真。互补边保证没有矛盾赋值,因此每个子句都被满足。</li>
+<p><strong>问题求解应用。</strong> 设 $\varphi=(x_1\vee x_2\vee x_3)\wedge(\neg x_1\vee \neg x_2\vee x_3)$,则 $m=2$,图中有 6 个顶点和 2 个三角形,另有互补边 $x_1\!-\!\neg x_1$、$x_2\!-\!\neg x_2$。取 $x_3$(第一个子句)和 $x_3$(第二个子句)这两个顶点:它们不相邻(相同文字不互补),所以是大小为 2 的独立集,对应赋值 $x_3=1$,确实满足 $\varphi$。</p>
+<p><strong>常见错误。</strong> </p>
+<li>只证明"可满足 $\Rightarrow$ 有独立集"而漏掉反方向;</li>
+<li>把归约方向写反。要证明 $B$ 是 NP 难的,必须从<strong>已知</strong>的 NP 难问题 $A$ 归约到 $B$,即 $A\le_p B$。</li>
+<pre class="mermaid">flowchart LR
+    X["输入 x(问题 A)"] --> F["多项式时间函数 f"]
+    F --> FX["f(x)(问题 B)"]
+    FX --> D["B 的判定器"]
+    D --> ANS["是 / 否,同时即为 x 的答案"]</pre>
+<p><em>图示:Karp 归约把问题 A 的实例 x 转换为问题 B 的实例 f(x),B 的判定器的答案原样作为 A 的答案。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

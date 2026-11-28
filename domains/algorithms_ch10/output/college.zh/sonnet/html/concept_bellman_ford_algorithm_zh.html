@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bellman Ford Algorithm | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="贝尔曼-福特算法">贝尔曼-福特算法</h2>
+<h3 id="定义">定义</h3>
+<p><strong>贝尔曼-福特算法(Bellman–Ford Algorithm)</strong> 是一种单源最短路径算法。给定带权有向图 $G=(V,E)$、权函数 $w:E\to\mathbb{R}$ 和源点 $s$,它能求出 $s$ 到所有顶点的最短距离 $d(v)$。与 Dijkstra 算法不同,它<strong>允许负权边</strong>,只要从 $s$ 出发不能到达<strong>负权环</strong>(环上权值之和为负)。若存在这样的环,算法能够检测并报告。</p>
+<p>核心操作是<strong>松弛</strong>(relaxation):若 $d(u)+w(u,v)<d(v)$,则令 $d(v)\leftarrow d(u)+w(u,v)$。</p>
+<p>算法步骤:</p>
+<li>初始化 $d(s)=0$,其余 $d(v)=+\infty$。</li>
+<li>重复 $|V|-1$ 轮:每轮对所有边 $(u,v)\in E$ 做一次松弛。</li>
+<li>再扫描一遍所有边:若仍有边可松弛,则图中存在从 $s$ 可达的负权环。</li>
+<p>时间复杂度为 $O(VE)$,空间复杂度为 $O(V)$。</p>
+<p><strong>正确性依据:</strong> 不含环的最短路径至多有 $|V|-1$ 条边。归纳可证,第 $k$ 轮结束后,所有"至多用 $k$ 条边"的最短路径都已算出。所以 $|V|-1$ 轮之后,所有距离均已收敛。若第 $|V|$ 轮仍能松弛,说明存在无法收敛的负环。</p>
+<h3 id="示例">示例</h3>
+<p>图中有顶点 $s,a,b,c$,边为:$s\to a$(4),$s\to b$(5),$a\to c$(3),$b\to a$($-2$),$c\to b$(1)。边的处理顺序固定为上述顺序。</p>
+<p>初始:$d=(s{:}0,\ a{:}\infty,\ b{:}\infty,\ c{:}\infty)$。</p>
+<li><strong>第 1 轮:</strong></li>
+<p>  - $s\to a$:$d(a)=4$。   - $s\to b$:$d(b)=5$。   - $a\to c$:$d(c)=7$。   - $b\to a$:$5-2=3<4$,故 $d(a)=3$。   - $c\to b$:$7+1=8>5$,不更新。</p>
+<li><strong>第 2 轮:</strong></li>
+<p>  - $a\to c$:$3+3=6<7$,故 $d(c)=6$。   - 其余边均无法再松弛。</p>
+<li><strong>第 3 轮:</strong> 没有任何更新。</li>
+<p>最终 $d=(0,\,3,\,5,\,6)$。注意 $s\to b\to a$ 的路径(总权 3)胜过直接边 $s\to a$(权 4),这就是负权边的作用。若 Dijkstra 在 $a$ 被确定为 4 之后不再回头修正,就会得出错误结果。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<p><strong>场景:货币套利检测。</strong> 设汇率 $r_{ij}$ 表示 1 单位货币 $i$ 兑换成货币 $j$ 的数量。一条兑换环 $i_1\to i_2\to\cdots\to i_1$ 有利可图,当且仅当</p>
+$$r_{i_1i_2}\,r_{i_2i_3}\cdots r_{i_ki_1}>1.$$
+<p>两边取对数并取负号,令边权 $w(i,j)=-\ln r_{ij}$,则条件化为</p>
+$$\sum w(e)<0,$$
+<p>即图中存在<strong>负权环</strong>。于是,套利检测就变成了负环检测:先任选一个能到达所有货币的源点,运行 $|V|-1$ 轮松弛,再多扫描一遍。若仍有边可松弛,就存在套利机会。</p>
+<p><strong>解题要点:</strong></p>
+<li>需要处理负权边,或要判断负环时,使用贝尔曼-福特算法。</li>
+<li>若某一轮没有任何更新,可<strong>提前终止</strong>,这在实践中常常显著加速。</li>
+<li>若所有边权非负,Dijkstra($O((V+E)\log V)$)更快。</li>
+<li>若要找出负环本身,可记录前驱指针,从仍可松弛的顶点沿前驱回溯 $|V|$ 步,必落在环上。</li>
+<p><strong>练习:</strong> 在上例中把 $c\to b$ 的权改为 $-5$。验证第 $|V|=4$ 轮仍有边可松弛,并写出由此检测到的负环。(提示:环 $b\to a\to c\to b$ 的权和为 $-2+3-5=-4<0$。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

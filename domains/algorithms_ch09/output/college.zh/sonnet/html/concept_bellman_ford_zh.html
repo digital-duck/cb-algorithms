@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bellman Ford | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="bellman-ford-贝尔曼-福特算法">Bellman Ford(贝尔曼-福特算法)</h2>
+<p><strong>定义。</strong> 给定带权有向图 $G=(V,E)$、权重函数 $w:E\to\mathbb{R}$(允许负权)和源点 $s$,Bellman-Ford 算法求出 $s$ 到每个顶点的最短路径距离 $d(v)$。它是 Ford 通用松弛框架的一个具体实例:维护估计值 $d[v]$,初始 $d[s]=0$,其余为 $+\infty$,并反复对边 $(u,v)$ 执行<strong>松弛</strong>:</p>
+$$
+\text{若 } d[u]+w(u,v)<d[v],\ \text{则令 } d[v]\leftarrow d[u]+w(u,v).
+$$
+<p>算法将所有边松弛 $|V|-1$ 轮,时间复杂度为 $O(VE)$。之后再扫描一遍所有边:若仍有某条边可被松弛,则图中存在从 $s$ 可达的<strong>负环</strong>。</p>
+<p><strong>为什么 $V-1$ 轮足够。</strong> 不含环的最短路径至多有 $|V|-1$ 条边。用归纳法:第 $k$ 轮结束后,所有"最短路径恰好用 $\le k$ 条边"的顶点,其 $d[v]$ 已等于真实距离。第 $k+1$ 轮中,路径 $s\to\cdots\to u\to v$ 的前缀已正确,松弛 $(u,v)$ 即得到 $v$ 的正确值。若存在负环,则沿环走一圈总权重为负,距离可无限下降,因此第 $V$ 轮仍会有更新——这就是检测依据。</p>
+<p><strong>例题。</strong> 顶点 $\{s,a,b,c\}$,边:$s\to a$(4),$s\to b$(5),$a\to c$(3),$b\to a$($-2$),$c\to b$(1)按此顺序松弛。</p>
+<li>初始:$d=(s{:}0,\ a{:}\infty,\ b{:}\infty,\ c{:}\infty)$</li>
+<li>第 1 轮:$s\to a$ 得 $a=4$;$s\to b$ 得 $b=5$;$a\to c$ 得 $c=7$;$b\to a$ 得 $a=3$;$c\to b$:$7+1=8>5$,不变。</li>
+<li>第 2 轮:$a\to c$ 得 $c=6$;其余不变。</li>
+<li>第 3 轮:无更新。</li>
+<li>检测:再扫一遍无可松弛的边,故无负环。</li>
+<p>最终 $d=(0,3,5,6)$。注意 Dijkstra 在此会出错,因为它假定已确定的顶点不会再被改善,而负边 $b\to a$ 恰好违反了这一点。</p>
+<p><strong>问题求解应用。</strong> 在货币套利中,令汇率 $r_{ij}$ 对应边权 $w(i,j)=-\ln r_{ij}$。一条兑换回路获利,当且仅当 $\prod r_{ij}>1$,等价于 $\sum w<0$,即存在<strong>负环</strong>。于是套利检测化为 Bellman-Ford 的负环检测。</p>
+<pre><code>def bellman_ford(n, edges, s):
+    d = [float("inf")] * n
+    d[s] = 0
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if d[u] + w &lt; d[v]:
+                d[v] = d[u] + w
+    for u, v, w in edges:
+        if d[u] + w &lt; d[v]:
+            return None  # 存在负环
+    return d</code></pre>
+<p><strong>小结。</strong> 当图含负边,或需要判断负环时,选用 Bellman-Ford;当权重均非负时,Dijkstra 更快。实现时可加"某轮无更新则提前退出"的优化。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

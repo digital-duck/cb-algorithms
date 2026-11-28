@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stable Matching Problem | Algorithms Ch05</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="稳定匹配问题">稳定匹配问题</h2>
+<p><strong>定义。</strong> 设有两个大小相同的集合 $M=\{m_1,\dots,m_n\}$(例如求职者)和 $W=\{w_1,\dots,w_n\}$(例如公司)。每个参与者对另一侧所有成员给出一个严格的偏好排序。<strong>匹配</strong> $\mu$ 是 $M$ 与 $W$ 之间的一一对应。若存在一对 $(m,w)$ 满足</p>
+$$
+w \succ_m \mu(m) \quad\text{且}\quad m \succ_w \mu(w),
+$$
+<p>即二者彼此都更偏爱对方而非当前伴侣,则称 $(m,w)$ 为<strong>阻塞对</strong>(不稳定对)。没有任何阻塞对的匹配称为<strong>稳定匹配</strong>。</p>
+<p><strong>Gale–Shapley 延迟接受算法。</strong> 当存在未匹配的 $m$ 时:$m$ 向其名单上尚未求过的最优选 $w$ 发出提议;若 $w$ 未匹配,或更偏爱 $m$ 胜过当前伴侣,则 $w$ 暂时接受 $m$(并抛弃原伴侣);否则拒绝。</p>
+<p><strong>定理。</strong> 对任意偏好,算法至多经 $n^2$ 轮提议终止,并输出稳定匹配。</p>
+<p><em>证明要点。</em> 每个 $m$ 至多向每个 $w$ 提议一次,故提议总数 $\le n^2$。一旦 $w$ 被提议,她此后始终保持匹配,且伴侣只会变得更好。因此终止时人人都已匹配。假设最终存在阻塞对 $(m,w)$,且 $w\succ_m\mu(m)$。$m$ 按偏好从高到低提议,所以他必定先向 $w$ 提议过并被拒绝(或被抛弃),这说明 $w$ 当时的伴侣优于 $m$。又因 $w$ 的伴侣只会越来越好,最终 $\mu(w)\succ_w m$,与 $(m,w)$ 是阻塞对矛盾。$\blacksquare$</p>
+<p><strong>例题。</strong> 设 $n=2$,偏好如下:</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;"></th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">第一选择</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">第二选择</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_1$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_2$</td>
+    </tr>
+  </tbody>
+</table>
+<li>$m_1$ 与 $m_2$ 都向 $w_1$ 提议。$w_1$ 偏爱 $m_2$,暂时接受 $m_2$,拒绝 $m_1$。</li>
+<li>$m_1$ 转向 $w_2$,$w_2$ 未匹配,接受。</li>
+<li>所有人均已匹配,得到 $\mu=\{(m_1,w_2),(m_2,w_1)\}$。</li>
+<p>检验:$m_1$ 更想要 $w_1$,但 $w_1$ 更喜欢现任 $m_2$;$m_2$ 已得到最优选。无阻塞对,匹配稳定。</p>
+<p><strong>问题求解应用。</strong> 医学院毕业生与医院的住院医师分配(NRMP)、学生与学校的录取都是此模型的变体。解题时的步骤是:(1)明确提议方与被提议方;(2)写出双方完整的偏好表;(3)按算法逐轮模拟,记录每个接受方“当前暂定伴侣”;(4)用阻塞对定义逐一验证。</p>
+<p>注意两点性质:其一,<strong>提议方最优</strong>——由 $m$ 一侧提议所得的匹配,使每个 $m$ 得到其在所有稳定匹配中可能获得的最佳伴侣,而每个 $w$ 得到最差的稳定伴侣。在上例中,若改由 $w$ 提议,会得到另一个稳定匹配 $\{(m_1,w_2),(m_2,w_1)\}$ 以外的结果吗?请自己模拟,并比较两者。其二,算法的时间复杂度为 $O(n^2)$,对大规模匹配市场仍然高效。</p>
+<p><strong>练习。</strong> 令 $n=3$,自行设定偏好表,用上述算法求出稳定匹配,并分别检验所有 $\binom{3}{1}\cdot 2=6$ 个可能的非匹配对是否构成阻塞对。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch5: Greedy Algorithms (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

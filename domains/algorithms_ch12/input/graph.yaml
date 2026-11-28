@@ -1,0 +1,100 @@
+domain: Algorithms_JeffE
+primitives:
+  maximum_flow:
+    defines: A flow of largest possible value from source s to target t in a capacitated network, computable
+      via algorithms like Ford-Fulkerson or Orlin's algorithm.
+    tier: 0
+  minimum_cut:
+    defines: A partition of the vertices into sets containing s and t, respectively, with the smallest
+      total capacity of edges crossing from the s-side to the t-side.
+    tier: 0
+  flow_decomposition_theorem:
+    defines: Any integer flow can be decomposed into a set of directed paths and cycles from source to
+      sink, each carrying one or more units of flow.
+    tier: 0
+  maxflow_mincut_theorem:
+    defines: The maximum value of an s-t flow equals the minimum capacity of an s-t cut in the network.
+    tier: 0
+  matching:
+    defines: A subgraph in which every vertex has degree at most one, i.e., a set of edges no two of which
+      share a vertex.
+    tier: 0
+  directed_acyclic_graph:
+    defines: A directed graph containing no directed cycles, used as the input structure for disjoint-path-cover
+      and project-selection problems.
+    tier: 0
+concepts:
+  edge_disjoint_paths:
+    defines: The maximum number of paths from s to t that share no common edge, computed by assigning
+      unit capacity to every edge and finding a maximum flow whose value equals the number of such paths.
+    composed_of:
+    - maximum_flow
+    tier: 1
+  vertex_capacities:
+    defines: A constraint limiting the total flow passing through a vertex, handled by splitting each
+      vertex into an 'in' and 'out' copy joined by an edge whose capacity equals the vertex capacity.
+    composed_of:
+    - maximum_flow
+    tier: 1
+  vertex_disjoint_paths:
+    defines: The maximum number of paths from s to t that share no common vertex (other than s and t),
+      found by assigning unit capacity to every vertex and computing a maximum flow.
+    composed_of:
+    - vertex_capacities
+    tier: 2
+  bipartite_matching:
+    defines: The problem of finding a maximum matching in a bipartite graph, solved by reducing it to
+      a maximum flow problem where each edge, plus new source and target edges, has unit capacity.
+    composed_of:
+    - maximum_flow
+    - matching
+    tier: 1
+  alternating_path:
+    defines: A path from an unmatched left vertex to an unmatched right vertex that alternates between
+      edges in the current matching and edges not in it, used by augmenting-path algorithms to grow a
+      matching.
+    composed_of:
+    - bipartite_matching
+    tier: 2
+  tuple_selection:
+    defines: The general problem of selecting the largest possible set of d-tuples drawn from d ordered
+      resource sets subject to per-element and adjacent-pair capacity constraints, solved by reduction
+      to maximum flow.
+    composed_of:
+    - maximum_flow
+    tier: 1
+  disjoint_path_cover:
+    defines: A minimum-size set of vertex-disjoint directed paths that together cover every vertex of
+      a DAG, computed by reducing to maximum bipartite matching between 'flat' and 'sharp' copies of each
+      vertex.
+    composed_of:
+    - bipartite_matching
+    - directed_acyclic_graph
+    tier: 2
+applications:
+  exam_scheduling:
+    defines: A real-world tuple-selection application that assigns each final exam a class, room, time
+      slot, and proctor by finding a maximum flow in a network built from these four resource types.
+    needs:
+    - tuple_selection
+    tier: 2
+  minimal_faculty_hiring:
+    defines: A real-world scheduling application that finds the fewest professors needed to teach all
+      classes by reducing the problem to a minimum disjoint-path cover of a class-compatibility DAG.
+    needs:
+    - disjoint_path_cover
+    tier: 3
+  baseball_elimination:
+    defines: The problem of determining whether a team can still finish in first place given remaining
+      games, decided by checking whether a maximum flow in a constructed game/team network saturates all
+      edges leaving the source.
+    needs:
+    - maxflow_mincut_theorem
+    tier: 1
+  project_selection:
+    defines: The problem of choosing a profit-maximizing subset of dependent projects, solved by finding
+      a minimum cut in a network where profitable projects connect to the source, costly projects connect
+      to the sink, and dependency edges have infinite capacity.
+    needs:
+    - minimum_cut
+    tier: 1

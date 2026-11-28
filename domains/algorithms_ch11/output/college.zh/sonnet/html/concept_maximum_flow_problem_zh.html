@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maximum Flow Problem | Algorithms Ch11</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最大流问题">最大流问题</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$,每条边 $e$ 有容量 $c(e)\ge 0$,并指定源点 $s$ 与汇点 $t$。一个 $(s,t)$-流是函数 $f:E\to\mathbb{R}_{\ge 0}$,满足:</p>
+<li><strong>容量约束</strong>:$0\le f(e)\le c(e)$;</li>
+<li><strong>流量守恒</strong>:对每个 $v\in V\setminus\{s,t\}$,有 $\sum_{e\text{ 入 }v} f(e)=\sum_{e\text{ 出 }v} f(e)$。</li>
+<p>流的<strong>值</strong>为 $|f|=\sum_{e\text{ 出 }s} f(e)-\sum_{e\text{ 入 }s} f(e)$。<strong>最大流问题</strong>就是:在所有可行的 $(s,t)$-流中,求 $|f|$ 最大的流。</p>
+<p><strong>割与对偶。</strong> $(s,t)$-割是把顶点分成 $S\ni s$ 与 $T=V\setminus S\ni t$,其容量为 $c(S,T)=\sum_{u\in S,\,v\in T} c(u,v)$。任意可行流的值都不超过任意割的容量,因此</p>
+$$\max_f |f| = \min_{(S,T)} c(S,T).$$
+<p>这就是<strong>最大流最小割定理</strong>:最大流的值等于最小割的容量。</p>
+<p><strong>求解思路。</strong> 给定流 $f$,定义残量网络:边 $(u,v)$ 的剩余容量为 $c(u,v)-f(u,v)$,并允许沿反向边撤销已有流量。若残量网络中存在 $s\to t$ 的<strong>增广路径</strong>,就沿它推送瓶颈容量的流量。当不再存在增广路径时,流达到最大。Edmonds–Karp 算法每次用 BFS 选最短增广路径,时间复杂度为 $O(VE^2)$。</p>
+<p><strong>例题。</strong> 顶点为 $s,a,b,t$,边容量为:$s\to a:3$,$s\to b:2$,$a\to b:1$,$a\to t:2$,$b\to t:3$。</p>
+<li>路径 $s\to a\to t$,瓶颈为 $2$,推送 $2$。</li>
+<li>路径 $s\to b\to t$,瓶颈为 $2$,推送 $2$。</li>
+<li>路径 $s\to a\to b\to t$:$s\to a$ 剩余 $1$,$a\to b$ 为 $1$,$b\to t$ 剩余 $1$,瓶颈为 $1$,推送 $1$。</li>
+<p>此时总流量为 $5$。再找增广路径:$s$ 的出边 $s\to a$(剩 $0$)与 $s\to b$(剩 $0$)均已饱和,无路可走,因此 $|f|=5$。</p>
+<p><strong>验证。</strong> 取 $S=\{s\}$,割容量为 $3+2=5$,与流值相等,所以 $5$ 确为最大流值,同时 $\{s\}$ 给出一个最小割。</p>
+<p><strong>应用。</strong> 许多问题都能归约为最大流:</p>
+<li><strong>二分图最大匹配</strong>:左右两侧顶点各连到 $s$ 与 $t$,所有边容量设为 $1$,最大流值即最大匹配数。</li>
+<li><strong>网络带宽与运输调度</strong>:求两地之间的最大吞吐量。</li>
+<li><strong>最小割应用</strong>:找出使网络断开所需删除的最小代价边集,例如图像分割。</li>
+<p><strong>解题要点。</strong> 先建模(确定顶点、容量、$s$ 与 $t$),再反复在残量网络中找增广路径,最后用最小割核对答案。若容量均为整数,则必存在整数最大流,这也是匹配问题可以用最大流求解的原因。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch11: Maximum Flows &amp; Minimum Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

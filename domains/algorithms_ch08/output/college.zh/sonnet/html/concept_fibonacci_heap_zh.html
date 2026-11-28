@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fibonacci Heap | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="斐波那契堆-fibonacci-heap">斐波那契堆(Fibonacci Heap)</h2>
+<p><strong>定义。</strong> 斐波那契堆是一组满足最小堆序的树的集合(森林),并维护一个指向最小根的指针 $\min$。它支持的操作及摊还代价为:</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">操作</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">摊还代价</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Insert</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(1)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">FindMin</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(1)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">DecreaseKey</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(1)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">ExtractMin</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(\log n)$</td>
+    </tr>
+  </tbody>
+</table>
+<p>核心思想是<strong>惰性</strong>:Insert 只是把新节点放入根链表;DecreaseKey 只在违反堆序时把该节点剪下,作为新树放入根链表;只有 ExtractMin 才进行整理(consolidate),把度数相同的树两两合并,直到每个度数至多一棵树。</p>
+<p>为了控制树的形状,每个非根节点最多允许失去一个孩子:若一个节点第二次失去孩子,就把它也剪下(<strong>级联剪切</strong>)。</p>
+<p><strong>势函数。</strong> 令 $\Phi = t + 2m$,其中 $t$ 为根链表中树的数目,$m$ 为被标记节点(已失去过一个孩子)的数目。</p>
+<p><strong>为什么是 $O(1)$ 与 $O(\log n)$。</strong></p>
+<li>Insert:实际代价 $O(1)$,$t$ 增加 1,摊还代价 $O(1)$。</li>
+<li>DecreaseKey:若发生 $c$ 次级联剪切,实际代价为 $O(c)$;每次剪切使 $t$ 增加 1,但取消一个标记使 $m$ 减少 1(最后一次可能新增一个标记)。于是 $\Delta\Phi \le c + 2(-(c-1)+1) = 4 - c$,摊还代价 $O(c) + 4 - c = O(1)$(适当放大势的常数)。</li>
+<li>ExtractMin:整理之后树的度数不超过 $D(n)$,而可以证明 $D(n) = O(\log n)$。原因是度数为 $k$ 的节点子树大小至少为 $F_{k+2}\ge \varphi^k$,其中 $\varphi=\frac{1+\sqrt5}{2}$,故 $D(n)\le \log_\varphi n$。这也是"斐波那契"之名的由来。整理的开销被势能的下降所抵消,摊还代价为 $O(\log n)$。</li>
+<p><strong>例题:加速 Jarník(Prim)算法。</strong> 该算法维护一个尚未加入生成树的顶点集合,每个顶点的键值为它到已选树的最小边权。算法共执行:</p>
+<li>$V$ 次 Insert(初始化);</li>
+<li>$V$ 次 ExtractMin;</li>
+<li>至多 $E$ 次 DecreaseKey(每条边最多触发一次松弛)。</li>
+<p>用二叉堆,DecreaseKey 为 $O(\log V)$,总代价为 $O(E\log V)$。用斐波那契堆则为</p>
+$$
+V\cdot O(1) + V\cdot O(\log V) + E\cdot O(1) = O(E + V\log V).
+$$
+<p><strong>问题求解应用。</strong> 设图有 $V=10^4$ 个顶点、$E=10^6$ 条边(稠密图)。二叉堆约需 $E\log_2 V\approx 1.3\times10^7$ 次基本操作,而斐波那契堆约需 $E + V\log_2 V\approx 1.1\times10^6$,理论上快一个数量级。</p>
+<p>选择准则:当 $E=\Theta(V)$(稀疏图)时,两者同为 $O(V\log V)$,而斐波那契堆常数因子大、实现复杂,二叉堆往往在实践中更快;只有当 $E\gg V$ 且 DecreaseKey 占主导时,斐波那契堆的优势才会显现。</p>
+<pre class="mermaid">flowchart LR
+    A["Insert:放入根链表"] --> B["森林中有多棵树"]
+    B --> C["DecreaseKey:剪下违规节点"]
+    C --> D["级联剪切:标记节点再失孩子则剪下"]
+    B --> E["ExtractMin:删除最小根"]
+    E --> F["整理:合并相同度数的树"]
+    F --> G["度数不超过 log_φ n"]</pre>
+<p><em>图:斐波那契堆的惰性策略。插入与减键只做常数工作,整理的代价集中在 ExtractMin 中,并由势函数摊还。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

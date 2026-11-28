@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safe Edge | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="安全边-safe-edge">安全边(Safe Edge)</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 是带权连通无向图,$F\subseteq E$ 是一个无环边集(一片森林,它是某棵最小生成树的子集)。$F$ 把顶点划分成若干连通分量。设 $C$ 是其中一个分量。若边 $e=(u,v)$ 恰有一个端点在 $C$ 内,则称 $e$ <strong>离开</strong> $C$。所有离开 $C$ 的边中权重最小的那条,称为 $F$ 的<strong>安全边</strong>(safe edge)。"安全"的含义是:把它加入 $F$ 之后,$F\cup\{e\}$ 仍然包含在某棵最小生成树中。</p>
+<p><strong>安全边性质(切割性质的分量形式)。</strong> 若 $F\subseteq T^<em>$($T^</em>$ 为某棵最小生成树),$e$ 是离开 $C$ 的最小权边,则存在最小生成树 $T'$ 满足 $F\cup\{e\}\subseteq T'$。</p>
+<p><em>证明思路。</em> 若 $e\in T^<em>$,结论显然。否则,在 $T^</em>$ 中加入 $e$ 会形成唯一的环。该环从 $C$ 内出发、经过 $e$ 到达 $C$ 外,必然还要通过另一条离开 $C$ 的边 $f$ 才能回到起点。因为 $e$ 是最小权离开边,所以 $w(e)\le w(f)$。令 $T'=T^*\setminus\{f\}\cup\{e\}$,它仍是生成树,且</p>
+$$w(T')=w(T^*)-w(f)+w(e)\le w(T^*).$$
+<p>$T^*$ 已是最小,故 $T'$ 也是最小生成树。又 $f$ 离开 $C$,所以 $f\notin F$,因此 $F\subseteq T'$。$\blacksquare$</p>
+<p><strong>例题。</strong> 取顶点 $\{A,B,C,D\}$,边权为 $w(AB)=1$,$w(BC)=4$,$w(AC)=3$,$w(CD)=2$,$w(BD)=5$。设当前 $F=\{AB\}$,分量为 $\{A,B\}$、$\{C\}$、$\{D\}$。</p>
+<li>对分量 $\{A,B\}$:离开它的边是 $AC\,(3)$、$BC\,(4)$、$BD\,(5)$,最小者为 $AC$,所以 $AC$ 是安全边。</li>
+<li>对分量 $\{C\}$:离开它的边是 $AC\,(3)$、$BC\,(4)$、$CD\,(2)$,最小者为 $CD$,所以 $CD$ 也是安全边。</li>
+<p>把两条安全边同时加入,得到 $F=\{AB,AC,CD\}$,总权重为 $1+3+2=6$,恰有 $|V|-1=3$ 条边,即为最小生成树。</p>
+<p><strong>问题求解应用。</strong> 安全边性质是 Borůvka、Prim、Kruskal 三种算法正确性的共同基础:</p>
+<li><strong>Borůvka</strong>:每一轮,为每个分量各选一条安全边并同时加入。每轮分量数至少减半,所以共需 $O(\log |V|)$ 轮,总时间为 $O(|E|\log|V|)$。</li>
+<li><strong>Prim</strong>:始终只维护一个分量,每步加入离开它的最小权边。</li>
+<li><strong>Kruskal</strong>:按权重升序扫描,第一条连接两个不同分量的边,正是其中一个分量的安全边。</li>
+<p><em>注意事项。</em> 若存在权重相同的边,必须用一致的规则(例如按边编号)打破平局。否则在 Borůvka 中,各分量可能选出会构成环的边。在边权互不相同的图中,最小生成树唯一,每条安全边必然属于这棵树。</p>
+<p><strong>小结。</strong> 要判断一条边能否放心加入,只需检查它是不是某个分量的最小权离开边。只要是,就可以加入。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

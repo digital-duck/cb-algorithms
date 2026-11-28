@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Negative Cycle | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="负环">负环</h2>
+<p><strong>定义。</strong> 在带权有向图 $G=(V,E)$ 中,若存在一条有向回路 $C = (v_0, v_1, \dots, v_k = v_0)$,其边权之和满足</p>
+$$
+w(C)=\sum_{i=0}^{k-1} w(v_i, v_{i+1}) < 0,
+$$
+<p>则称 $C$ 为<strong>负环</strong>(负权回路)。</p>
+<p><strong>为什么最短路不存在。</strong> 设某条从 $s$ 到 $t$ 的路径经过(或能到达并返回)负环 $C$。每多绕环一圈,路径总权重就减少 $|w(C)|$。绕 $n$ 圈后的权重为</p>
+$$
+d_n = d_0 + n\,w(C) \xrightarrow{n\to\infty} -\infty .
+$$
+<p>因此不存在下界,$\delta(s,t)=-\infty$,最短路没有定义。注意:只有"从 $s$ 可达、且能到达 $t$ 的负环"才会影响 $s\to t$;与该路径无关的负环不影响它。</p>
+<p><strong>例题。</strong> 考虑边:$s\to a$(权 $2$)、$a\to b$(权 $-4$)、$b\to a$(权 $1$)、$b\to t$(权 $3$)。</p>
+<p>回路 $a\to b\to a$ 的权重为 $-4+1=-3<0$,是负环。</p>
+<li>不绕环:$s\to a\to b\to t$,权重 $2-4+3=1$。</li>
+<li>绕一圈:$s\to a\to b\to a\to b\to t$,权重 $1-3=-2$。</li>
+<li>绕两圈:权重 $-5$,依此类推,趋向 $-\infty$。</li>
+<p>所以 $\delta(s,t)=-\infty$。</p>
+<p><strong>问题求解:用 Bellman–Ford 检测负环。</strong> 在没有负环时,最短路至多含 $|V|-1$ 条边,因此对所有边做 $|V|-1$ 轮松弛后,距离值应已收敛。算法如下:</p>
+<li>令 $d[s]=0$,其余为 $\infty$。</li>
+<li>重复 $|V|-1$ 轮:对每条边 $(u,v)$,若 $d[u]+w(u,v)<d[v]$,则更新 $d[v]$。</li>
+<li>再做第 $|V|$ 轮:若仍有边能被松弛,则从 $s$ 可达一个负环。</li>
+<pre><code>def has_negative_cycle(n, edges, s):
+    INF = float("inf")
+    d = [INF] * n
+    d[s] = 0
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if d[u] + w &lt; d[v]:
+                d[v] = d[u] + w
+    return any(d[u] + w &lt; d[v] for u, v, w in edges)</code></pre>
+<p>对上例(顶点 $s,a,b,t$ 编号 $0,1,2,3$),第 $4$ 轮仍可松弛边 $(b,a)$,故返回 <code>True</code>。时间复杂度为 $O(|V|\,|E|)$。</p>
+<p><strong>应用。</strong> 在外汇套利中,取边权 $-\log(\text{汇率})$,则一条乘积大于 $1$ 的兑换回路恰好对应一个负环:检测到负环,就等于发现了套利机会。</p>
+<pre class="mermaid">graph LR
+    S["起点 s"] -->|"2"| A["顶点 a"]
+    A -->|"-4"| B["顶点 b"]
+    B -->|"1"| A
+    B -->|"3"| T["终点 t"]</pre>
+<p><em>图:$a\to b\to a$ 构成总权重为 $-3$ 的负环,每绕一圈 $s\to t$ 的路径权重就再减小 $3$。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

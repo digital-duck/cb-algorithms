@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jarniks Algorithm | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="jarnik-算法">Jarnik 算法</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 为连通、带权无向图,权函数为 $w:E\to\mathbb{R}$。<strong>Jarník 算法</strong>(也称 Prim 算法)从任意起点 $s$ 出发,维护一棵不断生长的树 $T$,每一步加入 $T$ 的<strong>安全边</strong>,即连接 $T$ 内顶点与 $T$ 外顶点的最小权边(称为"割 $(V_T, V\setminus V_T)$ 的轻边")。重复 $|V|-1$ 次后,$T$ 即为最小生成树(MST)。</p>
+<p><strong>正确性(割性质)。</strong> 设 $A\subseteq E$ 含于某棵 MST,$(S,V\setminus S)$ 是不切割 $A$ 中任何边的割,$(u,v)$ 是横跨该割的轻边,则 $A\cup\{(u,v)\}$ 仍含于某棵 MST。 <em>证明思路:</em> 设 MST $T^<em>\supseteq A$ 不含 $(u,v)$。把 $(u,v)$ 加入 $T^</em>$ 形成唯一的环,环上必有另一条边 $(x,y)$ 横跨该割。因 $(u,v)$ 是轻边,$w(u,v)\le w(x,y)$,故 $T'=T^<em>-\{(x,y)\}+\{(u,v)\}$ 仍是生成树,且 $w(T')\le w(T^</em>)$,所以 $T'$ 也是 MST。每一步取 $S=V_T$,即可归纳得证。</p>
+<p><strong>实现。</strong> 用最小优先队列存放"候选边"(或存放每个顶点到 $T$ 的最小距离 $key[v]$)。每次弹出最小项,若其终点已在 $T$ 内则丢弃,否则加入 $T$,并把新顶点的所有出边压入队列。每条边至多入队 2 次,每次操作 $O(\log E)=O(\log V)$,总时间为</p>
+$$O(E\log V).$$
+<p><strong>例题。</strong> 顶点 $A,B,C,D$,边:$AB=1,\ AC=4,\ BC=2,\ BD=6,\ CD=3$。从 $A$ 开始:</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">步骤</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$T$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">候选边</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">选取</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$AB=1,\ AC=4$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$AB$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A,B\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$AC=4,\ BC=2,\ BD=6$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$BC$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A,B,C\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$BD=6,\ CD=3$($AC$ 已成环)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$CD$</td>
+    </tr>
+  </tbody>
+</table>
+<p>MST 权重为 $1+2+3=6$。</p>
+<p><strong>问题求解应用。</strong> 某公司要用光缆连接 $n$ 个机房,每对机房的铺设成本已知,求总成本最低的联网方案。这正是 MST 问题。代码如下:</p>
+<pre><code>import heapq
+
+def jarnik(graph, s):
+    # graph: {u: [(w, v), ...]}
+    in_tree, total = {s}, 0
+    pq = list(graph[s]); heapq.heapify(pq)
+    while pq and len(in_tree) &lt; len(graph):
+        w, v = heapq.heappop(pq)
+        if v in in_tree:
+            continue                      # 丢弃过时的边
+        in_tree.add(v); total += w
+        for e in graph[v]:
+            if e[1] not in in_tree:
+                heapq.heappush(pq, e)
+    return total</code></pre>
+<p><strong>选择算法的经验。</strong> 若用邻接矩阵加数组扫描,复杂度为 $O(V^2)$,适合稠密图;若用斐波那契堆,可降到 $O(E+V\log V)$。对稀疏图,二叉堆版本的 $O(E\log V)$ 已足够。与 Kruskal 算法相比,Jarník 算法无需并查集,且生长过程始终保持连通,适合边按需生成的场景。</p>
+<p><strong>小结。</strong> Jarník 算法每步都由割性质保证"局部最优即全局最优",优先队列使选边高效。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

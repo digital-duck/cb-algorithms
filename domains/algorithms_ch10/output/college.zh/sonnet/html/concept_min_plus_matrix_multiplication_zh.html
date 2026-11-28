@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Min Plus Matrix Multiplication | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最小加矩阵乘法-min-plus-matrix-multiplication">最小加矩阵乘法(Min-Plus Matrix Multiplication)</h2>
+<p><strong>定义。</strong> 在普通矩阵乘法 $C_{ij}=\sum_k A_{ik}B_{kj}$ 中,把"乘法"换成加法,把"求和"换成取最小值,就得到<strong>最小加乘法</strong>(也称热带矩阵乘法),记作 $\otimes$:</p>
+$$
+(A\otimes B)_{ij}=\min_{k}\bigl(A_{ik}+B_{kj}\bigr).
+$$
+<p>它是在半环 $(\mathbb{R}\cup\{\infty\},\ \min,\ +)$ 上的矩阵乘法:$\min$ 扮演"加法",$+$ 扮演"乘法",单位元分别为 $\infty$ 与 $0$。该运算满足结合律,因此可以定义幂 $A^{\otimes m}$。</p>
+<p><strong>与最短路径的联系。</strong> 设有向图有 $n$ 个顶点,令 $W_{ij}$ 为边 $i\to j$ 的权重,$W_{ii}=0$,无边则 $W_{ij}=\infty$。则 $(W\otimes W)_{ij}=\min_k(W_{ik}+W_{kj})$ 恰好是从 $i$ 到 $j$ <strong>至多经过 2 条边</strong>的最短路径长度。</p>
+<p><strong>命题。</strong> $(W^{\otimes m})_{ij}$ 等于从 $i$ 到 $j$ 至多使用 $m$ 条边的最短路径长度。</p>
+<p><em>证明(对 $m$ 归纳)。</em> $m=1$ 显然成立。假设对 $m$ 成立,则至多 $m+1$ 条边的最优路径可分解为"前 $m$ 条边到达某中间点 $k$,再走边 $k\to j$",故其长度为 $\min_k\bigl((W^{\otimes m})_{ik}+W_{kj}\bigr)=(W^{\otimes(m+1)})_{ij}$。$\blacksquare$</p>
+<p>不含负环时,最短路径至多有 $n-1$ 条边,所以全源最短路径矩阵为 $W^{\otimes(n-1)}$。</p>
+<p><strong>例题。</strong> 三个顶点,$W_{12}=3,\ W_{23}=2,\ W_{13}=7$,其余非对角元为 $\infty$,即</p>
+$$
+W=\begin{pmatrix}0&3&7\\ \infty&0&2\\ \infty&\infty&0\end{pmatrix}.
+$$
+<p>计算 $(W\otimes W)_{13}=\min(0+7,\ 3+2,\ 7+0)=5$。这说明经过中间点 2 的路径 $1\to2\to3$(长度 5)优于直达边(长度 7)。因 $n-1=2$,所以 $W^{\otimes 2}$ 已是最终答案。</p>
+<p><strong>问题求解应用。</strong> 朴素地做 $n-2$ 次乘法,每次 $O(n^3)$,总计 $O(n^4)$。利用<strong>重复平方</strong>:依次计算 $W^{\otimes 2},W^{\otimes 4},W^{\otimes 8},\dots$,只需 $\lceil\log_2(n-1)\rceil$ 次乘法(多算的幂不会出错,因为"至多 $m$ 条边"对更大的 $m$ 仍保持正确),总复杂度为</p>
+$$
+O(n^3\log n).
+$$
+<p>这正是 Floyd–Warshall 算法($O(n^3)$)之外的另一种全源最短路径思路。其意义在于:最短路径问题被归结为矩阵幂,因此任何更快的最小加乘法都能直接加速它;同时,对角元 $(W^{\otimes m})_{ii}<0$ 可用于检测负环。</p>
+<p><strong>练习。</strong> 对上面的 $W$ 加上一条边 $W_{31}=-4$,计算 $(W\otimes W)_{11}$,并判断图中是否存在负环。(提示:$1\to2\to3\to1$ 的总权重为 $3+2-4=1>0$,但 $1\to3\to1$ 的权重为 $7-4=3$;请自行验证所有环的权重符号。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

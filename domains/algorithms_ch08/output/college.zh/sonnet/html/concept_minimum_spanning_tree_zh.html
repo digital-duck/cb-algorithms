@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minimum Spanning Tree | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最小生成树">最小生成树</h2>
+<p><strong>定义。</strong> 设 $G=(V,E)$ 是连通的无向加权图,边 $e$ 的权重为 $w(e)$。<strong>生成树</strong>是包含 $G$ 全部顶点、且无圈连通的子图,恰有 $|V|-1$ 条边。<strong>最小生成树</strong>(MST)是所有生成树中总权重</p>
+$$w(T)=\sum_{e\in T} w(e)$$
+<p>最小的那一棵。若各边权重互不相同,则 MST 唯一。</p>
+<p><strong>核心性质(割性质)。</strong> 把顶点任意划分为 $S$ 与 $V\setminus S$,则横跨这两部分的所有边中,权重最小的边必属于某棵 MST。</p>
+<p><em>证明思路:</em> 设最小横跨边 $e$ 不在某棵 MST $T$ 中。把 $e$ 加入 $T$ 会形成唯一的圈,该圈必含另一条横跨边 $f$,且 $w(f)\ge w(e)$。用 $e$ 替换 $f$ 得到的新生成树,权重不超过 $w(T)$,因此仍是 MST。$\square$</p>
+<p>由此得到两个贪心算法:</p>
+<li><strong>Kruskal 算法:</strong> 将边按权重升序排列,依次加入,若会形成圈则跳过。用并查集判圈,复杂度为 $O(|E|\log|E|)$。</li>
+<li><strong>Prim 算法:</strong> 从某顶点出发,每次加入连接"已选集合"与"未选集合"的最小边。用二叉堆实现,复杂度为 $O(|E|\log|V|)$。</li>
+<p><strong>例题。</strong> 图有顶点 $A,B,C,D$,边权为:$AB=1$,$BC=4$,$AC=3$,$CD=2$,$BD=5$。用 Kruskal 算法:</p>
+<li>取 $AB$(1):加入。</li>
+<li>取 $CD$(2):加入。</li>
+<li>取 $AC$(3):连接 $\{A,B\}$ 与 $\{C,D\}$,不成圈,加入。</li>
+<li>此时已有 $3=|V|-1$ 条边,停止。</li>
+<p>所以 $w(T)=1+2+3=6$。若改选 $BC$(4)代替 $AC$,总权重为 7,更大。</p>
+<pre class="mermaid">graph LR
+A((A)) ---|1| B((B))
+C((C)) ---|2| D((D))
+A ---|3| C</pre>
+<p><em>图:例题中的最小生成树,加粗保留的三条边总权重为 6;边 $BC$ 与 $BD$ 被舍弃。</em></p>
+<p><strong>问题求解应用。</strong> 某公司要用光缆连接 5 栋楼,各楼之间铺设成本不同,要求任意两栋楼都能通信且总成本最低。把楼看作顶点、可铺设的线路看作边、成本看作权重,问题就转化为求 MST。解题步骤:</p>
+<li>建模:写出所有候选边及其成本。</li>
+<li>选算法:边数少(稀疏图)用 Kruskal,边数接近 $|V|^2$(稠密图)用 Prim。</li>
+<li>验证:检查所选边数是否为 $|V|-1$,且图保持连通无圈。</li>
+<p>MST 还用于聚类(删去 MST 中最重的 $k-1$ 条边,得到 $k$ 个簇)、电路布线和网络设计。</p>
+<p><strong>小结。</strong> MST 要求在保持连通的前提下使总权重最小;割性质保证了"每步取局部最优"的贪心策略全局正确。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

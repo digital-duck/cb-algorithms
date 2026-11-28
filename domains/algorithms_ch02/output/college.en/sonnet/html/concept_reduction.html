@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reduction | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="reduction">Reduction</h2>
+<p>A <strong>reduction</strong> solves problem $A$ by transforming its input into an input for problem $B$, invoking an algorithm for $B$ as a black box, and transforming $B$'s output back into a solution for $A$. Correctness follows entirely from the correctness of the transformations and the <em>specification</em> of $B$'s algorithm — never from knowledge of how that algorithm is implemented internally. This is what makes reductions powerful: you can swap in a faster algorithm for $B$ later, and $A$'s correctness proof does not change.</p>
+<p><strong>Worked example.</strong> Suppose you need to find the <em>median</em> of an unsorted array of $n$ numbers, but the only tool available is a black-box sorting algorithm, $\text{SORT}(A)$, guaranteed to return $A$ in ascending order. The reduction is: call $\text{SORT}(A)$ to get sorted array $A'$, then return $A'[n/2]$ (adjusting for even/odd length). Correctness holds because $\text{SORT}$'s specification guarantees $A'$ is sorted — it doesn't matter whether $\text{SORT}$ is merge sort, quicksort, or radix sort internally. If $\text{SORT}$ runs in $O(n \log n)$, the reduction gives an $O(n \log n)$ median-finding algorithm for free, with zero additional proof burden beyond "indexing the middle of a sorted array gives the median."</p>
+<p><strong>Problem-solving application.</strong> Reductions are the backbone of complexity theory and algorithm design because they let you reuse both <em>correctness</em> and <em>efficiency</em> results. Two disciplined habits make reductions rigorous:</p>
+<li><strong>Specify the interface, not the implementation.</strong> State exactly what $B$'s algorithm promises (input format, output format, guarantees) and prove your transformation satisfies $B$'s preconditions and correctly interprets $B$'s postconditions.</li>
+<li><strong>Account for transformation cost.</strong> If $A \to B$ transformation takes $O(f(n))$ time and $B$ costs $O(g(m))$ on an input of size $m$, the total cost for $A$ is $O(f(n) + g(m(n)))$. A reduction that blows up input size (e.g., $m = 2^n$) can make an efficient $B$ useless for $A$.</li>
+<p>This second point is why reductions also <em>prove hardness</em>: if a known-hard problem $H$ reduces to $A$ in polynomial time, then an efficient algorithm for $A$ would yield an efficient algorithm for $H$ — evidence that $A$ is at least as hard as $H$. This same black-box logic underlies NP-completeness proofs, where problems like 3-SAT are reduced to Vertex Cover, Clique, or Subset Sum, establishing a shared lower bound on their difficulty without ever opening up an actual SAT solver.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

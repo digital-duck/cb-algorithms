@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Intermediate Spanning Forest | Algorithms Ch08</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="中间生成森林">中间生成森林</h2>
+<p><strong>定义。</strong> 设 $G=(V,E,w)$ 是连通带权无向图。<em>中间生成森林</em>是 Kruskal、Prim、Borůvka 等算法在构造最小生成树(MST)过程中维护的一个无环子图 $F=(V,E_F)$,$E_F\subseteq E$。它始终满足<strong>不变式</strong>:存在 $G$ 的某棵 MST $T$,使得 $F\subseteq T$。算法每一步加入一条边,森林的连通分量逐渐合并。当 $|E_F|=|V|-1$ 时,$F$ 就是一棵完整的 MST。</p>
+<p>森林有 $|V|$ 个顶点、$k$ 个连通分量时,恰有 $|V|-k$ 条边。起初 $F=(V,\varnothing)$,有 $|V|$ 个分量;每加一条安全边,分量数减 1。</p>
+<p><strong>为什么这个不变式能被保持?(切割性质)</strong> 设 $F\subseteq T$,$S\subset V$ 是一个"切割",且 $F$ 中没有边横跨 $(S,V\setminus S)$。设 $e$ 是横跨该切割的最小权边。则 $F\cup\{e\}$ 仍包含于某棵 MST。</p>
+<p><em>证明。</em> 若 $e\in T$,结论显然。否则 $T\cup\{e\}$ 含唯一一个环,该环必有另一条横跨切割的边 $e'\in T$,且 $w(e)\le w(e')$。令 $T'=T\setminus\{e'\}\cup\{e\}$,则 $T'$ 仍是生成树,$w(T')=w(T)-w(e')+w(e)\le w(T)$,所以 $T'$ 也是 MST。由于 $F$ 无边横跨该切割,$e'\notin F$,故 $F\cup\{e\}\subseteq T'$。$\blacksquare$</p>
+<p>满足条件的 $e$ 称为<strong>安全边</strong>。</p>
+<p><strong>例题。</strong> 顶点 $\{A,B,C,D\}$,边权:$AB=1,\ BC=4,\ AC=2,\ CD=3,\ BD=5$。按 Kruskal 算法按权从小到大处理:</p>
+<li>加入 $AB$(1):$F=\{AB\}$,分量 $\{A,B\},\{C\},\{D\}$。</li>
+<li>加入 $AC$(2):分量 $\{A,B,C\},\{D\}$。</li>
+<li>考察 $BC$(4):$B,C$ 已在同一分量,加入会成环,<strong>跳过</strong>。</li>
+<li>加入 $CD$(3 已在 4 之前处理,实际顺序为 $CD$ 先于 $BC$):分量合并为 $\{A,B,C,D\}$。</li>
+<p>最终 $F=\{AB,AC,CD\}$,边数 $3=|V|-1$,权重 $1+2+3=6$,即 MST。</p>
+<p><strong>问题求解应用。</strong> 判断一条候选边能否加入 $F$,只需两步:</p>
+<li><strong>判环</strong>:若两端点属于 $F$ 的同一分量,则拒绝。可用并查集,单次操作近似 $O(\alpha(n))$。</li>
+<li><strong>判安全</strong>:取一个不被 $F$ 横跨的切割,选其上的最小权边。Prim 算法取 $S=$ 当前树的顶点集;Borůvka 算法对每个分量取其出边中的最小权边。</li>
+<p><em>练习:</em> 在上例中,当 $F=\{AB\}$ 时,取 $S=\{A,B\}$,横跨边为 $AC(2),BC(4),BD(5)$。最小者 $AC$ 是安全边,这与 Kruskal 的选择一致。若边权出现并列,不变式依然成立,只是 MST 不唯一。</p>
+<p><strong>小结:</strong> 中间生成森林是 MST 算法正确性的"载体"。证明算法正确,只需证明初始空森林满足不变式,且每步加入的边都是安全边。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch8: Minimum Spanning Trees (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbitrage Detection | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="套利检测">套利检测</h2>
+<h3 id="定义">定义</h3>
+<p><strong>套利</strong>是指在不承担风险的前提下,通过一系列交易获得正收益。在外汇市场中,设货币 $i$ 兑换货币 $j$ 的汇率为 $r_{ij}$(1 单位 $i$ 可换 $r_{ij}$ 单位 $j$)。若存在一条兑换环路 $c_1 \to c_2 \to \cdots \to c_k \to c_1$,使得</p>
+$$
+r_{c_1c_2}\cdot r_{c_2c_3}\cdots r_{c_kc_1} > 1,
+$$
+<p>则从任意一种货币出发沿此环路兑换一圈,就能凭空增值,这条环路就是<strong>套利环</strong>。</p>
+<p>将货币视为顶点、汇率视为有向边,问题变成图上的"乘积大于 1 的环路"。乘积不便直接处理,于是取对数变换,令边权</p>
+$$
+w_{ij} = -\log r_{ij}.
+$$
+<p>因为 $\log$ 把乘积变为求和、且 $-\log$ 反转了不等号,所以</p>
+$$
+\prod r > 1 \iff \sum \log r > 0 \iff \sum w < 0.
+$$
+<p><strong>结论:套利环恰好对应图中的负权环。</strong> 负权环可以用 Bellman–Ford 算法检测:对 $|V|-1$ 轮松弛后,若第 $|V|$ 轮仍能松弛某条边,则图中存在负权环。其时间复杂度为 $O(|V|\cdot|E|)$。</p>
+<h3 id="worked-example-例题">worked example(例题)</h3>
+<p>三种货币的汇率为:USD→EUR 为 $0.9$,EUR→GBP 为 $0.8$,GBP→USD 为 $1.45$。</p>
+<p>沿环路 USD→EUR→GBP→USD 的乘积:</p>
+$$
+0.9 \times 0.8 \times 1.45 = 1.044 > 1.
+$$
+<p>换成权重:$w_1=-\ln 0.9\approx 0.1054$,$w_2=-\ln 0.8\approx 0.2231$,$w_3=-\ln 1.45\approx -0.3716$。</p>
+$$
+\sum w \approx 0.1054+0.2231-0.3716=-0.0431<0,
+$$
+<p>这是一个负权环。投入 $1000$ USD,一圈后得 $1000\times1.044=1044$ USD,获利 $44$ USD(未计手续费)。</p>
+<h3 id="问题求解应用">问题求解应用</h3>
+<pre class="mermaid">graph LR
+    USD -->|"0.9"| EUR
+    EUR -->|"0.8"| GBP
+    GBP -->|"1.45"| USD</pre>
+<p><em>图:三种货币构成的兑换环路,汇率乘积为 $1.044>1$,存在套利机会。</em></p>
+<p><strong>解题步骤:</strong></p>
+<li>建图:对每个汇率 $r_{ij}$ 添加有向边 $i\to j$,权重 $-\ln r_{ij}$。</li>
+<li>初始化:所有顶点距离设为 $0$(等价于加一个虚拟源点,可发现所有连通分量中的负环)。</li>
+<li>运行 Bellman–Ford:松弛 $|V|-1$ 轮。</li>
+<li>再做一轮检查:若仍有边可松弛,存在套利;沿前驱指针回溯即可还原具体的货币环路。</li>
+<pre><code>import math
+
+def find_arbitrage(n, rates):          # rates: [(i, j, r), ...]
+    dist, pred = [0.0] * n, [-1] * n
+    x = -1
+    for _ in range(n):
+        x = -1
+        for i, j, r in rates:
+            if dist[i] - math.log(r) &lt; dist[j] - 1e-12:
+                dist[j] = dist[i] - math.log(r)
+                pred[j], x = i, j
+    if x == -1:
+        return None                    # 无套利
+    for _ in range(n):                 # 确保落入环内
+        x = pred[x]
+    cycle, v = [x], pred[x]
+    while v != x:
+        cycle.append(v); v = pred[v]
+    return cycle[::-1]</code></pre>
+<p><strong>现实提示:</strong> 实际交易中还需考虑手续费、买卖价差与成交滑点。可将每条边的汇率替换为扣除成本后的净汇率 $r'_{ij}=r_{ij}(1-f_{ij})$,再用同样的方法检测;只有净乘积仍大于 $1$,套利才真正可行。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

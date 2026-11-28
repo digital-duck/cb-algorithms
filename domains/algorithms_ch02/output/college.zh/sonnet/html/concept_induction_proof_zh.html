@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Induction Proof | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="归纳证明">归纳证明</h2>
+<p><strong>定义。</strong> 归纳证明是证明递归算法正确性的标准方法。递归算法对规模为 $n$ 的输入，先把问题化为更小的实例，再调用自身求解。这些调用可以暂时当作"递归仙子"（Recursion Fairy）：只要输入更小，仙子就会给出正确答案。这一假设就是<strong>归纳假设</strong>。证明分为两步：</p>
+<li><strong>基础情形：</strong> 算法对最小的输入（如 $n=0$ 或 $n=1$）直接给出正确结果。</li>
+<li><strong>归纳步骤：</strong> 假设算法对所有规模 $<n$ 的输入都正确（强归纳假设），证明它对规模为 $n$ 的输入也正确。</li>
+<p>两步成立，就能得出算法对所有 $n\ge 0$ 都正确。注意，你不需要追踪递归调用内部的执行过程，只需要验证"相信仙子之后，当前这一层是否做对了"。</p>
+<p><strong>例题：求和。</strong> 考虑下面的算法，它计算数组 $A[1..n]$ 的元素和：</p>
+<pre><code>def total(A, n):
+    if n == 0:
+        return 0
+    return total(A, n - 1) + A[n]</code></pre>
+<p><strong>命题：</strong> 对所有 $n\ge 0$，$\text{total}(A,n)=\sum_{i=1}^{n}A[i]$。</p>
+<p><em>基础情形。</em> $n=0$ 时返回 $0$，而空和为 $0$，成立。</p>
+<p><em>归纳步骤。</em> 设 $n\ge1$，并假设对 $n-1$ 命题成立，即 $\text{total}(A,n-1)=\sum_{i=1}^{n-1}A[i]$。算法返回</p>
+$$\text{total}(A,n-1)+A[n]=\sum_{i=1}^{n-1}A[i]+A[n]=\sum_{i=1}^{n}A[i].$$
+<p>因此命题对 $n$ 成立。由归纳法，命题对所有 $n\ge0$ 成立。$\blacksquare$</p>
+<p><strong>问题求解应用：汉诺塔。</strong> 下面的算法把 $n$ 个圆盘从柱 $s$ 经柱 $t$ 借助移到柱 $d$：</p>
+<pre><code>def hanoi(n, s, d, t):
+    if n == 0:
+        return
+    hanoi(n - 1, s, t, d)   # 先把上面 n-1 个移到辅助柱
+    move(s, d)              # 移动最大的圆盘
+    hanoi(n - 1, t, d, s)   # 再把 n-1 个移到目标柱</code></pre>
+<p><strong>命题：</strong> $\text{hanoi}(n,s,d,t)$ 合法地把 $n$ 个圆盘从 $s$ 移到 $d$，并且移动次数为 $T(n)=2^n-1$。</p>
+<p><em>基础情形。</em> $n=0$ 时无需移动，$T(0)=0=2^0-1$。</p>
+<p><em>归纳步骤。</em> 假设对 $n-1$ 成立。第一次递归调用把上面 $n-1$ 个较小的圆盘合法移到 $t$。这时最大的圆盘单独留在 $s$，可直接移到空着的 $d$。因为最大圆盘在 $d$ 上不妨碍任何较小圆盘，第二次递归调用把那 $n-1$ 个圆盘合法移到 $d$ 上。次数满足递推式</p>
+$$T(n)=2T(n-1)+1=2(2^{n-1}-1)+1=2^n-1.$$
+<p><strong>常见错误：</strong></p>
+<li>漏掉基础情形，或归纳步骤中的调用没有真正缩小规模，这会使论证循环。</li>
+<li>在归纳假设里偷偷假设了待证的 $n$ 本身。</li>
+<li>追踪递归的每一层，而不是直接信任仙子。这样不仅繁琐，也容易出错。</li>
+<p><strong>练习：</strong> 证明 $\text{power}(x,n)$（当 $n>0$ 时返回 $x\cdot\text{power}(x,n-1)$，$n=0$ 时返回 $1$）对所有 $n\ge0$ 计算 $x^n$。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

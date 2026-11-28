@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tense Edge | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="松弛边-tense-edge">松弛边(Tense Edge)</h2>
+<p><strong>定义。</strong> 在带权有向图 $G=(V,E)$ 中,设 $\text{dist}(v)$ 表示算法当前对源点 $s$ 到顶点 $v$ 的最短距离的<strong>暂定估计</strong>(初始时 $\text{dist}(s)=0$,其余为 $\infty$)。若边 $uv$ 满足</p>
+$$\text{dist}(u) + w(uv) < \text{dist}(v),$$
+<p>则称 $uv$ 为<strong>松弛边</strong>(tense edge)。它说明:经过 $u$ 再走边 $uv$ 到达 $v$,比目前已知的任何路径都更短,所以 $\text{dist}(v)$ 还不是最优的。</p>
+<p>对松弛边执行<strong>松弛操作</strong>(relaxation),即令</p>
+$$\text{dist}(v) \leftarrow \text{dist}(u) + w(uv),$$
+<p>之后该边不再松弛,此时 $\text{dist}(u)+w(uv)=\text{dist}(v)$。</p>
+<p><strong>最优性判据。</strong> 对所有 $v$,$\text{dist}(v)$ 都是 $s$ 到 $v$ 的真实最短距离,当且仅当:$\text{dist}(s)=0$,每个 $\text{dist}(v)$ 都对应一条真实存在的路径,且图中<strong>不存在任何松弛边</strong>。因此,Dijkstra、Bellman–Ford 等算法本质上都在不断寻找并消除松弛边。</p>
+<p><strong>例题。</strong> 图中有边 $s\to a$(权 4)、$s\to b$(权 1)、$b\to a$(权 2)、$a\to t$(权 3)。初始 $\text{dist}(s)=0$,其余为 $\infty$。</p>
+<li>检查 $sb$:$0+1<\infty$,是松弛边,更新 $\text{dist}(b)=1$。</li>
+<li>检查 $sa$:$0+4<\infty$,更新 $\text{dist}(a)=4$。</li>
+<li>检查 $ba$:$1+2=3<4$,是松弛边,更新 $\text{dist}(a)=3$。</li>
+<li>检查 $at$:$3+3=6<\infty$,更新 $\text{dist}(t)=6$。</li>
+<p>此时再检查所有边:$sb$($0+1=1$)、$sa$($0+4=4>3$)、$ba$($1+2=3$)、$at$($3+3=6$),没有任何一条满足严格小于,图中已无松弛边,故 $\text{dist}(t)=6$ 是最短距离。</p>
+<pre class="mermaid">graph LR
+    S["s: 0"] -->|4| A["a: 4,可降为 3"]
+    S -->|1| B["b: 1"]
+    B -->|2| A
+    A -->|3| T["t: ∞"]</pre>
+<p><em>边 $ba$ 是松弛边:$1+2<4$,所以 $a$ 的暂定距离应从 4 降为 3。</em></p>
+<p><strong>问题求解应用。</strong> 松弛边既是"错误的证据",也是"改进的线索"。</p>
+<li><strong>检验答案。</strong> 给定一组声称的最短距离,只需扫描全部 $|E|$ 条边。若发现一条松弛边,这组答案必定不是最优的,时间为 $O(|E|)$。</li>
+<li><strong>检测负环。</strong> Bellman–Ford 算法对所有边做 $|V|-1$ 轮松弛。若之后仍存在松弛边,则图中有从 $s$ 可达的负权环。因为无负环时,最短路径至多含 $|V|-1$ 条边,$|V|-1$ 轮后必已收敛。</li>
+<li><strong>设计算法。</strong> 不同算法的区别只在于<strong>选择松弛边的顺序</strong>:Dijkstra 总是从暂定距离最小的顶点出发松弛(要求权重非负),每条边只松弛一次;Bellman–Ford 则不加挑选地反复扫描所有边。</li>
+<p><strong>练习。</strong> 若 $\text{dist}(u)=5$,$w(uv)=2$,$\text{dist}(v)=7$,$uv$ 是松弛边吗?(答:不是,因为 $5+2=7$ 不满足严格小于。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

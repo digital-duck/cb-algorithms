@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transitive Closure | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="传递闭包">传递闭包</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$,$|V|=n$,邻接矩阵 $A\in\{0,1\}^{n\times n}$,当 $(i,j)\in E$ 时 $A_{ij}=1$。$G$ 的<strong>传递闭包</strong>是满足下式的图 $G^<em>=(V,E^</em>)$:</p>
+$$(i,j)\in E^* \iff \text{在 } G \text{ 中存在从 } i \text{ 到 } j \text{ 的有向路径(长度}\ge 0\text{)}.$$
+<p>它回答的是"从 $i$ 出发,能不能到达 $j$?"这一<strong>可达性</strong>问题,与路径的长短无关。</p>
+<p><strong>布尔矩阵乘法。</strong> 在布尔半环中,用 $\lor$ 代替加法,用 $\land$ 代替乘法:</p>
+$$(A\otimes B)_{ij}=\bigvee_{k}\,(A_{ik}\land B_{kj}).$$
+<p>于是 $(A^m)_{ij}=1$ 当且仅当存在一条恰好长 $m$ 的路径。简单路径至多经过 $n-1$ 条边,所以</p>
+$$A^*=(I\lor A)^{\,n-1}$$
+<p>($I$ 为单位矩阵,用来表示长度为 0 的路径)。</p>
+<p><strong>例题。</strong> 设 $V=\{1,2,3,4\}$,边为 $1\to2,\ 2\to3,\ 3\to4$。令 $B=I\lor A$:</p>
+<li>$B^2=(I\lor A)^2$ 包含长度 $\le 2$ 的路径,新增 $1\to3$、$2\to4$。</li>
+<li>$B^4=(B^2)^2$ 包含长度 $\le 4$ 的路径,新增 $1\to4$。</li>
+<p>所以 $A^*$ 是上三角全 1 矩阵:从 1 可到达 2、3、4,从 2 可到达 3、4,从 3 可到达 4。注意,只需<strong>反复平方</strong> $\lceil\log_2 n\rceil$ 次,而不必做 $n-1$ 次乘法。此处 $n=4$,平方 2 次即可。</p>
+<p><strong>复杂度与归约。</strong> 每次布尔矩阵乘法若用定义计算,需要 $O(n^3)$ 时间。设 $M(n)$ 是 $n\times n$ 布尔矩阵乘法的时间。反复平方给出</p>
+$$T_{\text{TC}}(n)=O\big(M(n)\log n\big).$$
+<p>更精细的结论是:</p>
+$$T_{\text{TC}}(n)=\Theta\big(M(n)\big)$$
+<p>(在 $M(n)$ 满足通常的正则性条件时)。</p>
+<li><strong>TC 可归约到乘法。</strong> 先对强连通分量做缩点,得到有向无环图,再按分块递归,即可达到 $O(M(n))$。</li>
+<li><strong>乘法可归约到 TC。</strong> 构造三层图,第一层到第二层的边由 $A$ 给出,第二层到第三层的边由 $B$ 给出。则第一层到第三层的可达关系恰好是 $A\otimes B$。</li>
+<p>因此传递闭包与布尔矩阵乘法在渐近意义上难度相同。布尔乘法可借助整数乘法实现(把结果中非零的元素置 1)。使用 Strassen 算法时,$M(n)=O(n^{2.807})$。已知最快的矩阵乘法算法指数 $\omega<2.372$,于是 $T_{\text{TC}}(n)=O(n^{\omega})$。</p>
+<p><strong>问题求解应用。</strong> 比较三种方法:</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">方法</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">从每个顶点做 DFS/BFS</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(n(n+m))$,稀疏图上最优</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Floyd–Warshall(Warshall 算法)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(n^3)$,代码最简单</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">快速矩阵乘法</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(n^{\omega})$,理论上最优,适合稠密图</td>
+    </tr>
+  </tbody>
+</table>
+<p>Warshall 算法的核心是三重循环:</p>
+<pre><code>for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            R[i][j] = R[i][j] or (R[i][k] and R[k][j])</code></pre>
+<p>典型应用有:判断课程先修关系是否间接成立,判断软件模块之间是否存在依赖,以及判断 SPL 中某个工作流能否经由 <code>CALL</code> 链最终调用另一个工作流。</p>
+<p><strong>练习。</strong> 对环 $1\to2\to3\to1$,求 $A^<em>$。(提示:同一强连通分量内的所有顶点互相可达,所以 $A^</em>$ 是 $3\times3$ 全 1 矩阵。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

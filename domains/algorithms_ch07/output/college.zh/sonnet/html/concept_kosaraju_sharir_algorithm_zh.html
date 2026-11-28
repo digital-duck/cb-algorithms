@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kosaraju Sharir Algorithm | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="kosaraju-sharir-algorithm">Kosaraju Sharir Algorithm</h2>
+<p><strong>定义</strong></p>
+<p>强连通分量（Strongly Connected Component, SCC）是有向图 $G=(V,E)$ 的一个极大顶点子集 $C\subseteq V$，使得 $C$ 中任意两点 $u,v$ 都满足 $u\to v$ 且 $v\to u$ 可达。Kosaraju–Sharir 算法在 $O(V+E)$ 时间内求出图的全部 SCC，其正确性依赖一个关键定理：若在图 $G$ 上做 DFS 并按完成时间（finish time）从大到小排序，再在反图 $G^T$（所有边方向取反）上按此顺序依次做 DFS，则每一轮 DFS 恰好遍历一个完整的 SCC，不多不少。</p>
+<p>直觉上的原因是：SCC 之间的“凝聚图”（condensation graph，把每个 SCC 缩成一点）必然是一个有向无环图（DAG）。在原图上做 DFS，完成时间最大的顶点必然落在凝聚图的一个“源”SCC 中（没有其他 SCC 指向它）。在反图上从这个顶点出发做 DFS，由于反图中原本指向它的边全部反转，DFS 恰好只能走到同一 SCC 内部，无法“逃逸”到其他 SCC，从而精确圈出该 SCC。</p>
+<p><strong>算法步骤</strong></p>
+<li>在 $G$ 上做一次完整 DFS，记录每个顶点的完成时间，得到一个顶点栈（后完成的在栈顶）。</li>
+<li>构造反图 $G^T$。</li>
+<li>按栈顶到栈底的顺序，对尚未访问的顶点在 $G^T$ 上做 DFS；每次 DFS 访问到的所有顶点构成一个 SCC。</li>
+<p>两趟 DFS 各为 $O(V+E)$，构造反图为 $O(V+E)$，总复杂度 $O(V+E)$，与图的规模线性相关。</p>
+<p><strong>例题：网页链接图</strong></p>
+<p>设有向图边集为 $\{A\to B,\,B\to C,\,C\to A,\,B\to D,\,D\to E,\,E\to D\}$。第一趟 DFS（从 $A$ 出发）得到完成顺序（栈顶最新）大致为 $[C,B,A,E,D]$（具体顺序取决于遍历分支次序，但 $A,B,C$ 互为环、$D,E$ 互为环这一结构不变）。在反图上按栈顺序处理：先弹出的顶点会带出其所在整个环，例如从 $A$ 出发在反图中只能到达 $\{A,B,C\}$，因为 $D,E$ 到 $A,B,C$ 的边在反图中被切断了方向；随后处理 $D$（或 $E$）时得到 $\{D,E\}$。最终得到两个 SCC：$\{A,B,C\}$ 与 $\{D,E\}$。</p>
+<p><strong>解题应用</strong></p>
+<p>在实际编程中，判断“网页 A 能否通过若干跳链接回到自身所在的环”本质上就是求 SCC。工程实践中常用该算法预处理社交网络的“互相关注簇”，或编译器分析程序依赖图中的循环依赖模块，将每个 SCC 收缩为单点后即可在 DAG 上做拓扑排序求解后续问题。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

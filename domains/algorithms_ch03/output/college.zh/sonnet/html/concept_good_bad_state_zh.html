@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Good Bad State | Algorithms Ch03</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="好坏状态">好坏状态</h2>
+<p><strong>定义。</strong> 在两人轮流行动、无随机性、有限步必然结束的组合博弈中(规定无法行动者判负),每个局面可递归分类如下:</p>
+<li><strong>坏状态</strong>(又称必败态,$P$-position):轮到行动的一方,无论怎么走,对手都能获胜。即<strong>每一步</strong>都通向好状态。终局(无合法着法)是坏状态。</li>
+<li><strong>好状态</strong>(又称必胜态,$N$-position):轮到行动的一方存在某一步,使对手面对<strong>坏状态</strong>。</li>
+<p>记 $M(s)$ 为从 $s$ 出发的合法后继集合,则</p>
+$$
+\text{好}(s)\iff \exists\, t\in M(s),\ \text{坏}(t),\qquad
+\text{坏}(s)\iff \forall\, t\in M(s),\ \text{好}(t).
+$$
+<p>当 $M(s)=\varnothing$ 时,"$\forall$"空真,故终局为坏状态,递归由此启动。由于博弈有限,从终局向前逐层标记,每个状态恰好得到一个标签。</p>
+<p><strong>例题。</strong> 一堆 $n$ 颗石子,每次取 $1$、$2$ 或 $3$ 颗,取走最后一颗者胜。令 $n$ 为剩余石子数:</p>
+<li>$n=0$:无法行动,坏。</li>
+<li>$n=1,2,3$:可一步取到 $0$,好。</li>
+<li>$n=4$:只能到 $3,2,1$,全是好状态,所以坏。</li>
+<li>$n=5,6,7$:可取到 $4$,好。</li>
+<li>$n=8$:只能到 $7,6,5$,坏。</li>
+<p>规律是:$n\equiv 0\pmod 4$ 为坏状态,其余为好状态。归纳证明:若 $4\mid n$,则取 $k\in\{1,2,3\}$ 后 $n-k$ 不被 $4$ 整除,故都是好状态;若 $4\nmid n$,取 $k=n\bmod 4$ 可到达被 $4$ 整除的状态。</p>
+<pre class="mermaid">graph LR
+  S0["0:坏"] --> S1["1:好"]
+  S0 --> S2["2:好"]
+  S0 --> S3["3:好"]
+  S1 --> S4["4:坏"]
+  S2 --> S4
+  S3 --> S4
+  S4 --> S5["5:好"]
+  S4 --> S6["6:好"]
+  S4 --> S7["7:好"]
+  S5 --> S8["8:坏"]</pre>
+<p><em>图中箭头表示"可由该状态到达的更大状态"的标记关系:每个好状态都能走回一个坏状态(箭头反向),坏状态之间相隔 4。</em></p>
+<p><strong>问题求解应用。</strong> 将取石子规则改为每次取 $1$ 到 $m$ 颗,同样推出坏状态为 $n\equiv 0\pmod{m+1}$。若 $m=5$、$n=20$,先手应取 $20\bmod 6=2$ 颗,留下 $18$,此后无论对手取 $k$ 颗,先手回应 $6-k$ 颗,始终把 $6$ 的倍数留给对手。</p>
+<p>一般的游戏没有这样简洁的公式,但算法不变:</p>
+<li>列出所有状态与后继;</li>
+<li>从终局开始,按上述两条规则自底向上(或带记忆的递归)标记;</li>
+<li>若起始状态为好,选择通向坏状态的那一步;若为坏,则对手若不犯错必胜。</li>
+<p>该方法的时间复杂度为 $O(|V|+|E|)$,其中 $V$ 为状态集、$E$ 为着法集。它是 Sprague–Grundy 理论的基础,后者把"好/坏"二值标签推广为整数值,用于分析多个游戏的组合。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch3: Backtracking (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

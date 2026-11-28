@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moores Algorithm | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="moores-算法">Moores 算法</h2>
+<p><strong>定义。</strong> Moore 算法(又称基于队列的 Bellman-Ford,常称 SPFA)用于求解带权有向图中从源点 $s$ 出发的单源最短路径。标准 Bellman-Ford 每一轮都扫描全部 $|E|$ 条边;Moore 算法观察到:只有在上一阶段<strong>距离刚被缩短</strong>的顶点,其出边才可能产生新的松弛。因此它维护一个先进先出队列 $Q$,只重新扫描队内顶点的出边。</p>
+<p><strong>算法。</strong></p>
+<li>初始化 $d[s]=0$,其余 $d[v]=\infty$;将 $s$ 入队。</li>
+<li>取出队首 $u$。对每条边 $(u,v)$,权重为 $w(u,v)$,若</li>
+$$d[u]+w(u,v)<d[v],$$
+<p>则更新 $d[v]\leftarrow d[u]+w(u,v)$,并在 $v$ 不在队中时将其入队。</p>
+<li>队列为空时终止。</li>
+<p>允许负权边,但要求不存在从 $s$ 可达的负权环。</p>
+<p><strong>例题。</strong> 设顶点 $s,a,b,c$,边:$s\to a$ (4),$s\to b$ (1),$b\to a$ (2),$a\to c$ (1)。</p>
+<li>初始:$d=(s{:}0,\ a{:}\infty,\ b{:}\infty,\ c{:}\infty)$,$Q=[s]$。</li>
+<li>取出 $s$:$d[a]=4,\ d[b]=1$,$Q=[a,b]$。</li>
+<li>取出 $a$:$d[c]=5$,$Q=[b,c]$。</li>
+<li>取出 $b$:$d[a]$ 可由 $1+2=3<4$ 改进为 $3$,$a$ 重新入队,$Q=[c,a]$。</li>
+<li>取出 $c$:无出边。</li>
+<li>取出 $a$:$d[c]=3+1=4<5$,更新,$c$ 入队;再取出 $c$ 后队空。</li>
+<p>结果:$d=(0,3,1,4)$。注意 $a$ 与 $c$ 被处理了两次,这正是"距离变小才重新入队"的体现。</p>
+<p><strong>问题求解应用。</strong></p>
+<p><em>复杂度。</em> 设每个顶点最多入队 $|V|-1$ 次(无负环时可证:顶点 $v$ 的距离每次改进都对应一条更多边数的路径,而最短路径至多含 $|V|-1$ 条边),则最坏情况为</p>
+$$O(|V|\cdot|E|),$$
+<p>与 Bellman-Ford 相同。但在稀疏图或随机图上,每个顶点平均仅入队常数次,实际接近 $O(|E|)$,所以往往快得多。</p>
+<p><em>检测负环。</em> 记录每个顶点的入队次数 $\text{cnt}[v]$。若某顶点入队达到 $|V|$ 次,则说明存在从 $s$ 可达的负权环,算法应报告并终止。否则队列会无限运行。</p>
+<p><em>何时选用。</em> </p>
+<li>图中有负权边、Dijkstra 不适用时,首选 Moore 算法作为快速的实用方法。</li>
+<li>对抗性输入(如精心构造的网格图)可令其退化到最坏情况;若无负权边,且需要稳定的性能保证,应改用带堆的 Dijkstra,复杂度 $O((|V|+|E|)\log|V|)$。</li>
+<pre><code>from collections import deque
+
+def moore(n, adj, s):
+    d = [float("inf")] * n
+    d[s] = 0
+    q, inq, cnt = deque([s]), [False] * n, [0] * n
+    inq[s] = True
+    while q:
+        u = q.popleft(); inq[u] = False
+        for v, w in adj[u]:
+            if d[u] + w &lt; d[v]:
+                d[v] = d[u] + w
+                if not inq[v]:
+                    q.append(v); inq[v] = True
+                    cnt[v] += 1
+                    if cnt[v] &gt;= n:
+                        raise ValueError("存在负权环")
+    return d</code></pre>
+<p><strong>小结。</strong> Moore 算法用"只处理变化过的顶点"这一思想剪掉了 Bellman-Ford 的大量冗余扫描:最坏情况不变,平均表现显著更好,并可用入队次数顺带检测负环。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

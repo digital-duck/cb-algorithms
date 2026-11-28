@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maximum Flow | Algorithms Ch12</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最大流">最大流</h2>
+<p><strong>定义。</strong> 设有向图 $G=(V,E)$ 中,每条边 $(u,v)$ 有容量 $c(u,v)\ge 0$,并指定源点 $s$ 与汇点 $t$。<strong>流</strong> $f$ 是满足下列两条约束的函数:</p>
+<li>容量约束:$0\le f(u,v)\le c(u,v)$;</li>
+<li>流量守恒:对每个 $v\notin\{s,t\}$,有 $\sum_{u} f(u,v)=\sum_{w} f(v,w)$。</li>
+<p>流的<strong>值</strong>为 $|f|=\sum_{v} f(s,v)-\sum_{v} f(v,s)$。<strong>最大流</strong>就是使 $|f|$ 最大的流。</p>
+<p><strong>割与最大流最小割定理。</strong> 一个 $s$–$t$ 割 $(S,T)$ 把顶点分成 $s\in S$、$t\in T$ 两部分,其容量为 $c(S,T)=\sum_{u\in S,\,v\in T}c(u,v)$。任何流的值都不超过任何割的容量,因此 $|f|\le c(S,T)$。更强的结论是:</p>
+$$\max_f |f| = \min_{(S,T)} c(S,T).$$
+<p><strong>增广路算法(Ford–Fulkerson)。</strong> 给定当前流 $f$,定义<strong>残量网络</strong> $G_f$,边 $(u,v)$ 的残量容量为 $c(u,v)-f(u,v)$,并添加反向边,其容量为 $f(u,v)$。只要 $G_f$ 中存在 $s\to t$ 的路径(<strong>增广路</strong>),就沿该路径推送其瓶颈容量。若路径选取为最短路(Edmonds–Karp),则复杂度为 $O(VE^2)$。更先进的算法,如 Orlin 算法,可达到 $O(VE)$。</p>
+<h3 id="流程示意">流程示意</h3>
+<pre class="mermaid">flowchart LR
+    S((s)) -->|"容量 3"| A((a))
+    S -->|"容量 2"| B((b))
+    A -->|"容量 2"| B
+    A -->|"容量 2"| T((t))
+    B -->|"容量 3"| T</pre>
+<p><em>一个五节点网络:图中的边标注了容量,最大流为 5。</em></p>
+<p><strong>例题。</strong> 对上图求最大流。</p>
+<li>沿 $s\to a\to t$ 推送 $2$ 单位(瓶颈为 $a\to t$ 的容量 $2$)。</li>
+<li>沿 $s\to b\to t$ 推送 $2$ 单位(瓶颈为 $s\to b$ 的容量 $2$)。</li>
+<li>沿 $s\to a\to b\to t$ 推送 $1$ 单位。此时 $s\to a$ 剩余 $3-2=1$,$a\to b$ 剩余 $2$,$b\to t$ 剩余 $3-2=1$,瓶颈为 $1$。</li>
+<li>此后 $s$ 的出边中 $s\to a$ 已用完($2+1=3$),$s\to b$ 也已用完($2$),残量网络中再无增广路。</li>
+<p>总流值为 $2+2+1=5$。<strong>验证:</strong> 取割 $S=\{s\}$,$T=\{a,b,t\}$,其容量为 $3+2=5$。流值等于割容量,所以由最大流最小割定理可知,$5$ 即为最大流。</p>
+<p><strong>问题求解应用。</strong> 许多看似无关的问题都能归约为最大流:</p>
+<li><strong>二分图最大匹配</strong>:加入源点连向左侧所有顶点、右侧所有顶点连向汇点,所有边容量取 $1$,最大流的值即最大匹配数。</li>
+<li><strong>边不相交路径</strong>:令每条边容量为 $1$,最大流的值等于 $s$ 到 $t$ 的最大边不相交路径数(Menger 定理)。</li>
+<li><strong>网络瓶颈识别</strong>:算法终止后,从 $s$ 在残量网络中可达的顶点集合即为 $S$,所对应的最小割给出了系统中最脆弱的一组边。</li>
+<p>解题要点是:先确定"什么是容量、什么要守恒",再建图,最后用割来验证答案。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch12: Applications of Flows and Cuts (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

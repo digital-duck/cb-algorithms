@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edge Relaxation | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="边松弛-edge-relaxation">边松弛(Edge Relaxation)</h2>
+<p><strong>定义。</strong> 在带权有向图 $G=(V,E,w)$ 中,最短路算法为每个顶点 $v$ 维护两个量:当前已知的最短路径长度估计 $\mathrm{dist}(v)$(初始为 $\infty$,源点 $s$ 为 $0$),以及该路径上 $v$ 的前驱 $\mathrm{pred}(v)$。对边 $uv$,若</p>
+$$
+\mathrm{dist}(u)+w(u,v)<\mathrm{dist}(v),
+$$
+<p>则称 $uv$ 是<strong>紧张边(tense edge)</strong>,因为经过 $u$ 到达 $v$ 比当前记录的路径更短。<strong>松弛</strong>操作就是利用这条紧张边改进估计:</p>
+<pre><code>RELAX(u, v):
+    if dist(u) + w(u,v) &lt; dist(v):
+        dist(v) ← dist(u) + w(u,v)
+        pred(v) ← u</code></pre>
+<p>若 $uv$ 不紧张,则什么也不做。松弛只会使 $\mathrm{dist}(v)$ 减小,且 $\mathrm{dist}(v)$ 始终是某条真实路径的长度,因此它永远满足上界性质 $\mathrm{dist}(v)\ge\delta(s,v)$,其中 $\delta(s,v)$ 是真实最短距离。</p>
+<p><strong>例题。</strong> 设源点 $s$,边权为 $w(s,a)=4,\ w(s,b)=1,\ w(b,a)=2,\ w(a,t)=3$。初始 $\mathrm{dist}(s)=0$,其余为 $\infty$。</p>
+<li>松弛 $sa$:$0+4<\infty$,故 $\mathrm{dist}(a)=4,\ \mathrm{pred}(a)=s$。</li>
+<li>松弛 $sb$:$\mathrm{dist}(b)=1,\ \mathrm{pred}(b)=s$。</li>
+<li>松弛 $ba$:$1+2=3<4$,边紧张,故 $\mathrm{dist}(a)=3,\ \mathrm{pred}(a)=b$。</li>
+<li>松弛 $at$:$3+3=6<\infty$,故 $\mathrm{dist}(t)=6,\ \mathrm{pred}(t)=a$。</li>
+<p>沿 $\mathrm{pred}$ 回溯 $t\to a\to b\to s$,得到最短路径 $s\to b\to a\to t$,长度为 $6$。注意第 1 步得到的 $\mathrm{dist}(a)=4$ 只是暂时的估计,第 3 步将其改进。</p>
+<pre class="mermaid">flowchart LR
+    S((源点 s)) -->|4| A((a))
+    S -->|1| B((b))
+    B -->|2| A
+    A -->|3| T((t))</pre>
+<p><em>示例图:边 $ba$ 在 $\mathrm{dist}(a)=4$ 时是紧张边,松弛后 $a$ 的估计降为 $3$。</em></p>
+<p><strong>问题求解应用。</strong> 松弛是各类最短路算法共用的基本操作,算法之间的差别只在于松弛的<strong>顺序</strong>:</p>
+<li><strong>Bellman–Ford</strong>:重复 $|V|-1$ 轮,每轮对所有边松弛一次,可处理负权边,时间 $O(|V||E|)$。若之后仍存在紧张边,说明图中有从 $s$ 可达的负权环。</li>
+<li><strong>Dijkstra</strong>:每次取出 $\mathrm{dist}$ 最小的未确定顶点 $u$,只松弛 $u$ 的出边,要求边权非负。使用二叉堆时为 $O((|V|+|E|)\log|V|)$。</li>
+<li><strong>DAG 最短路</strong>:按拓扑序处理顶点并松弛其出边,每条边恰好松弛一次,时间 $O(|V|+|E|)$。</li>
+<p><strong>路径松弛性质</strong>:若 $s=v_0\to v_1\to\cdots\to v_k=v$ 是一条最短路径,且松弛操作按 $v_0v_1,\ v_1v_2,\ \dots,\ v_{k-1}v_k$ 的相对顺序发生(中间可穿插其他松弛),则最终 $\mathrm{dist}(v)=\delta(s,v)$。这说明了 Bellman–Ford 为何 $|V|-1$ 轮就够:最短路径至多含 $|V|-1$ 条边,每一轮至少推进路径上的一条边。</p>
+<p><strong>练习。</strong> 在上例中把 $w(b,a)$ 改为 $-5$。依次松弛 $sa,\ sb,\ ba,\ at$,求最终的 $\mathrm{dist}(t)$ 与 $\mathrm{pred}$ 链。(答案:$\mathrm{dist}(a)=-4$,$\mathrm{dist}(t)=-1$,路径仍为 $s\to b\to a\to t$。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

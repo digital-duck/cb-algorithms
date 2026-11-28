@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reachability | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="可达性-reachability">可达性（Reachability）</h2>
+<p>在有向图 $G = (V, E)$ 中，若存在一条由边构成的路径 $u \to v_1 \to v_2 \to \cdots \to v$，则称顶点 $v$ 从顶点 $u$ <strong>可达</strong>，记作 $u \rightsquigarrow v$。特别地，规定每个顶点对自身可达（路径长度为 0）。给定起点 $u$，其<strong>可达集</strong>定义为</p>
+$$
+\text{reach}(u) = \{ v \in V \mid u \rightsquigarrow v \}.
+$$
+<p>可达性关系是自反、传递的，但通常不对称——这正是有向图区别于无向图的关键之处：在无向图中可达性等价于连通性，而在有向图中 $u$ 可达 $v$ 并不意味着 $v$ 可达 $u$。</p>
+<p><strong>求解可达集</strong>的标准方法是从 $u$ 出发做一次广度优先搜索（BFS）或深度优先搜索（DFS），把所有被访问到的顶点收集起来即为 $\text{reach}(u)$。设图有 $|V|$ 个顶点、$|E|$ 条边，邻接表存储下该算法的时间复杂度为 $O(|V| + |E|)$——每个顶点最多入队一次，每条边最多被扫描一次。</p>
+<p><strong>例题</strong>：给定有向图，边集为 $\{A\to B,\ B\to C,\ A\to D,\ D\to C,\ C\to E\}$。求 $\text{reach}(A)$。从 $A$ 出发做 BFS：第一层访问 $B, D$；第二层通过 $B\to C$ 和 $D\to C$ 访问 $C$（只记录一次）；第三层通过 $C\to E$ 访问 $E$。因此 $\text{reach}(A) = \{A, B, C, D, E\}$，而 $\text{reach}(C) = \{C, E\}$，说明可达集会随起点不同而显著缩小。</p>
+<p><strong>应用</strong>：可达性是许多实际问题的基础判据。例如编译器做“死代码检测”时，会计算从程序入口 <code>main</code> 出发的可达集，任何不在该集合中的函数或代码块都可以安全删除；网络路由分析中，判断数据包能否从节点 $A$ 送达节点 $Z$，本质上就是询问 $Z \in \text{reach}(A)$ 是否成立。当需要频繁查询任意两点间的可达性时，可预先计算<strong>传递闭包</strong>（对所有顶点对判定可达性的矩阵），代价是 $O(|V|^3)$（如 Floyd–Warshall 变体），用空间换时间。</p>
+<pre class="mermaid">graph TD
+    A[顶点 A] --> B[顶点 B]
+    A --> D[顶点 D]
+    B --> C[顶点 C]
+    D --> C
+    C --> E[顶点 E]</pre>
+<p><em>从顶点 A 出发的可达集 reach(A) = {A, B, C, D, E}，通过 BFS/DFS 遍历所有可达顶点得到。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strong Connectivity | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="strong-connectivity">Strong Connectivity</h2>
+<p><strong>定义.</strong> 在有向图 $G = (V, E)$ 中，若顶点 $u$ 到 $v$ 存在有向路径，且 $v$ 到 $u$ 也存在有向路径，则称 $u$ 与 $v$ <strong>强连通</strong>（strongly connected），记作 $u \leftrightarrow v$。可以验证这一关系满足自反性、对称性与传递性，因此是 $V$ 上的一个<strong>等价关系</strong>：自反性由长度为零的路径保证；对称性由定义直接得到；传递性则是因为若 $u \to v \to w$ 且 $w \to v \to u$ 均存在路径，拼接后即得 $u \to w$ 与 $w \to u$。作为等价关系，它自然把 $V$ 划分为若干互不相交的等价类，每一类称为一个<strong>强连通分量</strong>（Strongly Connected Component, SCC）：分量内部任意两点互达，分量之间的有向边则不能双向抵达。</p>
+<p><strong>判定与算法.</strong> 求 SCC 的经典算法有两种：Kosaraju 算法（两次 DFS，利用完成时间逆序）与 Tarjan 算法（单次 DFS，用 low-link 值与栈标记回边），二者时间复杂度均为 $O(|V| + |E|)$，因为每个顶点、每条边只被访问常数次。将每个 SCC 收缩为一个节点后，得到的<strong>分量图</strong>（condensation graph）必定是一个有向无环图（DAG）——这是强连通性理论中唯一必须以定理形式给出的结论。</p>
+<p><strong>证明要点.</strong> 假设分量图中存在环 $C_1 \to C_2 \to \cdots \to C_k \to C_1$，则任取 $u \in C_1, v \in C_2$，沿环可从 $u$ 到达 $v$ 再回到 $u$，说明 $u, v$ 本应属于同一等价类，与 $C_1 \ne C_2$ 矛盾。故分量图无环。</p>
+<p><strong>问题求解应用.</strong> 该 DAG 结构是许多算法的基础：编译器用它检测循环依赖并做拓扑排序调度；社交网络分析用它识别"互粉圈子"；2-SAT 问题的可满足性判定正是通过构造隐含图并检查每个变量与其否定是否落入同一 SCC 来完成的。</p>
+<pre class="mermaid">graph TD
+    subgraph SCC_A[强连通分量 A]
+        A1((节点1)) --> A2((节点2))
+        A2 --> A3((节点3))
+        A3 --> A1
+    end
+    subgraph SCC_B[强连通分量 B]
+        B1((节点4)) --> B2((节点5))
+        B2 --> B1
+    end
+    A2 -->|唯一桥接边| B1</pre>
+<p><em>图中两个稠密簇分别是强连通分量 A 和 B：簇内任意两节点互达；两簇之间只有一条单向"桥"边，因此无法反向到达，A 与 B 是分量图中的两个独立节点。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

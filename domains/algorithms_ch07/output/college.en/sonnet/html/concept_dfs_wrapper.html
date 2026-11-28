@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dfs Wrapper | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="dfs-wrapper">Dfs Wrapper</h2>
+<p>A single call to depth-first search only explores the connected component containing its starting vertex. If a graph has multiple components — for example, a social network with isolated clusters, or a road map with disconnected regions — one DFS call leaves the rest of the graph untouched. The <strong>DFS wrapper</strong> solves this by iterating over every vertex in the graph and launching a fresh DFS from any vertex not yet visited, guaranteeing that all vertices, across all components, are eventually explored.</p>
+<p>The wrapper maintains one shared <code>visited</code> set across all calls. For each vertex $v$ in the vertex set $V$, it checks whether $v$ has been visited; if not, it calls <code>dfs(v)</code>, which recursively visits $v$'s entire component before returning control to the wrapper.</p>
+<pre><code>def dfs_wrapper(graph):
+    visited = set()
+    components = []
+    for v in graph.vertices:
+        if v not in visited:
+            component = []
+            dfs(graph, v, visited, component)
+            components.append(component)
+    return components
+
+def dfs(graph, v, visited, component):
+    visited.add(v)
+    component.append(v)
+    for neighbor in graph.neighbors(v):
+        if neighbor not in visited:
+            dfs(graph, neighbor, visited, component)</code></pre>
+<p>Consider a graph with vertices $\{1,2,3,4,5,6\}$ and edges forming two components: $\{1,2,3\}$ and $\{4,5,6\}$. Iterating vertices in order, the wrapper starts DFS at vertex 1, visiting $\{1,2,3\}$. Vertex 4 is the next unvisited vertex, so DFS restarts there, visiting $\{4,5,6\}$. The wrapper returns two components — the correct decomposition of the graph.</p>
+<p>This pattern is the standard method for computing <strong>connected components</strong> (undirected graphs) or performing a full <strong>topological sort</strong> and <strong>cycle detection</strong> (directed graphs), since both require visiting every vertex regardless of how many disconnected pieces the graph contains. Because each vertex is visited exactly once and each edge examined at most twice, the wrapper preserves DFS's overall $O(|V| + |E|)$ time complexity — the outer loop adds only $O(|V|)$ overhead for the visited-checks, not a new asymptotic cost.</p>
+<pre class="mermaid">flowchart TD
+    A[Start: for each vertex v in V] --> B{v visited?}
+    B -->|No| C[Call dfs from v]
+    C --> D[Mark entire component visited]
+    D --> B
+    B -->|Yes| E[Move to next vertex]
+    E --> B
+    B -->|All vertices checked| F[Return all components]</pre>
+<p><em>The wrapper loop restarts DFS at each unvisited vertex until the whole graph, including disconnected components, has been traversed.</em></p>
+<p>When solving problems, always check whether a graph might be disconnected before writing a single DFS call — the wrapper is what makes DFS a complete graph-traversal algorithm rather than a component-local one.</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: EN &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

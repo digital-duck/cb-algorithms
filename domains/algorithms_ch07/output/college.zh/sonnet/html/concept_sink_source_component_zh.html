@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sink Source Component | Algorithms Ch07</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="sink-source-component">Sink Source Component</h2>
+<p><strong>定义</strong>　给定有向图 $G=(V,E)$，将其强连通分量（SCC）逐一收缩为单个节点，得到的图称为<strong>凝聚图</strong>（component graph）$G^{SCC}$：若原图中存在从分量 $C_1$ 到 $C_2$（$C_1\neq C_2$）的边，则 $G^{SCC}$ 中有边 $C_1\to C_2$。<strong>定理 1</strong>：$G^{SCC}$ 必为有向无环图（DAG）。证明用反证法：若 $G^{SCC}$ 中存在环 $C_1\to C_2\to\cdots\to C_k\to C_1$，则这些分量中任意两个顶点都互相可达，于是它们本应属于同一个更大的 SCC，与 SCC 的极大性矛盾。在这个 DAG 中，入度为 0 的分量称为<strong>源分量</strong>（source component），出度为 0 的分量称为<strong>汇分量</strong>（sink component）。</p>
+<p><strong>实例</strong>　设图中含三个 SCC：$A=\{1,2\}$、$B=\{3,4\}$、$C=\{5\}$，边关系为 $A\to B\to C$。凝聚图是一条链，$A$ 是源分量，$C$ 是汇分量。若对原图做一次 DFS 并记录各顶点完成时间，可以观察到：顶点 1 或 2（属于源分量 $A$）会获得全局最大完成时间。</p>
+<p><strong>问题求解应用与定理证明</strong>　这一现象正是 Kosaraju 线性时间 SCC 算法的理论基础。<strong>引理</strong>：若 $G^{SCC}$ 中有边 $C\to C'$，则 $C$ 内顶点的最大完成时间大于 $C'$ 内顶点的最大完成时间。证明依赖 DFS 的括号定理：DFS 首次从 $C$ 或 $C'$ 中进入时，若先进入 $C$，则由于 $C\to C'$ 可达，会先递归完成 $C'$ 再回溯完成 $C$，故 $C$ 的最大完成时间更晚；若先进入 $C'$，则因 $C'$ 不能到达 $C$（DAG 无环），DFS 无法从 $C'$ 跳到 $C$，$C$ 会在之后独立地被发现和完成，其最大完成时间仍然更晚。由此得出：全局完成时间最大的顶点必属于某个<strong>源分量</strong>。</p>
+<p>算法据此设计两轮 DFS：第一轮在 $G$ 上做 DFS 求各顶点完成时间；第二轮在转置图 $G^{T}$（所有边反向）上，按完成时间递减顺序做 DFS。因为反转边后，原图的源分量在 $G^{T}$ 中变为<strong>汇分量</strong>（出度为 0），从该分量任一顶点出发的 DFS 无法越界到其他分量，因此每棵 DFS 树恰好精确对应一个 SCC。这一"找源分量代替找汇分量"的技巧，使 SCC 的识别整体只需 $O(V+E)$ 时间。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch7: Depth-First Search (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shortest Path Distance | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="最短路径距离">最短路径距离</h2>
+<p><strong>定义。</strong> 在带权有向图 $G=(V,E,w)$ 中,一条从 $u$ 到 $v$ 的路径的权重是其所含各边权之和。<strong>最短路径距离</strong> $\operatorname{dist}(u,v)$ 定义为所有 $u\to v$ 路径权重的下确界:</p>
+$$
+\operatorname{dist}(u,v)=
+\begin{cases}
+0, & u=v \text{(且无负环可达)},\\
++\infty, & \text{从 } u \text{ 无法到达 } v,\\
+-\infty, & u \text{ 可到达 } v \text{,且途中可经过负权环},\\
+\min_{p:u\leadsto v} w(p), & \text{其他情形}.
+\end{cases}
+$$
+<p>这四种取值各有含义:</p>
+<li><strong>不可达</strong>:没有路径,按约定取 $+\infty$(空集的下确界)。</li>
+<li><strong>负环</strong>:若某条 $u\to v$ 的路径上能经过权重和为负的环,则每绕一圈总权重就更小,下确界为 $-\infty$。</li>
+<li><strong>$\operatorname{dist}(u,u)=0$</strong>:空路径不含任何边,权重为 $0$。若 $u$ 位于负环上,则 $\operatorname{dist}(u,u)=-\infty$。</li>
+<p><strong>例题。</strong> 设图有边 $A\to B$(权 $4$)、$A\to C$(权 $1$)、$C\to B$(权 $2$)、$B\to D$(权 $-1$),另有孤立点 $E$。</p>
+<li>$\operatorname{dist}(A,B)=\min\{4,\;1+2\}=3$。</li>
+<li>$\operatorname{dist}(A,D)=3+(-1)=2$。</li>
+<li>$\operatorname{dist}(A,A)=0$。</li>
+<li>$\operatorname{dist}(A,E)=+\infty$,因为 $E$ 不可达。</li>
+<p>现在加入边 $D\to B$(权 $1$)。环 $B\to D\to B$ 的权重为 $-1+1=0$,不是负环,距离不变。若改为权 $0.5$,环权重为 $-0.5<0$,每绕一圈减少 $0.5$,于是 $\operatorname{dist}(A,B)=\operatorname{dist}(A,D)=-\infty$。</p>
+<p><strong>问题求解应用。</strong> 计算距离时,先判断情形,再选算法:</p>
+<li>所有边权非负:用 Dijkstra 算法,时间 $O(|E|+|V|\log|V|)$(斐波那契堆)或 $O(|E|\log|V|)$(二叉堆),不会出现 $-\infty$。</li>
+<li>含负权边:用 Bellman–Ford。把 $d[s]=0$、其余为 $+\infty$ 作为初值,对所有边松弛 $|V|-1$ 轮。若再松弛一轮仍有边能缩短,则存在从 $s$ 可达的负环。</li>
+<li>标记 $-\infty$:把第 $|V|$ 轮中被更新的顶点作为起点,沿边做搜索,所有可从它们到达的顶点距离都是 $-\infty$。</li>
+<p><strong>为什么是 $|V|-1$ 轮?</strong> 不含环的最短路径至多有 $|V|-1$ 条边。若不存在负环,最优路径不必重复顶点,$|V|-1$ 轮松弛就够了;第 $|V|$ 轮仍能改进,就说明某条"最优"路径其实包含环,且该环必为负环。</p>
+<p><strong>实际应用:</strong> 货币兑换中取 $w=-\log(\text{汇率})$,负环就对应套利机会;此时 $\operatorname{dist}=-\infty$ 恰好表示收益可无限放大(理论上)。</p>
+<p><strong>小结。</strong> 距离不一定是一个普通实数,它取值于 $\mathbb{R}\cup\{-\infty,+\infty\}$。解题时要先检查可达性和负环,再报告数值。</p>
+<pre class="mermaid">flowchart LR
+A["起点 A"] -->|"1"| C["C"]
+A -->|"4"| B["B"]
+C -->|"2"| B
+B -->|"-1"| D["D"]
+D -->|"0.5"| B
+E["孤立点 E"]</pre>
+<p><em>图示:$B\to D\to B$ 构成权重为 $-0.5$ 的负环,使 $\operatorname{dist}(A,B)=\operatorname{dist}(A,D)=-\infty$;孤立点 $E$ 不可达,距离为 $+\infty$。</em></p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

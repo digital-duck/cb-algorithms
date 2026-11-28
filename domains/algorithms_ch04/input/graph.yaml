@@ -1,0 +1,103 @@
+domain: Algorithms_JeffE
+primitives:
+  recursion:
+    defines: A problem-solving technique where a function or definition is expressed in terms of smaller
+      instances of itself.
+    tier: 0
+  recurrence_relation:
+    defines: An equation that defines a sequence or function value in terms of its values at smaller inputs,
+      plus base cases.
+    tier: 0
+  backtracking:
+    defines: A recursive algorithm that solves a problem by exploring recursive subproblems directly from
+      a recurrence, without storing results, often leading to repeated work.
+    tier: 0
+  greedy_algorithm:
+    defines: An algorithm that constructs a solution through a sequence of locally optimal decisions made
+      directly, without solving recursive subproblems.
+    tier: 0
+concepts:
+  memoization:
+    defines: An optimization of recursive algorithms that stores ("remembers") the results of previously
+      computed subproblems and reuses them instead of recomputing.
+    composed_of:
+    - recursion
+    - recurrence_relation
+    - backtracking
+    tier: 1
+  dynamic_programming:
+    defines: A method of solving problems by formulating a correct recurrence and then filling in solutions
+      to subproblems from the bottom up in a deliberate order, avoiding the repeated computation of backtracking.
+    composed_of:
+    - recurrence_relation
+    - backtracking
+    tier: 1
+  matrix_exponentiation_recurrence:
+    defines: A technique that reformulates a linear recurrence as matrix multiplication so repeated squaring
+      can evaluate it in logarithmic time.
+    composed_of:
+    - recurrence_relation
+    tier: 1
+  subproblem_evaluation_order:
+    defines: The identification of which subproblems a given subproblem depends on, and the ordering of
+      computation (e.g., bottom-up, by rows/columns/diagonals) so dependencies are always resolved before
+      use.
+    composed_of:
+    - dynamic_programming
+    tier: 2
+  tree_dynamic_programming:
+    defines: A form of dynamic programming where subproblems are associated with nodes of a tree rather
+      than array indices, and results are memoized directly in tree nodes using post-order traversal.
+    composed_of:
+    - dynamic_programming
+    - recursion
+    tier: 2
+applications:
+  fibonacci_numbers:
+    defines: The sequence defined by the recurrence F(n) = F(n-1) + F(n-2), used as the introductory example
+      for recursion, memoization, and dynamic programming.
+    needs:
+    - recursion
+    - memoization
+    - dynamic_programming
+    - matrix_exponentiation_recurrence
+    tier: 2
+  text_segmentation:
+    defines: The problem of determining whether a string can be partitioned into a sequence of valid words,
+      solved via a recurrence on suffixes.
+    needs:
+    - dynamic_programming
+    tier: 2
+  subset_sum:
+    defines: The problem of determining whether some subset of a given array of positive integers sums
+      to a target value.
+    needs:
+    - dynamic_programming
+    tier: 2
+  longest_increasing_subsequence:
+    defines: The problem of computing the length of the longest subsequence of an array in which elements
+      are strictly increasing.
+    needs:
+    - dynamic_programming
+    - subproblem_evaluation_order
+    tier: 3
+  edit_distance:
+    defines: The minimum number of insertions, deletions, and substitutions needed to transform one string
+      into another.
+    needs:
+    - dynamic_programming
+    - subproblem_evaluation_order
+    tier: 3
+  optimal_binary_search_trees:
+    defines: The problem of building a binary search tree over a sorted set of keys with given search
+      frequencies that minimizes total expected search cost.
+    needs:
+    - dynamic_programming
+    - subproblem_evaluation_order
+    tier: 3
+  maximum_independent_set_in_trees:
+    defines: The problem of finding the largest set of vertices in a tree such that no two are connected
+      by an edge, solvable in linear time via tree dynamic programming.
+    needs:
+    - tree_dynamic_programming
+    tier: 3

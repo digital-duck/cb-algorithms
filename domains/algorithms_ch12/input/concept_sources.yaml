@@ -1,0 +1,93 @@
+domain: Algorithms_JeffE
+sources:
+  maximum_flow:
+    label: Maximum Flow
+    sections: []
+  minimum_cut:
+    label: Minimum Cut
+    sections: []
+  flow_decomposition_theorem:
+    label: Flow Decomposition Theorem
+    sections:
+    - id: ch12_edge_disjoint_paths
+      title: Edge-Disjoint Paths
+    - id: ch12_tuple_selection
+      title: Tuple Selection
+  maxflow_mincut_theorem:
+    label: Max-Flow Min-Cut Theorem
+    sections:
+    - id: ch12_bipartite_matching
+      title: Bipartite Matching
+    - id: ch12_baseball_elimination
+      title: Baseball Elimination
+  matching:
+    label: Matching
+    sections:
+    - id: ch12_bipartite_matching
+      title: Bipartite Matching
+  directed_acyclic_graph:
+    label: Directed Acyclic Graph (DAG)
+    sections:
+    - id: ch12_disjoint_path_covers
+      title: Disjoint-Path Covers
+    - id: ch12_project_selection
+      title: Project Selection
+  edge_disjoint_paths:
+    label: Edge-Disjoint Paths
+    sections:
+    - id: ch12_edge_disjoint_paths
+      title: Edge-Disjoint Paths
+  vertex_capacities:
+    label: Vertex Capacities
+    sections:
+    - id: ch12_vertex_capacities_and_vertex_disjoint_pa
+      title: Vertex Capacities and Vertex-Disjoint Paths
+  vertex_disjoint_paths:
+    label: Vertex-Disjoint Paths
+    sections:
+    - id: ch12_vertex_capacities_and_vertex_disjoint_pa
+      title: Vertex Capacities and Vertex-Disjoint Paths
+  bipartite_matching:
+    label: Bipartite Matching
+    sections:
+    - id: ch12_bipartite_matching
+      title: Bipartite Matching
+  alternating_path:
+    label: Alternating Path
+    sections:
+    - id: ch12_bipartite_matching
+      title: Bipartite Matching
+  tuple_selection:
+    label: Tuple Selection
+    sections:
+    - id: ch12_tuple_selection
+      title: Tuple Selection
+  exam_scheduling:
+    label: Exam Scheduling
+    sections:
+    - id: ch12_tuple_selection
+      title: Tuple Selection
+    - id: ch12_disjoint_path_covers
+      title: Disjoint-Path Covers
+  disjoint_path_cover:
+    label: Disjoint-Path Cover
+    sections:
+    - id: ch12_disjoint_path_covers
+      title: Disjoint-Path Covers
+  minimal_faculty_hiring:
+    label: Minimal Faculty Hiring
+    sections:
+    - id: ch12_disjoint_path_covers
+      title: Disjoint-Path Covers
+    - id: ch12_baseball_elimination
+      title: Baseball Elimination
+  baseball_elimination:
+    label: Baseball Elimination
+    sections:
+    - id: ch12_baseball_elimination
+      title: Baseball Elimination
+  project_selection:
+    label: Project Selection
+    sections:
+    - id: ch12_project_selection
+      title: Project Selection

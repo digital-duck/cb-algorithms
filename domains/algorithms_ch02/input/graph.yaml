@@ -1,0 +1,106 @@
+domain: Algorithms_JeffE
+primitives:
+  reduction:
+    defines: Solving one problem by using an algorithm for another problem as a black box, where correctness
+      does not depend on the black box's internal implementation.
+    tier: 0
+  base_case:
+    defines: An elementary instance of a recursive problem that can be solved directly without further
+      reduction, ensuring recursive reductions terminate rather than looping forever.
+    tier: 0
+  induction_proof:
+    defines: A proof technique, identified with the Recursion Fairy/Induction Hypothesis, used to establish
+      the correctness of a recursive algorithm.
+    tier: 0
+  recurrence_relation:
+    defines: An equation expressing the running time of a recursive algorithm on an input of size n in
+      terms of the running times on smaller subproblems.
+    tier: 0
+  merge_subroutine:
+    defines: A subroutine that combines two already-sorted subarrays into a single sorted array by repeatedly
+      taking the smaller of the two fronts.
+    tier: 0
+  partition_subroutine:
+    defines: A subroutine that rearranges an array around a chosen pivot element so that smaller elements
+      precede it and larger elements follow it, returning the pivot's final index.
+    tier: 0
+concepts:
+  recursion:
+    defines: A special case of reduction in which a problem is solved by reducing it to one or more simpler
+      instances of the same problem, delegated to an imagined "Recursion Fairy."
+    composed_of:
+    - reduction
+    - base_case
+    - induction_proof
+    tier: 1
+  recursion_tree:
+    defines: A pictorial method for solving divide-and-conquer recurrences by summing, level by level,
+      the non-recursive work performed at every node of a tree of recursive subproblems.
+    composed_of:
+    - recurrence_relation
+    tier: 1
+  domain_transformation:
+    defines: A technique for removing floors, ceilings, and lower-order terms from a recurrence by defining
+      a shifted function that satisfies a simpler recurrence.
+    composed_of:
+    - recurrence_relation
+    tier: 1
+  divide_and_conquer:
+    defines: A three-step recursive pattern of dividing a problem into independent smaller instances,
+      delegating them recursively, and combining their solutions into the final answer.
+    composed_of:
+    - recursion
+    tier: 2
+  quickselect:
+    defines: A recursive algorithm that finds the kth smallest element of an array by partitioning around
+      a pivot and recursing into only the one subarray known to contain the target rank.
+    composed_of:
+    - recursion
+    - partition_subroutine
+    tier: 2
+  split_multiply:
+    defines: A divide-and-conquer multiplication algorithm that splits each n-digit number into two halves
+      and recursively computes four half-size sub-products, still yielding quadratic time.
+    composed_of:
+    - divide_and_conquer
+    tier: 3
+applications:
+  tower_of_hanoi:
+    defines: A puzzle solved by recursively moving n-1 disks to a spare peg, moving the largest disk directly,
+      then moving the n-1 disks onto it, reducing an n-disk instance to two (n-1)-disk instances.
+    needs:
+    - recursion
+    tier: 2
+  fast_exponentiation:
+    defines: A recursive "repeated squaring" method for computing a^n using only O(log n) multiplications
+      by halving the exponent at each step.
+    needs:
+    - recursion
+    tier: 2
+  mergesort:
+    defines: A divide-and-conquer sorting algorithm that recursively sorts the two halves of an array
+      and then merges the sorted halves into a single sorted array.
+    needs:
+    - divide_and_conquer
+    - merge_subroutine
+    - recurrence_relation
+    tier: 3
+  quicksort:
+    defines: A divide-and-conquer sorting algorithm that partitions an array around a chosen pivot into
+      smaller/pivot/larger subarrays and recursively sorts the outer two.
+    needs:
+    - divide_and_conquer
+    - partition_subroutine
+    tier: 3
+  median_of_medians:
+    defines: A linear-time selection algorithm that guarantees a good quickselect pivot by recursively
+      computing the median of medians of small fixed-size blocks of the array.
+    needs:
+    - quickselect
+    tier: 3
+  karatsuba_multiplication:
+    defines: A divide-and-conquer multiplication algorithm that reduces the four sub-products needed to
+      multiply two n-digit numbers to three recursive multiplications, yielding subquadratic time.
+    needs:
+    - split_multiply
+    tier: 4

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Np Class | Algorithms Ch13</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="np-类">NP 类</h2>
+<p><strong>定义。</strong> 类 $\mathbf{NP}$ 是这样一类判定问题:若某个实例的答案为"是",则存在一个简短的<strong>证书</strong>(certificate,即"证明"),可以在多项式时间内被验证。形式上,语言 $L \in \mathbf{NP}$ 当且仅当存在多项式时间的验证算法 $V$ 和多项式 $p$,使得</p>
+$$x \in L \iff \exists\, w,\ |w| \le p(|x|),\ V(x, w) = 1,$$
+<p>且 $V$ 的运行时间为 $|x|$ 的多项式。注意:$\mathbf{NP}$ 的含义是"非确定性多项式时间"(Nondeterministic Polynomial time),<strong>不是</strong>"非多项式"。</p>
+<p>关键区别在于:<strong>验证</strong>一个答案,与<strong>找到</strong>一个答案,难度可能相差很大。</p>
+<p><strong>例题:子集和问题。</strong> 给定整数集合 $S = \{3, 34, 4, 12, 5, 2\}$ 和目标值 $t = 9$,问是否存在子集,其元素之和恰为 $t$?</p>
+<li>证书:子集 $\{4, 5\}$。</li>
+<li>验证:检查 $4, 5 \in S$,且 $4 + 5 = 9$。这只需 $O(n)$ 步。</li>
+<p>若要<em>找到</em>这个子集,朴素方法需检查 $2^n$ 个子集,时间为指数级。但只要有人给出证书,验证就是快速的。因此子集和问题属于 $\mathbf{NP}$。</p>
+<p><strong>问题求解应用:判断一个问题是否属于 NP。</strong> 按以下步骤操作:</p>
+<li>确定"是"实例的证书是什么(如一个子集、一条路径、一组赋值)。</li>
+<li>证明证书长度为输入规模的多项式。</li>
+<li>给出多项式时间的验证算法。</li>
+<p><em>练习:证明哈密顿回路问题属于 $\mathbf{NP}$。</em> 证书是顶点的一个排列 $v_1, \dots, v_n$。验证:(a) 每个顶点恰好出现一次,用时 $O(n)$ 或 $O(n^2)$;(b) 每对相邻顶点 $v_i, v_{i+1}$ 以及 $v_n, v_1$ 之间都有边,用时 $O(n)$ 次邻接查询。总时间为多项式,故属于 $\mathbf{NP}$。</p>
+<p><strong>与其他类的关系。</strong> 任何 $\mathbf{P}$ 中的问题都属于 $\mathbf{NP}$:验证者可以忽略证书,直接自己求解。所以</p>
+$$\mathbf{P} \subseteq \mathbf{NP}.$$
+<p>$\mathbf{P} = \mathbf{NP}$ 是否成立,是计算机科学中最著名的未解问题之一(克莱数学研究所千禧年大奖难题)。多数研究者相信 $\mathbf{P} \ne \mathbf{NP}$,但至今无人能够证明。</p>
+<pre class="mermaid">graph TD
+    A[所有判定问题] --> B[NP:是实例有多项式时间可验证的证书]
+    B --> C[P:多项式时间可求解]
+    B --> D[NP 完全:NP 中最难的问题]
+    D --> E[子集和]
+    D --> F[布尔可满足性 SAT]
+    C --> G[排序、最短路径]</pre>
+<p><em>图:P、NP 与 NP 完全问题的包含关系示意。P 是 NP 的子集,NP 完全问题是 NP 中最难的一批问题。</em></p>
+<p><strong>小结。</strong> $\mathbf{NP}$ 刻画的是"答案易于检验"的问题。判断某问题是否属于 $\mathbf{NP}$,核心就是设计证书与多项式时间验证器。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch13: NP-Hardness (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

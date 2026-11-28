@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fast Matrix Multiplication | Algorithms Ch10</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="快速矩阵乘法">快速矩阵乘法</h2>
+<h3 id="定义">定义</h3>
+<p>设 $A,B$ 为两个 $n\times n$ 矩阵,乘积 $C=AB$ 的元素为</p>
+$$c_{ij}=\sum_{k=1}^{n} a_{ik}b_{kj}.$$
+<p>按定义直接计算需要 $n^2$ 个元素、每个元素 $n$ 次乘法,总计 $\Theta(n^3)$ 次标量乘法。<strong>快速矩阵乘法</strong>指用分治思想把乘法次数降到 $o(n^3)$ 的算法。其中最著名的是 Strassen 算法(1969),其关键在于:<strong>借助减法(即加法群中的逆元),用更少的乘法换取更多的加减法</strong>。</p>
+<h3 id="分治与递推">分治与递推</h3>
+<p>设 $n$ 为 2 的幂,将矩阵分成四个 $\tfrac n2\times\tfrac n2$ 的子块:</p>
+$$A=\begin{pmatrix}A_{11}&A_{12}\\A_{21}&A_{22}\end{pmatrix},\quad B=\begin{pmatrix}B_{11}&B_{12}\\B_{21}&B_{22}\end{pmatrix}.$$
+<p>朴素分块需要 8 次子矩阵乘法,递推式为 $T(n)=8T(n/2)+\Theta(n^2)$,由主定理得 $T(n)=\Theta(n^3)$,没有任何改进。</p>
+<p>Strassen 只用 7 次子矩阵乘法:</p>
+$$C_{11}=M_1+M_4-M_5+M_7,\quad C_{12}=M_3+M_5,$$
+$$C_{21}=M_2+M_4,\quad C_{22}=M_1-M_2+M_3+M_6.$$
+$$T(n)=\Theta\!\left(n^{\log_2 7}\right)\approx\Theta(n^{2.807}).$$
+$$M_3+M_5=A_{11}B_{12}-A_{11}B_{22}+A_{11}B_{22}+A_{12}B_{22}=A_{11}B_{12}+A_{12}B_{22},$$
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch10: All-Pairs Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

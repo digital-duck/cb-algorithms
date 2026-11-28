@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sssp Problem | Algorithms Ch09</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="单源最短路径问题">单源最短路径问题</h2>
+<p><strong>定义。</strong> 设有向加权图 $G=(V,E)$,权重函数 $w:E\to\mathbb{R}$,并指定一个源点 $s\in V$。路径 $p=\langle v_0,v_1,\dots,v_k\rangle$ 的权重为</p>
+$$w(p)=\sum_{i=1}^{k} w(v_{i-1},v_i).$$
+<p>从 $s$ 到 $v$ 的<strong>最短路径权重</strong>定义为</p>
+$$\delta(s,v)=\begin{cases}\min\{w(p): s\overset{p}{\leadsto}v\} & \text{若 } v \text{ 可从 } s \text{ 到达},\\ +\infty & \text{否则。}\end{cases}$$
+<p><strong>单源最短路径(SSSP)问题</strong>要求:对每个 $v\in V$,求出 $\delta(s,v)$,并给出一条实现它的路径。若 $s$ 可到达某个权重和为负的环,则相关的 $\delta(s,v)=-\infty$,最短路径没有良好定义。</p>
+<p><strong>关键性质:最优子结构。</strong> 若 $p=\langle s,\dots,u,\dots,v\rangle$ 是最短路径,则其任一子路径(如 $s\leadsto u$)也是最短路径。因此全部最短路径可以用一棵以 $s$ 为根的<strong>最短路径树</strong>来存储:对每个顶点只需记录前驱 $\pi[v]$。</p>
+<p><strong>松弛(relaxation)。</strong> 维护估计值 $d[v]\ge\delta(s,v)$,初始 $d[s]=0$,其余为 $+\infty$。对边 $(u,v)$ 的松弛操作为:若 $d[u]+w(u,v)<d[v]$,则令 $d[v]\leftarrow d[u]+w(u,v)$,$\pi[v]\leftarrow u$。各种 SSSP 算法的差别,仅在于松弛的顺序不同。</p>
+<p><strong>例题。</strong> 设顶点为 $s,a,b,c$,边权为 $s\to a:4$,$s\to b:1$,$b\to a:2$,$a\to c:1$,$b\to c:5$。</p>
+<p>初始:$d=(s{:}0,\ a{:}\infty,\ b{:}\infty,\ c{:}\infty)$。</p>
+<li>松弛 $s\to a$、$s\to b$:$d[a]=4$,$d[b]=1$。</li>
+<li>松弛 $b\to a$:$1+2=3<4$,所以 $d[a]=3$,$\pi[a]=b$。</li>
+<li>松弛 $b\to c$:$d[c]=6$;再松弛 $a\to c$:$3+1=4<6$,所以 $d[c]=4$,$\pi[c]=a$。</li>
+<p>结果:$\delta(s,a)=3$,$\delta(s,b)=1$,$\delta(s,c)=4$。沿 $\pi$ 回溯得到 $c$ 的最短路径 $s\to b\to a\to c$。注意:直接边 $s\to a$ 并非最优。</p>
+<p><strong>问题求解:如何选择算法。</strong> 先判断图的特征,再选择方法:</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">图的特征</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">算法</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">时间复杂度</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">所有 $w\ge 0$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Dijkstra(二叉堆)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O((V+E)\log V)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">允许负权,需检测负环</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Bellman–Ford</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(VE)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">有向无环图(DAG)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">按拓扑序松弛</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(V+E)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">无权图</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">广度优先搜索</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(V+E)$</td>
+    </tr>
+  </tbody>
+</table>
+<p>例如,路由网络中的延迟都是非负的,应选 Dijkstra;金融套利中取对数后的汇率权重可能为负,需要 Bellman–Ford 来检测负环(即套利机会)。</p>
+<pre class="mermaid">graph LR
+    S((源点 s)) -->|4| A((a))
+    S -->|1| B((b))
+    B -->|2| A
+    A -->|1| C((c))
+    B -->|5| C</pre>
+<p><em>例题中的图:最短路径树由边 $s\to b$、$b\to a$、$a\to c$ 构成。</em></p>
+<p><strong>小结。</strong> SSSP 问题的核心是:维护距离估计、用松弛逐步逼近 $\delta(s,v)$,并借助最优子结构得到一棵最短路径树。算法的选择取决于权重是否为负、图是否有环。</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch9: Shortest Paths (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>

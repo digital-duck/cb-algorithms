@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fast Exponentiation | Algorithms Ch02</title>
+<script>
+MathJax = {
+  tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']] },
+  options: { skipHtmlTags: ['script','noscript','style','textarea','pre','code'] }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Georgia,serif;background:#fafaf8;color:#1a1a1a;line-height:1.7}
+h2{font-size:1.45rem;color:#1e3a5f;margin-bottom:12px}
+h3{font-size:1.1rem;color:#2e4a7f;margin:20px 0 8px}
+h4{font-size:1rem;color:#3a5a8f;margin:16px 0 6px}
+p{margin-bottom:16px;font-size:1rem}
+li{margin-bottom:6px;margin-left:24px;font-size:1rem}
+pre{background:#f4f4f0;border:1px solid #d8d8d0;border-radius:6px;
+    padding:16px 20px;overflow-x:auto;margin:16px 0}
+code{font-family:Menlo,Consolas,monospace;font-size:.87em}
+p code{background:#f0f0ea;padding:1px 4px;border-radius:3px}
+footer.spl-credit{margin-top:32px;padding-top:16px;border-top:1px solid #e0e0d8;
+      font-family:system-ui,sans-serif;font-size:.78rem;color:#999;text-align:center}
+footer.spl-credit a{color:#2563eb;text-decoration:none}
+footer.spl-credit span{display:block}
+footer.spl-credit .spl-credit__meta{margin-bottom:4px}
+.cb-figure{margin:24px 0;text-align:center}
+.cb-figure img{max-width:100%;height:auto;border:1px solid #e0e0d8;border-radius:6px}
+figcaption{font-size:.82rem;color:#666;margin-top:8px;font-style:italic;text-align:center}
+pre.mermaid{background:none;border:none;padding:0;overflow:visible;margin:16px 0}
+.page{max-width:780px;margin:0 auto;padding:40px 32px}
+section{margin-bottom:48px;border-top:1px solid #e0e0d8;padding-top:36px}
+section:first-of-type{border-top:none;padding-top:0}
+</style>
+</head>
+<body>
+<div class="page">
+  <main>
+    <h2 id="快速幂">快速幂</h2>
+<p><strong>定义。</strong> 快速幂(fast exponentiation,又称"反复平方法")是一种计算 $a^n$ 的递归方法。朴素做法需要做 $n-1$ 次乘法;快速幂每一步把指数减半,只需 $O(\log n)$ 次乘法。其依据是下面的恒等式:</p>
+$$
+a^n=\begin{cases}
+1, & n=0,\\[4pt]
+\left(a^{n/2}\right)^2, & n \text{ 为偶数},\\[4pt]
+a\cdot\left(a^{(n-1)/2}\right)^2, & n \text{ 为奇数}.
+\end{cases}
+$$
+<p>这些等式直接来自指数律 $a^{m+k}=a^m a^k$。关键在于:子问题 $a^{\lfloor n/2\rfloor}$ 只算<strong>一次</strong>,再平方。若把它写成 $a^{n/2}\cdot a^{n/2}$ 并分别递归两次,就会退化回 $O(n)$。</p>
+<pre><code>def power(a, n):
+    if n == 0:
+        return 1
+    half = power(a, n // 2)      # 只递归一次
+    return half * half if n % 2 == 0 else a * half * half</code></pre>
+<p><strong>例题。</strong> 计算 $3^{13}$。把指数逐步减半:</p>
+$$
+13 \to 6 \to 3 \to 1 \to 0.
+$$
+<p>回代:</p>
+<li>$3^0=1$</li>
+<li>$3^1=3\cdot(3^0)^2=3$</li>
+<li>$3^3=3\cdot(3^1)^2=27$</li>
+<li>$3^6=(3^3)^2=729$</li>
+<li>$3^{13}=3\cdot(3^6)^2=3\cdot 531441=1594323$</li>
+<p>共 4 层递归,最多 8 次乘法,而朴素方法需要 12 次。</p>
+<p><strong>复杂度分析。</strong> 设 $T(n)$ 为所需乘法次数,则</p>
+$$
+T(n)\le T(\lfloor n/2\rfloor)+2,\qquad T(0)=0.
+$$
+<p>指数每次至少减半,经过 $\lfloor\log_2 n\rfloor+1$ 步降为 0,因此 $T(n)\le 2\lfloor\log_2 n\rfloor+2=O(\log n)$。例如 $n=10^9$ 时,朴素方法需约 $10^9$ 次乘法,快速幂不超过 60 次。</p>
+<pre class="mermaid">graph TD
+    A["计算 3 的 13 次方"] --> B["计算 3 的 6 次方"]
+    B --> C["计算 3 的 3 次方"]
+    C --> D["计算 3 的 1 次方"]
+    D --> E["指数为 0,返回 1"]
+    E --> F["3 = 3 × 1²"]
+    F --> G["27 = 3 × 3²"]
+    G --> H["729 = 27²"]
+    H --> I["1594323 = 3 × 729²"]</pre>
+<p><em>图:指数 13 的递归过程。向下每层指数减半,向上回代时做平方,奇数层再多乘一个 $a$。</em></p>
+<p><strong>问题求解应用。</strong> 快速幂最常见的用途是模幂运算,例如求 $7^{1000000} \bmod 13$,或密码学(RSA)中的 $a^e \bmod m$。因为 $(xy)\bmod m=\big((x\bmod m)(y\bmod m)\big)\bmod m$,每次乘法后立即取模,中间结果始终小于 $m$,不会溢出:</p>
+<pre><code>def power_mod(a, n, m):
+    if n == 0:
+        return 1 % m
+    half = power_mod(a, n // 2, m)
+    r = half * half % m
+    return r if n % 2 == 0 else r * a % m</code></pre>
+<p><strong>练习。</strong> (1) 用快速幂手算 $2^{10} \bmod 7$,写出每一层的结果。(2) 为什么把 <code>half &lt;em&gt; half</code> 写成 <code>power(a, n//2) &lt;/em&gt; power(a, n//2)</code> 会使复杂度退化为 $O(n)$?(提示:写出此时的递推 $T(n)=2T(n/2)+1$。)</p>
+  </main>
+  <footer class="spl-credit"><span class="spl-credit__meta">Algorithms (Jeff Erickson) — Ch2: Recursion (Level: College &middot; Language: ZH &middot; Model: sonnet)</span><span class="spl-credit__powered">Generated and Powered by <a href="https://github.com/digital-duck/SPL.py" target="_blank" rel="noopener">SPL</a></span></footer>
+</div>
+</body>
+</html>
