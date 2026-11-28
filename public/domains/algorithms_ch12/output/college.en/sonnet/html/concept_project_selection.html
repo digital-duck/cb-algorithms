@@ -39,7 +39,37 @@ section:first-of-type{border-top:none;padding-top:0}
 $$\maximize \sum_{i=1}^{n} v_i x_i \quad \text{subject to} \quad \sum_{i=1}^{n} \mathbf{w}_i x_i \leq \mathbf{b}, \quad x_i \in \{0,1\}.$$
 <p>This is the <strong>multi-dimensional 0–1 knapsack problem</strong>, a canonical NP-hard integer program. When $m=1$, it reduces to the classical knapsack problem.</p>
 <p><strong>Worked Example.</strong> Suppose a research office has a budget of $B = 10$ units and evaluates four projects:</p>
-<p>| Project | Value $v_i$ | Cost $w_i$ | |---------|-------------|------------| | $p_1$   | 6           | 4          | | $p_2$   | 5           | 3          | | $p_3$   | 4           | 3          | | $p_4$   | 3           | 2          |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Project</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Value $v_i$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Cost $w_i$</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$p_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">6</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$p_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">5</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$p_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$p_4$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+    </tr>
+  </tbody>
+</table>
 <p>The greedy heuristic ranks by value-to-cost ratio: $p_1 \to 1.5$, $p_2 \to 1.67$, $p_3 \to 1.33$, $p_4 \to 1.5$. Greedily selecting $p_2, p_1, p_4$ consumes $3+4+2=9$ units and yields value $14$. Exhaustive search confirms $\{p_2, p_3, p_4\}$ costs $8$ units and yields $12$, while $\{p_1, p_2, p_4\}$ achieves $14$—the optimum here.</p>
 <p><strong>Theorem (FPTAS for 0–1 Knapsack).</strong> For the single-resource 0–1 knapsack problem, there exists a fully polynomial-time approximation scheme (FPTAS): for any $\varepsilon > 0$, a solution of value at least $(1-\varepsilon)\,\text{OPT}$ can be found in time $O\!\left(n^2 / \varepsilon\right)$ via dynamic programming on scaled values $\tilde{v}_i = \lfloor v_i / \theta \rfloor$ with scaling factor $\theta = \varepsilon \max_i v_i / n$.</p>
 <p><strong>Lab Cell.</strong></p>

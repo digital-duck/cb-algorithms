@@ -44,7 +44,32 @@ section:first-of-type{border-top:none;padding-top:0}
   <main>
     <h2 id="斐波那契堆-fibonacci-heap">斐波那契堆(Fibonacci Heap)</h2>
 <p><strong>定义。</strong> 斐波那契堆是一组满足最小堆序的树的集合(森林),并维护一个指向最小根的指针 $\min$。它支持的操作及摊还代价为:</p>
-<p>| 操作 | 摊还代价 | |---|---| | Insert | $O(1)$ | | FindMin | $O(1)$ | | DecreaseKey | $O(1)$ | | ExtractMin | $O(\log n)$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">操作</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">摊还代价</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Insert</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(1)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">FindMin</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(1)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">DecreaseKey</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(1)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">ExtractMin</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(\log n)$</td>
+    </tr>
+  </tbody>
+</table>
 <p>核心思想是<strong>惰性</strong>:Insert 只是把新节点放入根链表;DecreaseKey 只在违反堆序时把该节点剪下,作为新树放入根链表;只有 ExtractMin 才进行整理(consolidate),把度数相同的树两两合并,直到每个度数至多一棵树。</p>
 <p>为了控制树的形状,每个非根节点最多允许失去一个孩子:若一个节点第二次失去孩子,就把它也剪下(<strong>级联剪切</strong>)。</p>
 <p><strong>势函数。</strong> 令 $\Phi = t + 2m$,其中 $t$ 为根链表中树的数目,$m$ 为被标记节点(已失去过一个孩子)的数目。</p>

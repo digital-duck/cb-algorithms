@@ -43,7 +43,42 @@ $$
 (A,B,1),\; (A,C,4),\; (B,C,2),\; (B,D,5),\; (C,D,3).
 $$
 <p>Sort by weight: $(A,B,1),\,(B,C,2),\,(C,D,3),\,(A,C,4),\,(B,D,5)$.</p>
-<p>| Step | Edge    | Components before            | Action  | |------|---------|------------------------------|---------| | 1    | $(A,B)$ | $\{A\},\{B\},\{C\},\{D\}$   | Accept  | | 2    | $(B,C)$ | $\{A,B\},\{C\},\{D\}$       | Accept  | | 3    | $(C,D)$ | $\{A,B,C\},\{D\}$           | Accept  | | 4    | $(A,C)$ | $\{A,B,C,D\}$               | Reject (cycle) |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Step</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Edge</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Components before</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(A,B)$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A\},\{B\},\{C\},\{D\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Accept</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(B,C)$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A,B\},\{C\},\{D\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Accept</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(C,D)$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A,B,C\},\{D\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Accept</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(A,C)$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$\{A,B,C,D\}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Reject (cycle)</td>
+    </tr>
+  </tbody>
+</table>
 <p>The MST is $\{(A,B),(B,C),(C,D)\}$ with total weight $1+2+3 = 6$.</p>
 <hr>
 <p><strong>Key Theorem (Correctness of Kruskal's Algorithm).</strong> <em>The output of Kruskal's algorithm is a minimum spanning tree of $G$.</em></p>

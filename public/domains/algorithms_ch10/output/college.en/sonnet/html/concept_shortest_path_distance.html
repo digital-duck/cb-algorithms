@@ -41,7 +41,28 @@ $$\ell(\pi) = \sum_{i=1}^{k} w(v_{i-1},\, v_i).$$
 $$d(u, v) = \min_{\pi \in \mathcal{P}(u,v)} \ell(\pi),$$
 <p>where $\mathcal{P}(u,v)$ denotes the set of all paths from $u$ to $v$. If no path exists, one writes $d(u,v) = \infty$ by convention.</p>
 <p><strong>Worked Example.</strong> Consider the graph $G$ with vertices $\{A, B, C, D\}$ and weighted edges $w(A,B)=1$, $w(A,C)=4$, $w(B,C)=2$, $w(B,D)=5$, $w(C,D)=1$. To compute $d(A,D)$, enumerate candidate paths:</p>
-<p>| Path | Length | |---|---| | $A \to B \to D$ | $1 + 5 = 6$ | | $A \to B \to C \to D$ | $1 + 2 + 1 = 4$ | | $A \to C \to D$ | $4 + 1 = 5$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Path</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$A \to B \to D$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$1 + 5 = 6$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$A \to B \to C \to D$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$1 + 2 + 1 = 4$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$A \to C \to D$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$4 + 1 = 5$</td>
+    </tr>
+  </tbody>
+</table>
 <p>The minimum is $4$, achieved by $A \to B \to C \to D$, so $d(A,D) = 4$.</p>
 <p><strong>Key Theorem (Triangle Inequality).</strong> For any three vertices $u$, $v$, $x$ in a connected weighted graph with non-negative weights,</p>
 $$d(u, v) \leq d(u, x) + d(x, v).$$

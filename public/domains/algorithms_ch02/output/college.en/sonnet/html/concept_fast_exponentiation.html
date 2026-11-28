@@ -47,7 +47,42 @@ $$
 <p>Each recursive call halves the exponent (when $n$ is even), so the recursion depth is $\lfloor \log_2 n \rfloor + 1$, yielding the logarithmic complexity claim.</p>
 <p><strong>Worked Example.</strong> Compute $3^{13}$.</p>
 <p>Write $13$ in binary: $13 = (1101)_2 = 8 + 4 + 1$. Trace the recursive calls:</p>
-<p>| Call | $n$ | Action | |------|-----|--------| | $3^{13}$ | odd | $3 \cdot 3^{12}$ | | $3^{12}$ | even | $(3^{6})^2$ | | $3^{6}$ | even | $(3^{3})^2$ | | $3^{3}$ | odd | $3 \cdot 3^{2}$ | | $3^{2}$ | even | $(3^{1})^2 = 9$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Call</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$n$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3^{13}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">odd</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3 \cdot 3^{12}$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3^{12}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">even</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(3^{6})^2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3^{6}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">even</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(3^{3})^2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3^{3}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">odd</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3 \cdot 3^{2}$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$3^{2}$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">even</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$(3^{1})^2 = 9$</td>
+    </tr>
+  </tbody>
+</table>
 <p>Unwinding: $3^3 = 3 \cdot 9 = 27$, $3^6 = 27^2 = 729$, $3^{12} = 729^2 = 531441$, $3^{13} = 3 \cdot 531441 = 1594323$. Only <strong>6 multiplications</strong> were needed; naive multiplication would require 12.</p>
 <p><strong>Key Theorem.</strong> <em>Let $n \geq 1$. The exponentiation-by-squaring algorithm computes $b^n$ using at most $2\lfloor \log_2 n \rfloor$ multiplications.</em></p>
 <p><em>Proof sketch.</em> Each bit of the binary representation of $n$ contributes at most two multiplications (one squaring, one conditional multiply). Since $n$ has $\lfloor \log_2 n \rfloor + 1$ bits, the bound follows. $\square$</p>

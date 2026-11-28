@@ -57,7 +57,37 @@ $$\delta(s,v)=\begin{cases}\min\{w(p): s\overset{p}{\leadsto}v\} & \text{若 } v
 <li>松弛 $b\to c$:$d[c]=6$;再松弛 $a\to c$:$3+1=4<6$,所以 $d[c]=4$,$\pi[c]=a$。</li>
 <p>结果:$\delta(s,a)=3$,$\delta(s,b)=1$,$\delta(s,c)=4$。沿 $\pi$ 回溯得到 $c$ 的最短路径 $s\to b\to a\to c$。注意:直接边 $s\to a$ 并非最优。</p>
 <p><strong>问题求解:如何选择算法。</strong> 先判断图的特征,再选择方法:</p>
-<p>| 图的特征 | 算法 | 时间复杂度 | |---|---|---| | 所有 $w\ge 0$ | Dijkstra(二叉堆) | $O((V+E)\log V)$ | | 允许负权,需检测负环 | Bellman–Ford | $O(VE)$ | | 有向无环图(DAG) | 按拓扑序松弛 | $O(V+E)$ | | 无权图 | 广度优先搜索 | $O(V+E)$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">图的特征</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">算法</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">时间复杂度</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">所有 $w\ge 0$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Dijkstra(二叉堆)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O((V+E)\log V)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">允许负权,需检测负环</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Bellman–Ford</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(VE)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">有向无环图(DAG)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">按拓扑序松弛</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(V+E)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">无权图</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">广度优先搜索</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(V+E)$</td>
+    </tr>
+  </tbody>
+</table>
 <p>例如,路由网络中的延迟都是非负的,应选 Dijkstra;金融套利中取对数后的汇率权重可能为负,需要 Bellman–Ford 来检测负环(即套利机会)。</p>
 <pre class="mermaid">graph LR
     S((源点 s)) -->|4| A((a))

@@ -68,7 +68,37 @@ $$\delta(s,v)\le \delta(s,u)+w(u,v).$$
 <li>取出 $C$($d=5$):$d[D]=\min(10,5+1)=6$。</li>
 <li>取出 $D$:结束,$d[D]=6$。</li>
 <p><strong>问题求解应用。</strong> 选择算法时先看图的性质:</p>
-<p>| 情形 | 算法 | 时间复杂度 | |---|---|---| | 无权图 | BFS | $O(V+E)$ | | 非负权重 | Dijkstra(二叉堆) | $O((V+E)\log V)$ | | 含负权边 | Bellman–Ford | $O(VE)$ | | 所有点对 | Floyd–Warshall | $O(V^3)$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">情形</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">算法</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">时间复杂度</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">无权图</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">BFS</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(V+E)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">非负权重</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Dijkstra(二叉堆)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O((V+E)\log V)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">含负权边</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Bellman–Ford</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(VE)$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">所有点对</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Floyd–Warshall</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(V^3)$</td>
+    </tr>
+  </tbody>
+</table>
 <pre><code>import heapq
 def dijkstra(G, s):
     d = {v: float("inf") for v in G}; d[s] = 0

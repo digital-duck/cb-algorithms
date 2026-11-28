@@ -39,7 +39,36 @@ section:first-of-type{border-top:none;padding-top:0}
 $$w(T) = \sum_{e \in T} w(e).$$
 <p>When all edge weights are distinct, the MST is unique. If weights may repeat, multiple MSTs can exist, but their total weight is always the same.</p>
 <p><strong>Worked Example.</strong> Consider the graph $G$ with vertices $\{A, B, C, D\}$ and weighted edges:</p>
-<p>| Edge | Weight | |------|--------| | $AB$ | 4 | | $AC$ | 2 | | $BC$ | 5 | | $BD$ | 3 | | $CD$ | 1 |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Edge</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Weight</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$AB$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$AC$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$BC$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">5</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$BD$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$CD$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+    </tr>
+  </tbody>
+</table>
 <p>Applying Kruskal's algorithm, sort edges by weight: $CD=1,\; AC=2,\; BD=3,\; AB=4,\; BC=5$. Add $CD$ (no cycle), add $AC$ (no cycle), add $BD$ (no cycle) — three edges connect four vertices, so a spanning tree is complete. The MST is $\{CD, AC, BD\}$ with total weight $1 + 2 + 3 = 6$. Edge $AB$ would create a cycle $A$–$C$–$D$–$B$–$A$ and is therefore rejected.</p>
 <p><strong>Key Theorem (Cut Property).</strong> For any partition of $V$ into two nonempty sets $S$ and $V \setminus S$, the minimum-weight edge crossing the cut $(S, V \setminus S)$ belongs to every MST of $G$. Conversely, the <em>Cycle Property</em> states that the maximum-weight edge in any cycle cannot belong to any MST. Together, these two properties form the theoretical foundation for both Kruskal's algorithm ($O(|E| \log |E|)$) and Prim's algorithm ($O(|E| + |V| \log |V|)$ with a Fibonacci heap). Both are provably correct greedy strategies whose exchange arguments follow directly from these cut and cycle properties.</p>
 <p><strong>Lab Cell.</strong></p>

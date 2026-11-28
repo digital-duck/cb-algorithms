@@ -48,7 +48,40 @@ $$P(m)=\;w_{i_1}\succ_m w_{i_2}\succ_m\cdots\succ_m w_{i_n},$$
 <p>其中 $w\succ_m w'$ 表示 $m$ 认为 $w$ 优于 $w'$。严格全序要求：任意两个不同伙伴都可比较（完全性），且不存在并列。为便于计算，常定义<strong>排名函数</strong> $\operatorname{rank}_m(w)$，它表示 $w$ 在 $P(m)$ 中的位置（1 表示最喜欢）。于是 $w\succ_m w'$ 当且仅当 $\operatorname{rank}_m(w)<\operatorname{rank}_m(w')$。</p>
 <p>偏好列表是匹配算法（如 Gale–Shapley 稳定匹配算法）的<strong>唯一输入</strong>：算法只比较名次，不关心偏好的“强度”。</p>
 <p><strong>例题。</strong> 三位学生 $a,b,c$ 与三个项目 $X,Y,Z$：</p>
-<p>| 参与者 | 偏好列表 | |---|---| | $a$ | $X\succ Y\succ Z$ | | $b$ | $X\succ Z\succ Y$ | | $c$ | $Y\succ X\succ Z$ | | $X$ | $b\succ a\succ c$ | | $Y$ | $a\succ b\succ c$ | | $Z$ | $a\succ c\succ b$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">参与者</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">偏好列表</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$X\succ Y\succ Z$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$X\succ Z\succ Y$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$c$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$Y\succ X\succ Z$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$X$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$b\succ a\succ c$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$Y$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a\succ b\succ c$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$Z$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$a\succ c\succ b$</td>
+    </tr>
+  </tbody>
+</table>
 <p>读表：$\operatorname{rank}_a(Y)=2$，$\operatorname{rank}_X(c)=3$。学生 $a$ 认为 $X$ 优于 $Z$，这是一个比较关系，而不是打分。</p>
 <p><strong>问题求解：判断稳定性。</strong> 匹配 $\mu_1=\{(a,X),(b,Z),(c,Y)\}$ 是否稳定？</p>
 <p>稳定性要求不存在<strong>阻塞对</strong>：即一对 $(s,p)$ 尚未配对，却互相认为对方优于当前伙伴。</p>

@@ -43,7 +43,37 @@ $$p \sim_{k+1} q \iff p \sim_k q \;\land\; \forall a \in \Sigma,\; \delta(p,a) \
 <p>The sequence $\Pi_0, \Pi_1, \ldots$ of induced partitions is monotonically refining. Because $Q$ is finite, it stabilises at some step $n \leq |Q|-1$, yielding the equivalence ${\sim} = {\sim_n}$.</p>
 <h3 id="worked-example">Worked Example</h3>
 <p>Consider the DFA over $\Sigma = \{0, 1\}$ with states $Q = \{A, B, C, D\}$, $q_0 = A$, $F = \{C, D\}$, and transitions:</p>
-<p>| State | 0 | 1 | |-------|---|---| | $A$   | $B$ | $C$ | | $B$   | $A$ | $D$ | | $C$   | $D$ | $C$ | | $D$   | $C$ | $D$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">State</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">0</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">1</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$A$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$B$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$C$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$B$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$A$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$C$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$C$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$C$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D$</td>
+    </tr>
+  </tbody>
+</table>
 <p><strong>Step 0.</strong> $\Pi_0 = \{\{A,B\},\{C,D\}\}$ (non-accepting vs. accepting).</p>
 <p><strong>Step 1.</strong> Check $A \sim_1 B$: on input $0$, $\delta(A,0)=B \in \{A,B\}$ and $\delta(B,0)=A \in \{A,B\}$; on input $1$, $\delta(A,1)=C \in \{C,D\}$ but $\delta(B,1)=D \in \{C,D\}$. Both transitions stay in the same block, so $A \sim_1 B$. Similarly $C \sim_1 D$. Thus $\Pi_1 = \Pi_0$ — the partition has stabilised. The minimal DFA has two states.</p>
 <h3 id="key-theorem">Key Theorem</h3>

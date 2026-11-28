@@ -48,7 +48,32 @@ $$T(n)\le k\,n^{c},$$
 <p>即 $T(n)=O(n^c)$,则称该算法是<strong>多项式时间</strong>算法。所有可在多项式时间内求解的判定问题构成复杂度类 $\mathrm{P}$。在理论计算机科学中,多项式时间被视为"高效"的最低要求。</p>
 <p>这一约定的合理性来自两点:第一,多项式对加法、乘法和复合封闭。若一个 $O(n^2)$ 的子程序被调用 $O(n^3)$ 次,总时间仍是多项式 $O(n^5)$,因此高效算法可以模块化组合。第二,它与具体计算模型基本无关,在图灵机、RAM 模型之间切换,只会改变指数 $c$,不会改变"是否多项式"这一性质。</p>
 <p><strong>与指数时间的对比。</strong> 设 $T_1(n)=n^3$,$T_2(n)=2^n$。若每秒执行 $10^9$ 步:</p>
-<p>| $n$ | $n^3$ 所需时间 | $2^n$ 所需时间 | |---|---|---| | 20 | $8\times10^{-6}$ 秒 | 约 $10^{-3}$ 秒 | | 60 | $2.2\times10^{-4}$ 秒 | 约 36 年 | | 100 | $10^{-3}$ 秒 | 约 $4\times10^{13}$ 年 |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$n$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$n^3$ 所需时间</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$2^n$ 所需时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">20</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$8\times10^{-6}$ 秒</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">约 $10^{-3}$ 秒</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">60</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$2.2\times10^{-4}$ 秒</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">约 36 年</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">100</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$10^{-3}$ 秒</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">约 $4\times10^{13}$ 年</td>
+    </tr>
+  </tbody>
+</table>
 <p>当 $n$ 增大时,指数算法很快变得不可行,而多项式算法依然可用。</p>
 <p><strong>例题 1:判断时间复杂度。</strong> 下列代码的运行时间是多项式的吗?</p>
 <pre><code>def count_pairs(a):

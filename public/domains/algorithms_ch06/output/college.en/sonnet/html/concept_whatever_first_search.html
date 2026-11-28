@@ -40,7 +40,27 @@ section:first-of-type{border-top:none;padding-top:0}
 <li>While $\mathcal{B} \neq \emptyset$: pull $u \leftarrow \textsc{Pull}(\mathcal{B})$; for each neighbour $v$ of $u$, if $v$ is undiscovered, mark $v$ and $\textsc{Put}(v, \mathcal{B})$.</li>
 <p>Every classical traversal is an instantiation: a LIFO stack yields depth-first search (DFS); a FIFO queue yields breadth-first search (BFS); a min-priority queue ordered by edge weight yields Dijkstra's algorithm.</p>
 <p><strong>Worked example.</strong> Consider the graph $G$ with vertices $\{A, B, C, D\}$ and edges $A{-}B,\, A{-}C,\, B{-}D,\, C{-}D$, source $s = A$.</p>
-<p>| Step | Pull | Discover | |------|------|----------| | 1 | $A$ | $B, C$ | | 2 | $B$ (stack) or $C$ (queue) | … |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Step</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Pull</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Discover</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$A$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$B, C$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$B$ (stack) or $C$ (queue)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">…</td>
+    </tr>
+  </tbody>
+</table>
 <p>With a stack the pull order is $A, C, D, B$, tracing a depth-first path; with a queue it is $A, B, C, D$, processing vertices layer by layer. The bag abstraction makes both orderings instances of the <em>same</em> three-line pseudocode.</p>
 <p><strong>Key theorem.</strong> For any finite graph $G = (V, E)$ with $|V| = n$ and $|E| = m$, WFS terminates in $O(n + m)$ time regardless of the bag policy, provided each vertex is placed in $\mathcal{B}$ at most once (enforced by the discovered flag). The proof follows by a potential-function argument: define $\Phi = |\mathcal{B}|$; each vertex contributes exactly one $\textsc{Put}$ and one $\textsc{Pull}$, so the total work is $\Theta(n + m)$.</p>
 <p><strong>Lab cell.</strong></p>

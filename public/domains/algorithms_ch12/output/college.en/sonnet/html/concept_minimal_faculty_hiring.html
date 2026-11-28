@@ -39,7 +39,28 @@ section:first-of-type{border-top:none;padding-top:0}
 $$\mathcal{H}^* = \arg\min_{\mathcal{H} \text{ covers } C} |\mathcal{H}|.$$
 <p>This is an instance of the classical <strong>Set Cover Problem</strong>, one of the canonical NP-hard combinatorial optimization problems.</p>
 <p><strong>Worked Example.</strong> Suppose $C = \{\text{Calculus, LinAlg, Statistics, Algorithms}\}$ and three candidates are available:</p>
-<p>| Candidate | Courses Teachable | |-----------|-------------------| | $f_1$ | Calculus, LinAlg | | $f_2$ | LinAlg, Statistics, Algorithms | | $f_3$ | Calculus, Statistics |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Candidate</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Courses Teachable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$f_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Calculus, LinAlg</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$f_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">LinAlg, Statistics, Algorithms</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$f_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Calculus, Statistics</td>
+    </tr>
+  </tbody>
+</table>
 <p>The subcollection $\{f_1, f_2\}$ covers $C$ because $S_1 \cup S_2 = C$. No single candidate covers all four courses, so $|\mathcal{H}^<em>| = 2$ and $\mathcal{H}^</em> = \{f_1, f_2\}$ is optimal.</p>
 <p><strong>Key Theorem (Greedy Approximation).</strong> Because Set Cover is NP-hard (reducible from 3-SAT), no polynomial-time algorithm is known to find $\mathcal{H}^<em>$ in general unless $\mathrm{P} = \mathrm{NP}$. The </em>greedy algorithm*—repeatedly select the candidate covering the most yet-uncovered courses—achieves the approximation guarantee</p>
 $$|\mathcal{H}_{\text{greedy}}| \leq \lceil H_m \rceil \cdot |\mathcal{H}^*|,$$

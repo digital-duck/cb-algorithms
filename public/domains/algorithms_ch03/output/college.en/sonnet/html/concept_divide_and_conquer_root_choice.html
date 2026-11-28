@@ -37,7 +37,44 @@ section:first-of-type{border-top:none;padding-top:0}
     <h2 id="divide-and-conquer-root-choice">Divide And Conquer Root Choice</h2>
 <p><strong>Definition.</strong> Given a continuous function $f : [a, b] \to \mathbb{R}$ with $f(a)$ and $f(b)$ of opposite sign, the <em>divide-and-conquer root choice</em> (commonly called the <strong>bisection method</strong>) is the iterative procedure that locates a root $c \in [a, b]$ satisfying $f(c) = 0$ by repeatedly halving the search interval. At each step $k$, a midpoint $m_k = \tfrac{a_k + b_k}{2}$ is evaluated, and the subinterval $[a_k, m_k]$ or $[m_k, b_k]$ is retained according to which endpoint pair preserves opposite signs. The method exploits the <strong>Intermediate Value Theorem</strong>: if $f$ is continuous and $f(a_k) \cdot f(b_k) < 0$, then a root exists inside the interval.</p>
 <p><strong>Worked Example.</strong> Let $f(x) = x^3 - x - 2$. Note $f(1) = -2 < 0$ and $f(2) = 4 > 0$, so a root lies in $[1, 2]$.</p>
-<p>| Step | $a_k$ | $b_k$ | $m_k$ | $f(m_k)$ | New interval | |------|--------|--------|--------|-----------|--------------| | 1 | 1.000 | 2.000 | 1.500 | $-0.125$ | $[1.5, 2.0]$ | | 2 | 1.500 | 2.000 | 1.750 | $+1.609$ | $[1.5, 1.75]$ | | 3 | 1.500 | 1.750 | 1.625 | $+0.666$ | $[1.5, 1.625]$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Step</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$a_k$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$b_k$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$m_k$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$f(m_k)$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">New interval</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.000</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2.000</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.500</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$-0.125$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$[1.5, 2.0]$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.500</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2.000</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.750</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$+1.609$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$[1.5, 1.75]$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.500</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.750</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1.625</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$+0.666$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$[1.5, 1.625]$</td>
+    </tr>
+  </tbody>
+</table>
 <p>After step 3 the root is bracketed within an interval of width $0.125$, already half the original in each iteration. The true root is $x^* \approx 1.5214$.</p>
 <p><strong>Key Theorem (Linear Convergence).</strong> After $n$ bisection steps, the absolute error satisfies</p>
 $$|m_n - x^*| \leq \frac{b - a}{2^n}.$$

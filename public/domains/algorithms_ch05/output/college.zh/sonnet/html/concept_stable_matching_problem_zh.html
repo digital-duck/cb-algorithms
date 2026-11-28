@@ -52,7 +52,37 @@ $$
 <p><strong>定理。</strong> 对任意偏好,算法至多经 $n^2$ 轮提议终止,并输出稳定匹配。</p>
 <p><em>证明要点。</em> 每个 $m$ 至多向每个 $w$ 提议一次,故提议总数 $\le n^2$。一旦 $w$ 被提议,她此后始终保持匹配,且伴侣只会变得更好。因此终止时人人都已匹配。假设最终存在阻塞对 $(m,w)$,且 $w\succ_m\mu(m)$。$m$ 按偏好从高到低提议,所以他必定先向 $w$ 提议过并被拒绝(或被抛弃),这说明 $w$ 当时的伴侣优于 $m$。又因 $w$ 的伴侣只会越来越好,最终 $\mu(w)\succ_w m$,与 $(m,w)$ 是阻塞对矛盾。$\blacksquare$</p>
 <p><strong>例题。</strong> 设 $n=2$,偏好如下:</p>
-<p>| | 第一选择 | 第二选择 | |---|---|---| | $m_1$ | $w_1$ | $w_2$ | | $m_2$ | $w_1$ | $w_2$ | | $w_1$ | $m_2$ | $m_1$ | | $w_2$ | $m_1$ | $m_2$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;"></th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">第一选择</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">第二选择</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_1$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$w_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$m_2$</td>
+    </tr>
+  </tbody>
+</table>
 <li>$m_1$ 与 $m_2$ 都向 $w_1$ 提议。$w_1$ 偏爱 $m_2$,暂时接受 $m_2$,拒绝 $m_1$。</li>
 <li>$m_1$ 转向 $w_2$,$w_2$ 未匹配,接受。</li>
 <li>所有人均已匹配,得到 $\mu=\{(m_1,w_2),(m_2,w_1)\}$。</li>

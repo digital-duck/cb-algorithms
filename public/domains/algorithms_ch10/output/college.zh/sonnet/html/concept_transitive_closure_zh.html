@@ -64,7 +64,28 @@ $$T_{\text{TC}}(n)=\Theta\big(M(n)\big)$$
 <li><strong>乘法可归约到 TC。</strong> 构造三层图,第一层到第二层的边由 $A$ 给出,第二层到第三层的边由 $B$ 给出。则第一层到第三层的可达关系恰好是 $A\otimes B$。</li>
 <p>因此传递闭包与布尔矩阵乘法在渐近意义上难度相同。布尔乘法可借助整数乘法实现(把结果中非零的元素置 1)。使用 Strassen 算法时,$M(n)=O(n^{2.807})$。已知最快的矩阵乘法算法指数 $\omega<2.372$,于是 $T_{\text{TC}}(n)=O(n^{\omega})$。</p>
 <p><strong>问题求解应用。</strong> 比较三种方法:</p>
-<p>| 方法 | 时间 | |---|---| | 从每个顶点做 DFS/BFS | $O(n(n+m))$,稀疏图上最优 | | Floyd–Warshall(Warshall 算法) | $O(n^3)$,代码最简单 | | 快速矩阵乘法 | $O(n^{\omega})$,理论上最优,适合稠密图 |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">方法</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">时间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">从每个顶点做 DFS/BFS</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(n(n+m))$,稀疏图上最优</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Floyd–Warshall(Warshall 算法)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(n^3)$,代码最简单</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">快速矩阵乘法</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$O(n^{\omega})$,理论上最优,适合稠密图</td>
+    </tr>
+  </tbody>
+</table>
 <p>Warshall 算法的核心是三重循环:</p>
 <pre><code>for k in range(n):
     for i in range(n):

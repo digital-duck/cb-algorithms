@@ -52,7 +52,36 @@ section:first-of-type{border-top:none;padding-top:0}
 <li>当所有医院都已匹配时停止。</li>
 <h3 id="例题">例题</h3>
 <p>设 3 家医院 $H_1,H_2,H_3$ 和 3 名医生 $D_1,D_2,D_3$,偏好(左为最优):</p>
-<p>| 医院 | 偏好 | 医生 | 偏好 | |---|---|---|---| | $H_1$ | $D_1 > D_2 > D_3$ | $D_1$ | $H_2 > H_1 > H_3$ | | $H_2$ | $D1 > D_3 > D_2$ | $D_2$ | $H_1 > H_3 > H_2$ | | $H_3$ | $D_1 > D_2 > D_3$ | $D_3$ | $H_1 > H_2 > H_3$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">医院</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">偏好</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">医生</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">偏好</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_1 > D_2 > D_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_2 > H_1 > H_3$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D1 > D_3 > D_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_1 > H_3 > H_2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_1 > D_2 > D_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$D_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$H_1 > H_2 > H_3$</td>
+    </tr>
+  </tbody>
+</table>
 <li><strong>第 1 轮</strong>:三家医院都向 $D_1$ 提议。$D_1$ 偏好 $H_2$,故暂时接受 $H_2$,拒绝 $H_1,H_3$。</li>
 <li><strong>第 2 轮</strong>:$H_1$ 向 $D_2$ 提议,$H_3$ 向 $D_2$ 提议。$D_2$ 偏好 $H_1$,接受 $H_1$,拒绝 $H_3$。</li>
 <li><strong>第 3 轮</strong>:$H_3$ 向 $D_3$ 提议,$D_3$ 无其他邀请,暂时接受。</li>

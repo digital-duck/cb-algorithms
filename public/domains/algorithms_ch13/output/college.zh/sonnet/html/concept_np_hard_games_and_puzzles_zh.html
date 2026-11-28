@@ -62,7 +62,32 @@ $$
 <li>NP 难描述的是<strong>最坏情况</strong>随 $n$ 增长的趋势，不排除典型实例容易。</li>
 <li>因此面对 NP 难谜题，实用策略是：约束传播 + 回溯，或转化为 SAT / 整数规划交给求解器。</li>
 <p><strong>常见归约模式</strong>（供你自己证明时参考）：</p>
-<p>| 游戏 | 归约来源 | 关键 gadget | |---|---|---| | 扫雷 | 电路可满足性 | 用数字格模拟与/或/非门 | | 俄罗斯方块 | 3-划分问题 | 用方块序列强制填充模式 | | 超级马里奥 | 3-SAT | 变量选择路径，子句为必经关卡 |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">游戏</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">归约来源</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">关键 gadget</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">扫雷</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">电路可满足性</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">用数字格模拟与/或/非门</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">俄罗斯方块</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3-划分问题</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">用方块序列强制填充模式</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">超级马里奥</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3-SAT</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">变量选择路径，子句为必经关卡</td>
+    </tr>
+  </tbody>
+</table>
 <pre class="mermaid">flowchart LR
 A[已知 NP 完全问题] --> B[构造游戏 gadget]
 B --> C[多项式时间归约]

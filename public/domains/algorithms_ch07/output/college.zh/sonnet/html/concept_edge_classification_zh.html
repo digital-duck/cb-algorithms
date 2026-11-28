@@ -46,7 +46,37 @@ section:first-of-type{border-top:none;padding-top:0}
 <h3 id="定义">定义</h3>
 <p>对有向图 $G=(V,E)$ 做深度优先搜索(DFS)时,每个顶点 $v$ 有两个时间戳:发现时间 $d[v]$(变为灰色)与完成时间 $f[v]$(变为黑色)。区间 $[d[v],f[v]]$ 称为 $v$ 的<strong>活动区间</strong>。任意两个顶点的活动区间要么互不相交,要么一个完全包含另一个(括号定理)。</p>
 <p>据此,DFS 将每条边 $(u,v)\in E$ 分为四类:</p>
-<p>| 类型 | 区间关系 | 探索边 $(u,v)$ 时 $v$ 的颜色 | |---|---|---| | 树边 | $v$ 是由 $u$ 首次发现的 | 白色 | | 后向边 | $[d[u],f[u]]\subset[d[v],f[v]]$($v$ 是 $u$ 的祖先,含自环) | 灰色 | | 前向边 | $[d[v],f[v]]\subset[d[u],f[u]]$($v$ 是 $u$ 的非子后代) | 黑色,且 $d[u]<d[v]$ | | 横跨边 | 两区间不相交 | 黑色,且 $d[v]<d[u]$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">类型</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">区间关系</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">探索边 $(u,v)$ 时 $v$ 的颜色</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">树边</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$v$ 是由 $u$ 首次发现的</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">白色</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">后向边</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$[d[u],f[u]]\subset[d[v],f[v]]$($v$ 是 $u$ 的祖先,含自环)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">灰色</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">前向边</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$[d[v],f[v]]\subset[d[u],f[u]]$($v$ 是 $u$ 的非子后代)</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">黑色,且 $d[u]<d[v]$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">横跨边</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">两区间不相交</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">黑色,且 $d[v]<d[u]$</td>
+    </tr>
+  </tbody>
+</table>
 <p>在无向图中,只会出现树边和后向边。</p>
 <h3 id="例题">例题</h3>
 <p>图的边为:$A\to B,\ A\to C,\ B\to C,\ C\to A,\ B\to D,\ D\to C,\ E\to D$。从 $A$ 开始 DFS(按字母序访问邻居),再从 $E$ 重启。</p>

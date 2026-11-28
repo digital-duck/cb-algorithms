@@ -40,7 +40,48 @@ section:first-of-type{border-top:none;padding-top:0}
 <p><strong>Worked example.</strong> Consider the graph with vertices $\{a, b, c, d\}$ and edges</p>
 $$e_1 = (a,b,2),\quad e_2 = (b,c,3),\quad e_3 = (a,c,5),\quad e_4 = (c,d,1),\quad e_5 = (b,d,4).$$
 <p>Run Kruskal's algorithm, processing edges in increasing weight order:</p>
-<p>| Step | Edge | Weight | Action | |------|------|--------|--------| | 1 | $e_4$ | 1 | Add — connects $c$ and $d$ | | 2 | $e_1$ | 2 | Add — connects $a$ and $b$ | | 3 | $e_2$ | 3 | Add — merges $\{a,b\}$ with $\{c,d\}$ | | 4 | $e_5$ | 4 | <strong>Useless</strong> — $b$ and $d$ already connected | | 5 | $e_3$ | 5 | <strong>Useless</strong> — $a$ and $c$ already connected |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Step</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Edge</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Weight</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$e_4$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Add — connects $c$ and $d$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$e_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Add — connects $a$ and $b$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$e_2$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">Add — merges $\{a,b\}$ with $\{c,d\}$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$e_5$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;"><strong>Useless</strong> — $b$ and $d$ already connected</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">5</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$e_3$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">5</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;"><strong>Useless</strong> — $a$ and $c$ already connected</td>
+    </tr>
+  </tbody>
+</table>
 <p>Edges $e_5$ and $e_3$ are useless because their endpoints share a component in the current forest $A$.</p>
 <p><strong>Theorem (Cycle Property).</strong> <em>Let $C$ be a cycle in $G$. If $e^</em> \in C$ is the unique maximum-weight edge of $C$, then $e^<em>$ does not belong to any MST of $G$.</em></p>
 <p><em>Proof sketch.</em> Suppose $T$ is an MST containing $e^<em>$. Removing $e^</em>$ splits $T$ into two components. Since $C$ is a cycle, at least one other edge $e' \in C$ crosses this cut. By assumption $w(e') < w(e^<em>)$, so replacing $e^</em>$ with $e'$ produces a spanning tree of strictly smaller total weight—contradicting the minimality of $T$. $\square$</p>

@@ -53,7 +53,42 @@ $$I(v)=[v.\text{pre},\ v.\text{post}]$$
 $$u.\text{pre}<v.\text{pre}<v.\text{post}<u.\text{post}.$$
 <p><strong>为什么成立。</strong> 递归栈是后进先出的。若 $v$ 在 $u$ 仍在栈上时入栈,则 $v$ 必须先于 $u$ 出栈,所以 $I(v)$ 被 $I(u)$ 包住。若 $v$ 在 $u$ 出栈之后才被发现,两区间就不相交。区间不可能只交叉一部分,因为那会违反栈的后进先出顺序。</p>
 <p><strong>例题。</strong> 设有向图的边为 $A\to B,\ A\to C,\ B\to D$,从 $A$ 出发,按字母顺序访问邻居,计时从 1 开始:</p>
-<p>| 顶点 | pre | post | 活跃区间 | |---|---|---|---| | A | 1 | 8 | [1, 8] | | B | 2 | 5 | [2, 5] | | D | 3 | 4 | [3, 4] | | C | 6 | 7 | [6, 7] |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">顶点</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">pre</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">post</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">活跃区间</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">A</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">8</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">[1, 8]</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">B</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">5</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">[2, 5]</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">D</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">[3, 4]</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">C</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">6</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">7</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">[6, 7]</td>
+    </tr>
+  </tbody>
+</table>
 <p>检查:$[3,4]\subset[2,5]\subset[1,8]$,所以 $D$ 是 $B$ 的后代,$B$ 是 $A$ 的后代。$[2,5]\cap[6,7]=\varnothing$,所以 $B$ 与 $C$ 互不为祖先。</p>
 <pre class="mermaid">graph TD
     A["A:区间 1-8"] --> B["B:区间 2-5"]

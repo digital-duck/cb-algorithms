@@ -41,7 +41,28 @@ $$\text{minimize} \quad \sum_{i=1}^{n} w(v_{\sigma(i)}, v_{\sigma(i+1)}),$$
 <p><strong>Worked Example.</strong> Consider four cities with the following symmetric distance matrix:</p>
 $$D = \begin{pmatrix} 0 & 10 & 15 & 20 \\ 10 & 0 & 35 & 25 \\ 15 & 35 & 0 & 30 \\ 20 & 25 & 30 & 0 \end{pmatrix}.$$
 <p>There are $(4-1)!/2 = 3$ distinct tours. Enumerating them:</p>
-<p>| Tour | Total Cost | |------|------------| | $v_1 \to v_2 \to v_3 \to v_4 \to v_1$ | $10+35+30+20 = 95$ | | $v_1 \to v_2 \to v_4 \to v_3 \to v_1$ | $10+25+30+15 = 80$ | | $v_1 \to v_3 \to v_2 \to v_4 \to v_1$ | $15+35+25+20 = 95$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Tour</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Total Cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$v_1 \to v_2 \to v_3 \to v_4 \to v_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$10+35+30+20 = 95$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$v_1 \to v_2 \to v_4 \to v_3 \to v_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$10+25+30+15 = 80$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$v_1 \to v_3 \to v_2 \to v_4 \to v_1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$15+35+25+20 = 95$</td>
+    </tr>
+  </tbody>
+</table>
 <p>The optimal tour is $v_1 \to v_2 \to v_4 \to v_3 \to v_1$ with cost $80$.</p>
 <p><strong>Key Theorem (Nearest-Neighbor Approximation Bound).</strong> For metric instances of TSP — where edge weights satisfy the triangle inequality $w(u,v) \leq w(u,x) + w(x,v)$ — the <em>Christofides–Serdyukov algorithm</em> guarantees a tour of cost at most $\tfrac{3}{2}\,\mathrm{OPT}$, where $\mathrm{OPT}$ denotes the optimal tour length. No polynomial-time approximation scheme with ratio better than $\tfrac{123}{122}$ exists unless $\mathbf{P} = \mathbf{NP}$ (Karpinski et al., 2015).</p>
 <p><strong>Lab Cell.</strong></p>

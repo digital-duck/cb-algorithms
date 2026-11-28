@@ -39,7 +39,61 @@ section:first-of-type{border-top:none;padding-top:0}
 <p>The subroutine maintains two pointers $i$ and $j$, initialized to $1$. At each step it compares $A[i]$ and $B[j]$, appends the smaller element to $C$, and advances the corresponding pointer. When one input is exhausted, the remaining elements of the other are appended directly.</p>
 <hr>
 <p><strong>Worked Example.</strong> Let $A = (2, 5, 8)$ and $B = (1, 4, 9)$.</p>
-<p>| Step | $i$ | $j$ | Compare | Append | |------|-----|-----|---------|--------| | 1 | 1 | 1 | $2 > 1$ | $1$ | | 2 | 1 | 2 | $2 < 4$ | $2$ | | 3 | 2 | 2 | $5 > 4$ | $4$ | | 4 | 2 | 3 | $5 < 9$ | $5$ | | 5 | 3 | 3 | $8 < 9$ | $8$ | | 6 | — | 3 | exhausted $A$ | $9$ |</p>
+<table style="border-collapse: collapse; border: 1px solid #333;">
+  <thead>
+    <tr>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Step</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$i$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">$j$</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Compare</th>
+      <th style="border: 1px solid #333; padding: 6px 12px;">Append</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$2 > 1$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$1$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">1</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$2 < 4$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$2$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$5 > 4$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$4$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">4</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">2</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$5 < 9$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$5$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">5</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$8 < 9$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$8$</td>
+    </tr>
+    <tr>
+      <td style="border: 1px solid #333; padding: 6px 12px;">6</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">—</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">3</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">exhausted $A$</td>
+      <td style="border: 1px solid #333; padding: 6px 12px;">$9$</td>
+    </tr>
+  </tbody>
+</table>
 <p>Result: $C = (1, 2, 4, 5, 8, 9)$. Each element is visited exactly once, giving a total of $p + q - 1 \le p + q$ comparisons.</p>
 <hr>
 <p><strong>Key Theorem (Merge Complexity).</strong> The merge subroutine runs in $\Theta(p + q)$ time and requires $\Theta(p + q)$ auxiliary space.</p>
